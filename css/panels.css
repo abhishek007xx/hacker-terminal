@@ -1,0 +1,742 @@
+/* ============================================================
+   NEXUS // SECURE TERMINAL — Panels
+   Glass panels, titlebars, terminal, monitor, topology,
+   encryption, event log, data stream
+   ============================================================ */
+
+/* ============================ BASE PANEL ============================ */
+.panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    background: var(--bg-panel);
+    border: 1px solid var(--emerald-line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-panel);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    overflow: hidden;
+}
+
+/* corner accents on panels */
+.panel::before,
+.panel::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.panel::before {
+    top: 0;
+    left: 0;
+    border-top: 1px solid var(--green);
+    border-left: 1px solid var(--green);
+    opacity: 0.5;
+}
+
+.panel::after {
+    bottom: 0;
+    right: 0;
+    border-bottom: 1px solid var(--green);
+    border-right: 1px solid var(--green);
+    opacity: 0.5;
+}
+
+.panel-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 30px;
+    padding: 0 var(--sp-3);
+    background: var(--bg-titlebar);
+    border-bottom: 1px solid var(--emerald-line-soft);
+    flex-shrink: 0;
+}
+
+.panel-title {
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--green-core);
+    text-shadow: var(--text-glow-soft);
+}
+
+.panel-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+}
+
+.pc {
+    color: var(--text-muted);
+    font-size: var(--fs-xs);
+    cursor: pointer;
+    transition: color 0.15s var(--ease);
+    line-height: 1;
+}
+
+.pc:hover {
+    color: var(--green);
+}
+
+.pc-close:hover,
+.pc-clearlog:hover {
+    color: var(--red);
+}
+
+.panel-content {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+/* ============================ TERMINAL ============================ */
+.terminal-region {
+    display: flex;
+    flex-direction: column;
+}
+
+.term-tabs {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-1);
+    height: 100%;
+}
+
+.term-tab {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-1) var(--sp-3);
+    font-size: var(--fs-sm);
+    color: var(--text-mid);
+    border: 1px solid transparent;
+    border-radius: 3px 3px 0 0;
+    cursor: pointer;
+}
+
+.term-tab.active {
+    color: var(--green-core);
+    background: rgba(45, 220, 130, 0.08);
+    border-color: var(--emerald-line);
+    border-bottom-color: transparent;
+    text-shadow: var(--text-glow-soft);
+}
+
+.term-tab .tab-x {
+    font-size: 9px;
+    color: var(--text-muted);
+}
+
+.term-tab .tab-x:hover {
+    color: var(--red);
+}
+
+.term-tab-add {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: var(--fs-md);
+    cursor: pointer;
+    padding: 0 var(--sp-2);
+}
+
+.term-tab-add:hover {
+    color: var(--green);
+}
+
+.terminal-body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: var(--sp-3) var(--sp-4);
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-size: var(--fs-base);
+    line-height: 1.55;
+    cursor: text;
+    scroll-behavior: smooth;
+}
+
+.terminal-output {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* Terminal line types */
+.t-line {
+    display: block;
+}
+
+.t-cmd {
+    color: var(--text-bright);
+}
+
+.t-cmd .t-prompt {
+    color: var(--green-core);
+    font-weight: 700;
+    margin-right: 6px;
+}
+
+.t-ok {
+    color: var(--green);
+}
+
+.t-ok .tag {
+    color: var(--green-core);
+    font-weight: 700;
+}
+
+.t-info {
+    color: var(--text);
+}
+
+.t-dim {
+    color: var(--text-dim);
+}
+
+.t-warn {
+    color: var(--amber);
+    text-shadow: var(--glow-amber);
+}
+
+.t-err {
+    color: var(--red);
+    text-shadow: var(--glow-red);
+}
+
+.t-cyan {
+    color: var(--cyan);
+}
+
+.t-accent {
+    color: var(--green-core);
+    font-weight: 700;
+    text-shadow: var(--text-glow);
+}
+
+.t-route {
+    color: var(--text-mid);
+}
+
+.t-big {
+    color: var(--green-core);
+    font-weight: 800;
+    font-size: var(--fs-md);
+    letter-spacing: 2px;
+    text-shadow: var(--glow-green-md);
+}
+
+.t-bar {
+    color: var(--green);
+    letter-spacing: -1px;
+}
+
+.t-tree {
+    color: var(--text-mid);
+}
+
+.t-spacer {
+    display: block;
+    height: 8px;
+}
+
+/* Extra terminal line helpers */
+.t-cmdline {
+    margin-top: 2px;
+}
+
+.t-prompt {
+    color: var(--green-core);
+    font-weight: 700;
+}
+
+.t-prompt-line {
+    color: var(--text-bright);
+    font-weight: 500;
+}
+
+.t-indent {
+    display: block;
+    padding-left: 1.6em;
+}
+
+.t-arrow {
+    color: var(--green);
+    font-weight: 700;
+}
+
+.t-sim-line {
+    color: var(--amber);
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-shadow: var(--glow-amber);
+}
+
+.t-key {
+    color: var(--cyan);
+    font-weight: 700;
+}
+
+.t-head {
+    color: var(--green-core);
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-shadow: var(--text-glow);
+}
+
+.t-val {
+    color: var(--text-bright);
+    font-weight: 700;
+}
+
+.t-crit {
+    color: var(--red);
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-shadow: var(--glow-red);
+}
+
+.t-bar-green {
+    color: var(--green);
+    letter-spacing: -1px;
+}
+
+.terminal-inputline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding-top: var(--sp-1);
+    position: relative;
+    flex-wrap: wrap;
+}
+
+.prompt-user {
+    color: var(--green-core);
+    font-weight: 700;
+    text-shadow: var(--text-glow-soft);
+}
+
+.prompt-sep {
+    color: var(--text-dim);
+}
+
+.prompt-path {
+    color: var(--cyan);
+}
+
+.prompt-dollar {
+    color: var(--green-core);
+    font-weight: 700;
+    margin: 0 8px 0 2px;
+}
+
+.terminal-input-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+}
+
+.terminal-input-mirror {
+    color: var(--text-bright);
+    white-space: pre;
+}
+
+.terminal-caret {
+    color: var(--green-core);
+    animation: caret-blink 1s steps(1) infinite;
+    text-shadow: var(--glow-green-sm);
+    margin-left: 1px;
+}
+
+@keyframes caret-blink {
+
+    0%,
+    50% {
+        opacity: 1;
+    }
+
+    50.01%,
+    100% {
+        opacity: 0;
+    }
+}
+
+.terminal-inputline.busy .terminal-caret {
+    animation: none;
+    opacity: 0.3;
+}
+
+.terminal-inputline.busy {
+    opacity: 0.6;
+}
+
+/* actual input is invisible, overlaid to capture keystrokes */
+.terminal-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: transparent;
+    caret-color: transparent;
+    font-family: var(--font-mono);
+    font-size: var(--fs-base);
+    letter-spacing: 0.02em;
+    padding: 0;
+}
+
+/* ============================ SYSTEM MONITOR ============================ */
+.monitor-content {
+    display: flex;
+    gap: var(--sp-3);
+    padding: var(--sp-3);
+}
+
+.monitor-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+    flex: 1;
+    min-width: 0;
+}
+
+.metric {
+    display: grid;
+    grid-template-columns: 58px 1fr 38px;
+    align-items: center;
+    gap: var(--sp-2);
+    font-size: var(--fs-sm);
+}
+
+.metric-label {
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+.metric-bar {
+    height: 9px;
+    background: var(--bg-inset);
+    border: 1px solid var(--emerald-line-soft);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+}
+
+.metric-bar i {
+    position: absolute;
+    inset: 0;
+    right: auto;
+    width: 72%;
+    background:
+        repeating-linear-gradient(90deg, var(--green) 0 3px, transparent 3px 5px);
+    box-shadow: 0 0 6px rgba(55, 255, 139, 0.5);
+    transition: width 0.6s var(--ease);
+}
+
+.metric-bar.warn i {
+    background: repeating-linear-gradient(90deg, var(--amber) 0 3px, transparent 3px 5px);
+    box-shadow: var(--glow-amber);
+}
+
+.metric-bar.crit i {
+    background: repeating-linear-gradient(90deg, var(--red) 0 3px, transparent 3px 5px);
+    box-shadow: var(--glow-red);
+}
+
+.metric-val {
+    color: var(--text-bright);
+    font-weight: 700;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.metric-row {
+    display: grid;
+    grid-template-columns: 58px 1fr;
+    gap: var(--sp-2);
+    font-size: var(--fs-sm);
+    margin-top: 2px;
+}
+
+.metric-plain {
+    color: var(--text-bright);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.radar-wrap {
+    width: 118px;
+    height: 118px;
+    flex-shrink: 0;
+    align-self: center;
+}
+
+.radar-canvas,
+.topo-canvas,
+.crypto-canvas,
+.worldmap-canvas,
+.ds-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* ============================ NETWORK TOPOLOGY ============================ */
+.topo-panel {
+    min-height: 0;
+}
+
+.topo-content {
+    padding: 0;
+}
+
+.topo-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+/* ============================ ENCRYPTION ENGINE ============================ */
+.crypto-content {
+    display: flex;
+    gap: var(--sp-3);
+    padding: var(--sp-3);
+}
+
+.crypto-left {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+}
+
+.crypto-field {
+    font-size: var(--fs-sm);
+}
+
+.crypto-key {
+    color: var(--text-dim);
+    letter-spacing: 1px;
+}
+
+.crypto-val {
+    color: var(--text-bright);
+    font-weight: 700;
+}
+
+.mono-ellipsis {
+    display: inline-block;
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
+}
+
+.crypto-genbar {
+    height: 10px;
+    background: var(--bg-inset);
+    border: 1px solid var(--emerald-line-soft);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 3px;
+}
+
+.crypto-genbar i {
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: repeating-linear-gradient(90deg, var(--green) 0 4px, rgba(55, 255, 139, 0.2) 4px 7px);
+    box-shadow: 0 0 8px rgba(55, 255, 139, 0.5);
+}
+
+.crypto-right {
+    width: 92px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+}
+
+.crypto-canvas {
+    width: 92px;
+    height: 92px;
+}
+
+/* ============================ EVENT LOG ============================ */
+.eventlog-content {
+    padding: var(--sp-2) var(--sp-3);
+    overflow-y: auto;
+    font-size: var(--fs-sm);
+    line-height: 1.7;
+    display: flex;
+    flex-direction: column;
+}
+
+.log-line {
+    display: flex;
+    gap: var(--sp-3);
+    white-space: nowrap;
+    animation: log-in 0.35s var(--ease);
+}
+
+@keyframes log-in {
+    from {
+        opacity: 0;
+        transform: translateX(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.log-time {
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.log-tag {
+    font-weight: 700;
+    min-width: 52px;
+}
+
+.log-tag.info {
+    color: var(--cyan);
+}
+
+.log-tag.ok {
+    color: var(--green-core);
+}
+
+.log-tag.warn {
+    color: var(--amber);
+}
+
+.log-tag.err {
+    color: var(--red);
+}
+
+.log-msg {
+    color: var(--text-mid);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* When event log is displayed as two columns (wide) */
+.eventlog-content.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 var(--sp-6);
+    align-content: start;
+}
+
+/* ============================ DATA STREAM ============================ */
+.datastream-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: var(--sp-4);
+    padding: var(--sp-2) var(--sp-3);
+    overflow: hidden;
+    font-family: var(--font-tech);
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+}
+
+.ds-hex,
+.ds-ascii {
+    overflow: hidden;
+    white-space: pre;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    position: relative;
+    mask-image: linear-gradient(180deg, transparent, black 12%, black 82%, transparent);
+    -webkit-mask-image: linear-gradient(180deg, transparent, black 12%, black 82%, transparent);
+}
+
+.ds-hex .hl {
+    color: var(--green);
+    text-shadow: var(--text-glow-soft);
+}
+
+.ds-ascii {
+    color: var(--text-muted);
+}
+
+.ds-ascii .hl {
+    color: var(--cyan);
+}
+
+.ds-canvas {
+    width: 90px;
+    height: 100%;
+    opacity: 0.8;
+}
+
+/* ============================ HACKER TYPER ============================ */
+/* Lines produced while mashing keys in Hacker Typer mode. */
+.hc-line {
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--text);
+    font-family: var(--font-mono);
+}
+
+.hc-kw {
+    color: var(--cyan);
+    text-shadow: var(--glow-cyan);
+    font-weight: 700;
+}
+
+.hc-fn {
+    color: var(--green-core);
+    text-shadow: var(--text-glow);
+}
+
+.hc-str {
+    color: var(--amber);
+}
+
+.hc-num {
+    color: #b98bff;
+}
+
+.hc-com {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.hc-pre {
+    color: var(--green-dim);
+    font-weight: 700;
+}
+
+.hc-op {
+    color: var(--text-mid);
+}
+
+/* subtle emphasis on the terminal while typer is active */
+body.hacker-typing .terminal-region {
+    box-shadow: var(--shadow-panel), inset 0 0 40px rgba(55, 255, 139, 0.06);
+    border-color: rgba(55, 255, 139, 0.4);
+}
+
+body.hacker-typing .terminal-caret {
+    opacity: 0;
+}
+
+/* hide the command input line while the typer owns the keyboard */
+body.hacker-typing .terminal-inputline {
+    display: none;
+}

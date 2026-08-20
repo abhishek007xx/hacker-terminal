@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="description"
+        content="NEXUS Secure Terminal — a cinematic, 100% simulated hacker terminal experience. No real network activity." />
+    <meta name="color-scheme" content="dark" />
+    <title>NEXUS // SECURE TERMINAL</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&family=Share+Tech+Mono&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/panels.css" />
+    <link rel="stylesheet" href="css/effects.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+</head>
+
+<body class="pre-boot">
+
+    <!-- ============================ GLOBAL CRT / FX LAYER ============================ -->
+    <div class="fx-layer" aria-hidden="true">
+        <div class="fx-scanlines"></div>
+        <div class="fx-noise"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-flicker"></div>
+        <div class="fx-glitch" id="fx-glitch"></div>
+    </div>
+
+    <!-- ============================ BOOT SEQUENCE ============================ -->
+    <div id="boot-screen" class="boot-screen" role="dialog" aria-label="System boot sequence">
+        <div class="boot-inner">
+            <pre class="boot-logo" id="boot-logo"></pre>
+            <div class="boot-log" id="boot-log"></div>
+            <div class="boot-progress-wrap">
+                <div class="boot-progress-track">
+                    <div class="boot-progress-fill" id="boot-progress-fill"></div>
+                </div>
+                <div class="boot-progress-label" id="boot-progress-label">0%</div>
+            </div>
+            <div class="boot-ready" id="boot-ready">
+                <div class="boot-ready-title">SYSTEM READY</div>
+                <div class="boot-ready-sub">Welcome, operator.</div>
+                <div class="boot-ready-hint">Type <span>'help'</span> to begin.</div>
+                <button class="boot-enter-btn" id="boot-enter-btn" type="button">[ ENTER TERMINAL ]</button>
+            </div>
+        </div>
+        <div class="boot-footer">SIMULATION MODE // NO REAL NETWORK ACTIVITY</div>
+    </div>
+
+    <!-- ============================ MAIN APP ============================ -->
+    <div id="app" class="app" aria-hidden="true">
+
+        <!-- ---------- TOP BAR ---------- -->
+        <header class="topbar">
+            <div class="topbar-brand">
+                <span class="brand-glyph">&gt;_</span>
+                <span class="brand-name">NEXUS</span>
+                <span class="brand-sep">//</span>
+                <span class="brand-sub">SECURE TERMINAL</span>
+            </div>
+            <div class="topbar-meta">
+                <div class="meta-item"><span class="meta-key">CONNECTION:</span> <span class="meta-val val-ok"
+                        id="meta-connection">ENCRYPTED</span></div>
+                <div class="meta-item"><span class="meta-key">NODE:</span> <span class="meta-val"
+                        id="meta-node">UNKNOWN</span></div>
+                <div class="meta-item"><span class="meta-key">SESSION:</span> <span class="meta-val"
+                        id="meta-session">7F3A-92C1</span></div>
+            </div>
+            <div class="topbar-right">
+                <span class="topbar-clock" id="topbar-clock">00:00:00</span>
+                <button class="icon-btn" id="btn-mute" title="Toggle sound" aria-label="Toggle sound">
+                    <span class="icon-mute-off">♪</span><span class="icon-mute-on">✕</span>
+                </button>
+                <button class="icon-btn" id="btn-fullscreen" title="Toggle fullscreen"
+                    aria-label="Toggle fullscreen">⛶</button>
+            </div>
+        </header>
+
+        <!-- ---------- STATUS BAR ---------- -->
+        <div class="statusbar">
+            <div class="status-leds">
+                <span class="led led-green" id="led-online"><i></i>SYSTEM ONLINE</span>
+                <span class="led led-green" id="led-encrypted"><i></i>ENCRYPTED</span>
+                <span class="led led-cyan" id="led-proxy"><i></i>PROXY ACTIVE</span>
+                <span class="led led-amber" id="led-trace"><i></i>TRACE: <em id="trace-value">0%</em></span>
+            </div>
+            <div class="status-sim" id="status-sim">
+                <span class="sim-dot">◆</span> SIMULATION MODE // NO REAL NETWORK ACTIVITY
+            </div>
+        </div>
+
+        <!-- ---------- MAIN GRID ---------- -->
+        <main class="main-grid">
+
+            <!-- ===== LEFT SIDEBAR ===== -->
+            <aside class="sidebar" id="sidebar">
+                <nav class="side-nav" aria-label="Main navigation">
+                    <div class="side-label">MAIN</div>
+                    <button class="nav-item active" data-nav="terminal"><span class="nav-ic">▶</span> TERMINAL</button>
+                    <button class="nav-item" data-nav="network"><span class="nav-ic">◈</span> NETWORK</button>
+                    <button class="nav-item" data-nav="system"><span class="nav-ic">▦</span> SYSTEM</button>
+                    <button class="nav-item" data-nav="exploits"><span class="nav-ic">⚡</span> EXPLOITS</button>
+                    <button class="nav-item" data-nav="payloads"><span class="nav-ic">◉</span> PAYLOADS</button>
+                    <button class="nav-item" data-nav="logs"><span class="nav-ic">▤</span> LOGS</button>
+                    <button class="nav-item" data-nav="settings"><span class="nav-ic">⚙</span> SETTINGS</button>
+                </nav>
+
+                <div class="identity-panel">
+                    <div class="identity-head">IDENTITY</div>
+                    <div class="identity-rows">
+                        <div class="id-row"><span>USER:</span><b>root</b></div>
+                        <div class="id-row"><span>UID :</span><b>0</b></div>
+                        <div class="id-row"><span>GID :</span><b>0</b></div>
+                        <div class="id-row"><span>GROUPS:</span><b>superuser</b></div>
+                        <div class="id-row"><span>LOCATION:</span><b>unknown</b></div>
+                        <div class="id-row"><span>IP:</span><b id="id-ip">192.168.0.101</b></div>
+                        <div class="id-row"><span>MASK:</span><b>255.255.255.0</b></div>
+                        <div class="id-row"><span>GATEWAY:</span><b>192.168.0.1</b></div>
+                    </div>
+                    <div class="worldmap-wrap">
+                        <canvas id="worldmap-canvas" class="worldmap-canvas"></canvas>
+                        <div class="worldmap-label">GLOBAL VIEW</div>
+                    </div>
+                </div>
+
+                <div class="side-actions">
+                    <button class="action-btn action-hacker" id="btn-hacker">[ HACKER TYPER ]</button>
+                    <button class="action-btn action-matrix" id="btn-matrix">[ ENTER MATRIX MODE ]</button>
+                    <button class="action-btn action-breach" id="btn-breach">RUN BREACH SIMULATION</button>
+                </div>
+            </aside>
+
+            <!-- ===== CENTER TERMINAL ===== -->
+            <section class="terminal-region panel" id="region-terminal">
+                <div class="panel-titlebar">
+                    <div class="term-tabs">
+                        <div class="term-tab active"><span class="tab-title">root@nexus:~</span><span
+                                class="tab-x">✕</span></div>
+                        <button class="term-tab-add" title="New tab (simulated)">+</button>
+                    </div>
+                    <div class="panel-controls">
+                        <span class="pc pc-min">─</span><span class="pc pc-max">▢</span><span
+                            class="pc pc-close">✕</span>
+                    </div>
+                </div>
+                <div class="terminal-body" id="terminal-body">
+                    <div class="terminal-output" id="terminal-output"></div>
+                    <div class="terminal-inputline" id="terminal-inputline">
+                        <span class="prompt-user">root@nexus</span><span class="prompt-sep">:</span><span
+                            class="prompt-path">~</span><span class="prompt-dollar">$</span>
+                        <span class="terminal-input-wrap">
+                            <span class="terminal-input-mirror" id="terminal-input-mirror"></span><span
+                                class="terminal-caret" id="terminal-caret">█</span>
+                        </span>
+                        <input type="text" class="terminal-input" id="terminal-input" autocomplete="off"
+                            autocorrect="off" autocapitalize="off" spellcheck="false"
+                            aria-label="Terminal command input" />
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== RIGHT COLUMN ===== -->
+            <aside class="right-column" id="right-column">
+
+                <!-- SYSTEM MONITOR -->
+                <section class="panel monitor-panel" data-panel="system">
+                    <div class="panel-titlebar">
+                        <span class="panel-title">SYSTEM MONITOR</span>
+                        <span class="panel-controls"><span class="pc">─</span><span class="pc">▢</span><span
+                                class="pc">✕</span></span>
+                    </div>
+                    <div class="panel-content monitor-content">
+                        <div class="monitor-metrics">
+                            <div class="metric">
+                                <span class="metric-label">CPU</span>
+                                <span class="metric-bar"><i id="bar-cpu"></i></span>
+                                <span class="metric-val" id="val-cpu">72%</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">MEMORY</span>
+                                <span class="metric-bar"><i id="bar-mem"></i></span>
+                                <span class="metric-val" id="val-mem">54%</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">NETWORK</span>
+                                <span class="metric-bar"><i id="bar-net"></i></span>
+                                <span class="metric-val" id="val-net">81%</span>
+                            </div>
+                            <div class="metric-row"><span class="metric-label">UPTIME</span><span class="metric-plain"
+                                    id="val-uptime">17:42:08</span></div>
+                            <div class="metric-row"><span class="metric-label">THREADS</span><span class="metric-plain"
+                                    id="val-threads">143</span></div>
+                            <div class="metric-row"><span class="metric-label">NODES</span><span class="metric-plain"
+                                    id="val-nodes">27</span></div>
+                        </div>
+                        <div class="radar-wrap">
+                            <canvas id="radar-canvas" class="radar-canvas"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- NETWORK TOPOLOGY -->
+                <section class="panel topo-panel" data-panel="network">
+                    <div class="panel-titlebar">
+                        <span class="panel-title">NETWORK TOPOLOGY</span>
+                        <span class="panel-controls"><span class="pc">─</span><span class="pc">▢</span><span
+                                class="pc">✕</span></span>
+                    </div>
+                    <div class="panel-content topo-content">
+                        <canvas id="topo-canvas" class="topo-canvas"></canvas>
+                    </div>
+                </section>
+
+                <!-- ENCRYPTION ENGINE -->
+                <section class="panel crypto-panel" data-panel="crypto">
+                    <div class="panel-titlebar">
+                        <span class="panel-title">ENCRYPTION ENGINE</span>
+                        <span class="panel-controls"><span class="pc">─</span><span class="pc">▢</span><span
+                                class="pc">✕</span></span>
+                    </div>
+                    <div class="panel-content crypto-content">
+                        <div class="crypto-left">
+                            <div class="crypto-field">
+                                <div class="crypto-key">KEY GENERATION</div>
+                                <div class="crypto-genbar"><i id="crypto-genbar"></i></div>
+                            </div>
+                            <div class="crypto-field"><span class="crypto-key">HASH:</span> <span
+                                    class="crypto-val mono-ellipsis" id="crypto-hash">8F7A2C91D4E8A92F...</span></div>
+                            <div class="crypto-field"><span class="crypto-key">SESSION KEY:</span> <span
+                                    class="crypto-val" id="crypto-session">A91F-72CD-8841-29FA</span></div>
+                            <div class="crypto-field"><span class="crypto-key">ALGORITHM:</span> <span
+                                    class="crypto-val">AES-256-GCM</span></div>
+                            <div class="crypto-field"><span class="crypto-key">STATUS:</span> <span
+                                    class="crypto-val val-ok" id="crypto-status">SECURE</span></div>
+                        </div>
+                        <div class="crypto-right">
+                            <canvas id="crypto-canvas" class="crypto-canvas"></canvas>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- ===== EVENT LOG ===== -->
+            <section class="panel eventlog-panel" id="region-logs" data-panel="logs">
+                <div class="panel-titlebar">
+                    <span class="panel-title">EVENT LOG</span>
+                    <span class="panel-controls"><span class="pc">─</span><span class="pc pc-clearlog" id="btn-clearlog"
+                            title="Clear log">✕</span></span>
+                </div>
+                <div class="panel-content eventlog-content" id="eventlog-content"></div>
+            </section>
+
+            <!-- ===== DATA STREAM ===== -->
+            <section class="panel datastream-panel" data-panel="stream">
+                <div class="panel-titlebar">
+                    <span class="panel-title">DATA STREAM</span>
+                    <span class="panel-controls"><span class="pc">✕</span></span>
+                </div>
+                <div class="panel-content datastream-content">
+                    <div class="ds-hex" id="ds-hex"></div>
+                    <div class="ds-ascii" id="ds-ascii"></div>
+                    <canvas id="ds-canvas" class="ds-canvas"></canvas>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- ---------- HACKER TYPER BADGE ---------- -->
+        <div class="hacker-typer-badge" id="hacker-badge" aria-hidden="true">
+            <span class="htb-dot">●</span> HACKER TYPER ACTIVE &nbsp;//&nbsp; MASH ANY KEYS &nbsp;//&nbsp; PRESS
+            <b>ESC</b> TO STOP
+        </div>
+
+        <!-- ---------- MOBILE TAB BAR ---------- -->
+        <nav class="mobile-tabs" id="mobile-tabs" aria-label="Panel tabs">
+            <button class="mtab active" data-tab="terminal">TERMINAL</button>
+            <button class="mtab" data-tab="monitor">MONITOR</button>
+            <button class="mtab" data-tab="network">NET</button>
+            <button class="mtab" data-tab="log">LOG</button>
+        </nav>
+    </div>
+
+    <!-- ============================ MATRIX MODE ============================ -->
+    <div id="matrix-mode" class="matrix-mode" aria-hidden="true">
+        <canvas id="matrix-canvas" class="matrix-canvas"></canvas>
+        <div class="matrix-hud">
+            <div class="matrix-terminal" id="matrix-terminal"></div>
+        </div>
+        <div class="matrix-exit-hint">PRESS <span>ESC</span> TO EXIT MATRIX MODE</div>
+    </div>
+
+    <!-- ============================ BREACH OVERLAY ============================ -->
+    <div id="breach-overlay" class="breach-overlay" aria-hidden="true">
+        <div class="breach-box">
+            <pre class="breach-output" id="breach-output"></pre>
+        </div>
+    </div>
+
+    <!-- ============================ SCRIPTS ============================ -->
+    <script src="js/audio.js"></script>
+    <script src="js/typewriter.js"></script>
+    <script src="js/worldmap.js"></script>
+    <script src="js/radar.js"></script>
+    <script src="js/monitor.js"></script>
+    <script src="js/topology.js"></script>
+    <script src="js/encryption.js"></script>
+    <script src="js/eventlog.js"></script>
+    <script src="js/datastream.js"></script>
+    <script src="js/matrix.js"></script>
+    <script src="js/breach.js"></script>
+    <script src="js/commands.js"></script>
+    <script src="js/terminal.js"></script>
+    <script src="js/hackertyper.js"></script>
+    <script src="js/boot.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

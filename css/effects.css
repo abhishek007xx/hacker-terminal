@@ -1,0 +1,694 @@
+/* ============================================================
+   NEXUS // SECURE TERMINAL — Effects
+   CRT scanlines, flicker, glitch, boot, matrix, breach,
+   identity panel
+   ============================================================ */
+
+/* ============================ GLOBAL FX LAYER ============================ */
+.fx-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Scanlines — fine horizontal lines */
+.fx-scanlines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(180deg,
+            rgba(0, 0, 0, 0) 0px,
+            rgba(0, 0, 0, 0) 2px,
+            rgba(0, 0, 0, 0.16) 3px,
+            rgba(0, 0, 0, 0.16) 3px);
+    background-size: 100% 3px;
+    opacity: 0.6;
+    mix-blend-mode: multiply;
+}
+
+/* Slow rolling scan bar */
+.fx-scanlines::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 140px;
+    background: linear-gradient(180deg, transparent, rgba(55, 255, 139, 0.04) 50%, transparent);
+    animation: scan-roll 7s linear infinite;
+}
+
+@keyframes scan-roll {
+    0% {
+        top: -140px;
+    }
+
+    100% {
+        top: 100%;
+    }
+}
+
+/* Subtle noise */
+.fx-noise {
+    position: absolute;
+    inset: -50%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    animation: noise-shift 0.4s steps(4) infinite;
+}
+
+@keyframes noise-shift {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    25% {
+        transform: translate(-3%, 2%);
+    }
+
+    50% {
+        transform: translate(2%, -2%);
+    }
+
+    75% {
+        transform: translate(-2%, -1%);
+    }
+
+    100% {
+        transform: translate(1%, 2%);
+    }
+}
+
+/* Vignette + slight screen curvature feel */
+.fx-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 90% 85% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+    box-shadow: inset 0 0 180px rgba(0, 0, 0, 0.5);
+}
+
+/* Flicker — very subtle brightness variation */
+.fx-flicker {
+    position: absolute;
+    inset: 0;
+    background: rgba(55, 255, 139, 0.015);
+    animation: flicker 6s infinite;
+    opacity: 0;
+}
+
+@keyframes flicker {
+
+    0%,
+    96%,
+    100% {
+        opacity: 0;
+    }
+
+    97% {
+        opacity: 0.5;
+    }
+
+    97.5% {
+        opacity: 0.1;
+    }
+
+    98% {
+        opacity: 0.6;
+    }
+
+    98.5% {
+        opacity: 0.2;
+    }
+}
+
+/* Glitch flash overlay (triggered via .active) */
+.fx-glitch {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    background:
+        linear-gradient(90deg, transparent 0%, rgba(63, 224, 255, 0.06) 2%, transparent 3%),
+        linear-gradient(0deg, transparent 0%, rgba(255, 65, 85, 0.05) 50%, transparent 51%);
+    mix-blend-mode: screen;
+}
+
+.fx-glitch.active {
+    animation: glitch-flash 0.5s steps(2) 3;
+}
+
+@keyframes glitch-flash {
+    0% {
+        opacity: 0;
+        transform: translateX(0);
+    }
+
+    20% {
+        opacity: 1;
+        transform: translateX(-4px) skewX(2deg);
+    }
+
+    40% {
+        opacity: 0.4;
+        transform: translateX(5px);
+    }
+
+    60% {
+        opacity: 1;
+        transform: translateX(-2px) skewX(-1deg);
+    }
+
+    80% {
+        opacity: 0.2;
+        transform: translateX(3px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(0);
+    }
+}
+
+/* Screen-wide shake for major events */
+body.screen-shake .app {
+    animation: screen-shake 0.4s var(--ease);
+}
+
+@keyframes screen-shake {
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    20% {
+        transform: translate(-2px, 1px);
+    }
+
+    40% {
+        transform: translate(2px, -1px);
+    }
+
+    60% {
+        transform: translate(-1px, -1px);
+    }
+
+    80% {
+        transform: translate(1px, 1px);
+    }
+}
+
+/* Text glitch utility for headings during breach */
+.glitch-text {
+    position: relative;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+}
+
+.glitch-text::before {
+    color: var(--cyan);
+    animation: glitch-a 0.4s infinite steps(2);
+    clip-path: inset(0 0 55% 0);
+}
+
+.glitch-text::after {
+    color: var(--red);
+    animation: glitch-b 0.35s infinite steps(2);
+    clip-path: inset(55% 0 0 0);
+}
+
+@keyframes glitch-a {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(-2px);
+    }
+}
+
+@keyframes glitch-b {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(2px);
+    }
+}
+
+/* ============================ BOOT SCREEN ============================ */
+.boot-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 8000;
+    background: radial-gradient(ellipse at 50% 40%, #04120c, #010604 80%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--sp-8);
+    opacity: 1;
+    transition: opacity 0.6s var(--ease);
+}
+
+.boot-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.boot-inner {
+    width: min(560px, 90vw);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+}
+
+.boot-logo {
+    color: var(--green-core);
+    font-size: 11px;
+    line-height: 1.1;
+    text-shadow: var(--glow-green-md);
+    white-space: pre;
+    margin-bottom: var(--sp-2);
+    filter: drop-shadow(0 0 8px rgba(55, 255, 139, 0.3));
+}
+
+.boot-log {
+    min-height: 150px;
+    font-size: var(--fs-base);
+    line-height: 1.7;
+    color: var(--text);
+    white-space: pre-wrap;
+}
+
+.boot-log .boot-ok {
+    color: var(--green-core);
+    font-weight: 700;
+}
+
+.boot-log .boot-line {
+    display: block;
+}
+
+.boot-log .boot-dim {
+    color: var(--text-dim);
+}
+
+.boot-progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+}
+
+.boot-progress-track {
+    flex: 1;
+    height: 14px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--emerald-line);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+}
+
+.boot-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: repeating-linear-gradient(90deg, var(--green) 0 6px, rgba(55, 255, 139, 0.25) 6px 9px);
+    box-shadow: 0 0 12px rgba(55, 255, 139, 0.6);
+    transition: width 0.2s linear;
+}
+
+.boot-progress-label {
+    color: var(--green-core);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    min-width: 42px;
+    text-align: right;
+}
+
+.boot-ready {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.5s var(--ease);
+    text-align: center;
+    margin-top: var(--sp-4);
+    pointer-events: none;
+}
+
+.boot-ready.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.boot-ready-title {
+    font-size: var(--fs-2xl);
+    font-weight: 800;
+    letter-spacing: 6px;
+    color: var(--green-core);
+    text-shadow: var(--glow-green-lg);
+}
+
+.boot-ready-sub {
+    color: var(--text-bright);
+    font-size: var(--fs-lg);
+    margin-top: var(--sp-2);
+    letter-spacing: 2px;
+}
+
+.boot-ready-hint {
+    color: var(--text-dim);
+    margin-top: var(--sp-2);
+    font-size: var(--fs-sm);
+}
+
+.boot-ready-hint span {
+    color: var(--cyan);
+}
+
+.boot-enter-btn {
+    margin-top: var(--sp-5);
+    padding: var(--sp-3) var(--sp-6);
+    background: rgba(45, 220, 130, 0.1);
+    border: 1px solid var(--green-dim);
+    color: var(--green-core);
+    font-family: var(--font-mono);
+    font-size: var(--fs-md);
+    font-weight: 700;
+    letter-spacing: 3px;
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: all 0.25s var(--ease);
+    animation: btn-pulse 2s ease-in-out infinite;
+}
+
+.boot-enter-btn:hover {
+    background: rgba(45, 220, 130, 0.24);
+    box-shadow: var(--glow-green-lg);
+    text-shadow: var(--text-glow);
+}
+
+@keyframes btn-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 rgba(55, 255, 139, 0);
+    }
+
+    50% {
+        box-shadow: 0 0 20px rgba(55, 255, 139, 0.25);
+    }
+}
+
+.boot-footer {
+    position: absolute;
+    bottom: var(--sp-5);
+    font-size: var(--fs-xs);
+    letter-spacing: 2px;
+    color: var(--red);
+    opacity: 0.6;
+}
+
+/* ============================ IDENTITY PANEL ============================ */
+.identity-panel {
+    background: var(--bg-panel);
+    border: 1px solid var(--emerald-line-soft);
+    border-radius: var(--radius-lg);
+    padding: var(--sp-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    min-height: 0;
+}
+
+.identity-head {
+    font-size: var(--fs-xs);
+    letter-spacing: 3px;
+    color: var(--green-core);
+    font-weight: 700;
+    text-shadow: var(--text-glow-soft);
+    padding-bottom: var(--sp-1);
+    border-bottom: 1px solid var(--emerald-line-soft);
+}
+
+.identity-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.id-row {
+    display: flex;
+    gap: var(--sp-2);
+    font-size: var(--fs-xs);
+    line-height: 1.7;
+}
+
+.id-row span {
+    color: var(--text-dim);
+    min-width: 66px;
+}
+
+.id-row b {
+    color: var(--text-bright);
+    font-weight: 600;
+}
+
+.worldmap-wrap {
+    position: relative;
+    margin-top: var(--sp-2);
+    border: 1px solid var(--emerald-line-soft);
+    border-radius: var(--radius);
+    overflow: hidden;
+    aspect-ratio: 2 / 1;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.worldmap-label {
+    position: absolute;
+    bottom: 3px;
+    left: 5px;
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    opacity: 0.7;
+}
+
+/* ============================ MATRIX MODE ============================ */
+.matrix-mode {
+    position: fixed;
+    inset: 0;
+    z-index: 9500;
+    background: #000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s var(--ease);
+}
+
+.matrix-mode.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.matrix-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.matrix-hud {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--sp-8);
+    pointer-events: none;
+}
+
+.matrix-terminal {
+    width: min(720px, 88vw);
+    max-height: 70vh;
+    overflow: hidden;
+    background: rgba(0, 20, 8, 0.42);
+    border: 1px solid rgba(55, 255, 139, 0.3);
+    border-radius: var(--radius-lg);
+    padding: var(--sp-5);
+    font-size: var(--fs-md);
+    line-height: 1.7;
+    color: var(--green-core);
+    text-shadow: var(--glow-green-md);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    white-space: pre-wrap;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.7), inset 0 0 40px rgba(55, 255, 139, 0.05);
+}
+
+/* stronger scanlines in matrix mode */
+.matrix-mode.active~.fx-layer .fx-scanlines,
+body.matrix-active .fx-scanlines {
+    opacity: 0.9;
+}
+
+.matrix-exit-hint {
+    position: absolute;
+    bottom: var(--sp-6);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: var(--fs-sm);
+    letter-spacing: 3px;
+    color: var(--text-mid);
+    animation: led-pulse 2s ease-in-out infinite;
+}
+
+.matrix-exit-hint span {
+    color: var(--green-core);
+    border: 1px solid var(--green-dim);
+    padding: 1px 6px;
+    border-radius: 3px;
+}
+
+/* ============================ BREACH OVERLAY ============================ */
+.breach-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9200;
+    background: rgba(2, 6, 6, 0.92);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s var(--ease);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.breach-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.breach-box {
+    width: min(640px, 90vw);
+    background: rgba(6, 16, 14, 0.85);
+    border: 1px solid var(--red-dim);
+    border-radius: var(--radius-lg);
+    padding: var(--sp-6);
+    box-shadow: 0 0 80px rgba(255, 65, 85, 0.15), var(--shadow-deep);
+    position: relative;
+}
+
+.breach-box::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 65, 85, 0.3);
+    animation: breach-border 1.5s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes breach-border {
+
+    0%,
+    100% {
+        box-shadow: inset 0 0 20px rgba(255, 65, 85, 0.05);
+    }
+
+    50% {
+        box-shadow: inset 0 0 30px rgba(255, 65, 85, 0.18);
+    }
+}
+
+.breach-output {
+    font-family: var(--font-mono);
+    font-size: var(--fs-md);
+    line-height: 1.7;
+    color: var(--text);
+    white-space: pre-wrap;
+    min-height: 320px;
+}
+
+.breach-output .b-title {
+    color: var(--amber);
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.breach-output .b-ok {
+    color: var(--green-core);
+    font-weight: 700;
+}
+
+.breach-output .b-tree {
+    color: var(--text-mid);
+}
+
+.breach-output .b-warn {
+    color: var(--amber);
+}
+
+.breach-output .b-crit {
+    color: var(--red);
+    font-weight: 800;
+    text-shadow: var(--glow-red);
+    letter-spacing: 2px;
+}
+
+.breach-output .b-root {
+    color: var(--green-core);
+    font-weight: 800;
+    font-size: var(--fs-xl);
+    letter-spacing: 3px;
+    text-shadow: var(--glow-green-lg);
+}
+
+.breach-output .b-safe {
+    color: var(--text-dim);
+    font-size: var(--fs-sm);
+    letter-spacing: 2px;
+}
+
+.breach-output .b-bar {
+    color: var(--red);
+    letter-spacing: -1px;
+}
+
+/* ============================ REDUCED MOTION ============================ */
+@media (prefers-reduced-motion: reduce) {
+
+    .fx-noise,
+    .fx-flicker,
+    .fx-scanlines::after,
+    .led i,
+    .status-sim .sim-dot,
+    .boot-enter-btn,
+    .matrix-exit-hint,
+    .breach-box::before {
+        animation: none !important;
+    }
+
+    .terminal-caret {
+        animation: caret-blink 1s steps(1) infinite;
+    }
+
+    * {
+        scroll-behavior: auto !important;
+    }
+}

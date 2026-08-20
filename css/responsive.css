@@ -1,0 +1,279 @@
+/* ============================================================
+   NEXUS // SECURE TERMINAL — Responsive
+   Tablet + mobile: collapse panels into tabs
+   ============================================================ */
+
+.mobile-tabs {
+    display: none;
+}
+
+/* ---------------- Large desktop: widen right column a touch ---------------- */
+@media (min-width: 1600px) {
+    :root {
+        --right-w: 400px;
+        --sidebar-w: 230px;
+        --bottom-h: 168px;
+    }
+}
+
+/* ---------------- Medium: shrink right column ---------------- */
+@media (max-width: 1280px) {
+    :root {
+        --right-w: 320px;
+        --sidebar-w: 190px;
+    }
+
+    .brand-sub {
+        display: none;
+    }
+
+    .topbar-meta {
+        gap: var(--sp-4);
+    }
+}
+
+/* ---------------- Narrow desktop / small laptop ---------------- */
+@media (max-width: 1080px) {
+    .topbar-meta .meta-item:nth-child(2) {
+        display: none;
+    }
+
+    :root {
+        --right-w: 290px;
+    }
+
+    .crypto-right,
+    .radar-wrap {
+        display: none;
+    }
+}
+
+/* ============================================================
+   MOBILE / TABLET — tabbed single-column layout
+   ============================================================ */
+@media (max-width: 900px) {
+    :root {
+        --topbar-h: auto;
+        --statusbar-h: auto;
+    }
+
+    body {
+        overflow: auto;
+    }
+
+    .app {
+        position: relative;
+        inset: auto;
+        min-height: 100vh;
+        grid-template-rows: auto auto 1fr;
+        padding-bottom: var(--mobile-tabs-h);
+    }
+
+    /* --- Topbar wraps --- */
+    .topbar {
+        flex-wrap: wrap;
+        height: auto;
+        padding: var(--sp-2) var(--sp-3);
+        gap: var(--sp-2);
+    }
+
+    .topbar-meta {
+        order: 3;
+        width: 100%;
+        justify-content: flex-start;
+        gap: var(--sp-3);
+        flex-wrap: wrap;
+    }
+
+    .topbar-meta .meta-item {
+        display: block !important;
+    }
+
+    .topbar-right {
+        margin-left: auto;
+    }
+
+    .brand-sub {
+        display: inline;
+    }
+
+    /* --- Statusbar wraps --- */
+    .statusbar {
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+        gap: var(--sp-1);
+        padding: var(--sp-2) var(--sp-3);
+    }
+
+    .status-leds {
+        flex-wrap: wrap;
+        gap: var(--sp-3);
+    }
+
+    .status-sim {
+        font-size: 9px;
+    }
+
+    /* --- Grid becomes single column with tab panes --- */
+    .main-grid {
+        display: block;
+        padding: var(--sp-2);
+        overflow: visible;
+    }
+
+    .sidebar,
+    .right-column,
+    .terminal-region,
+    .eventlog-panel,
+    .datastream-panel {
+        display: none;
+    }
+
+    /* right column children promoted to top-level panes */
+    .right-column {
+        grid-template-rows: none;
+    }
+
+    /* Active pane display driven by body[data-mtab] */
+    body[data-mtab="terminal"] .terminal-region {
+        display: flex;
+        height: calc(100vh - var(--mobile-tabs-h) - 150px);
+        min-height: 380px;
+    }
+
+    body[data-mtab="monitor"] .sidebar,
+    body[data-mtab="monitor"] .right-column {
+        display: flex;
+    }
+
+    body[data-mtab="monitor"] .right-column {
+        display: grid;
+        grid-template-rows: auto auto auto;
+    }
+
+    body[data-mtab="monitor"] .topo-panel {
+        min-height: 260px;
+    }
+
+    body[data-mtab="network"] .right-column {
+        display: grid;
+        grid-template-rows: auto;
+    }
+
+    body[data-mtab="network"] .topo-panel {
+        display: flex;
+        min-height: 420px;
+    }
+
+    body[data-mtab="network"] .monitor-panel,
+    body[data-mtab="network"] .crypto-panel {
+        display: none;
+    }
+
+    body[data-mtab="log"] .eventlog-panel,
+    body[data-mtab="log"] .datastream-panel {
+        display: flex;
+        min-height: 240px;
+        margin-bottom: var(--sp-2);
+    }
+
+    /* sidebar shown within monitor tab (identity + actions) */
+    body[data-mtab="monitor"] .sidebar {
+        display: flex;
+        margin-bottom: var(--sp-2);
+    }
+
+    .radar-wrap,
+    .crypto-right {
+        display: block;
+    }
+
+    /* --- Mobile tab bar --- */
+    .mobile-tabs {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: var(--mobile-tabs-h);
+        background: rgba(6, 14, 14, 0.95);
+        border-top: 1px solid var(--emerald-line);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 100;
+    }
+
+    .mtab {
+        background: transparent;
+        border: none;
+        border-top: 2px solid transparent;
+        color: var(--text-mid);
+        font-family: var(--font-mono);
+        font-size: var(--fs-sm);
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        cursor: pointer;
+        transition: all 0.18s var(--ease);
+    }
+
+    .mtab.active {
+        color: var(--green-core);
+        border-top-color: var(--green-core);
+        background: rgba(45, 220, 130, 0.08);
+        text-shadow: var(--text-glow);
+    }
+
+    /* Data stream simplified on mobile */
+    .datastream-content {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .ds-canvas {
+        display: none;
+    }
+
+    .matrix-terminal {
+        font-size: var(--fs-sm);
+    }
+
+    .boot-ready-title {
+        font-size: var(--fs-xl);
+        letter-spacing: 3px;
+    }
+
+    /* keep the Hacker Typer badge above the mobile tab bar */
+    .hacker-typer-badge {
+        bottom: calc(var(--mobile-tabs-h) + var(--sp-3));
+        font-size: 9px;
+        letter-spacing: 1px;
+        padding: var(--sp-1) var(--sp-3);
+        max-width: 92vw;
+        white-space: normal;
+        text-align: center;
+    }
+}
+
+/* ---------------- Small phones ---------------- */
+@media (max-width: 480px) {
+    .brand-name {
+        font-size: var(--fs-lg);
+    }
+
+    .datastream-content {
+        grid-template-columns: 1fr;
+    }
+
+    .ds-ascii {
+        display: none;
+    }
+
+    .topbar-clock {
+        display: none;
+    }
+
+    .monitor-content {
+        flex-direction: column;
+    }
+}
