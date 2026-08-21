@@ -913,7 +913,7 @@ body.hacker-typing .terminal-inputline {
     font-weight: 700;
     padding: 3px 8px;
     border-radius: var(--radius);
-    background: rgba(55, 255, 139, 0.08);
+    background: var(--green-ghost);
     border: 1px solid var(--emerald-line);
     color: var(--green-core);
     cursor: pointer;
@@ -924,8 +924,16 @@ body.hacker-typing .terminal-inputline {
 }
 
 .theme-picker-btn:hover {
-    background: rgba(55, 255, 139, 0.2);
+    background: rgba(45, 220, 130, 0.2);
     box-shadow: var(--glow-green-sm);
+    border-color: var(--green-dim);
+}
+
+.theme-picker-btn.active {
+    background: var(--green-ghost);
+    border-color: var(--green);
+    box-shadow: var(--glow-green-sm);
+    animation: btn-pulse 1.8s ease-in-out infinite;
 }
 
 .theme-dot {
@@ -1279,3 +1287,205 @@ body.hacker-typing .terminal-inputline {
     overflow-y: auto;
     white-space: pre-wrap;
 }
+
+/* ============================ GPU HASH CRACKER ============================ */
+.hc-box {
+    width: min(820px, 96vw);
+    max-height: 88vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.hc-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2);
+}
+
+.hc-hash-field {
+    width: 100%;
+    height: 38px !important;
+    padding: var(--sp-2) var(--sp-3) !important;
+    resize: none !important;
+    font-size: var(--fs-xs) !important;
+    letter-spacing: 0.5px;
+}
+
+.hc-progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+}
+
+.hc-progress-track {
+    flex: 1;
+    height: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--emerald-line);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.hc-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--green-dim), var(--green-core));
+    transition: width 0.15s linear;
+    box-shadow: 0 0 8px var(--green);
+}
+
+.hc-progress-label {
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    color: var(--green-core);
+    min-width: 36px;
+    text-align: right;
+}
+
+.hc-status-idle {
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    padding: 2px 8px;
+    border: 1px solid var(--emerald-line-soft);
+    border-radius: var(--radius);
+}
+
+.hc-status-running {
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--amber);
+    padding: 2px 8px;
+    border: 1px solid var(--amber-dim);
+    border-radius: var(--radius);
+    animation: led-pulse 1s ease-in-out infinite;
+}
+
+.hc-status-cracked {
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--green-core);
+    padding: 2px 8px;
+    border: 1px solid var(--green);
+    border-radius: var(--radius);
+    text-shadow: var(--text-glow);
+}
+
+.hc-log-wrap {
+    flex: 1;
+    min-height: 200px;
+    max-height: 320px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--emerald-line-soft);
+    border-radius: var(--radius);
+    padding: var(--sp-2) var(--sp-3);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* ============================ DARKNET INTEL FEED ============================ */
+.dn-box {
+    width: min(900px, 98vw);
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.dn-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-3);
+    max-height: 320px;
+}
+
+.dn-section {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--emerald-line-soft);
+    border-radius: var(--radius);
+    padding: var(--sp-2);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-1);
+    max-height: 155px;
+}
+
+.dn-section-title {
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--text-mid);
+    border-bottom: 1px solid var(--emerald-line-soft);
+    padding-bottom: 4px;
+    flex-shrink: 0;
+}
+
+.dn-breach-list, .dn-c2-list, .dn-exploit-list, .dn-live-feed {
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: var(--fs-xs);
+    font-family: var(--font-mono);
+}
+
+.dn-breach-row, .dn-c2-row, .dn-exploit-row {
+    display: flex;
+    gap: var(--sp-2);
+    align-items: center;
+    padding: 1px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.dn-target, .dn-c2-src, .dn-exp-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+}
+
+.dn-meta, .dn-c2-addr { color: var(--text-muted); flex-shrink: 0; }
+.dn-records, .dn-c2-beacons { color: var(--text-dim); flex-shrink: 0; }
+.dn-date { color: var(--text-muted); flex-shrink: 0; }
+
+.dn-sev-crit { color: var(--red); font-weight: 700; flex-shrink: 0; }
+.dn-sev-high { color: var(--amber); font-weight: 700; flex-shrink: 0; }
+.dn-sev-med { color: var(--text-mid); font-weight: 700; flex-shrink: 0; }
+
+.dn-exp-price { color: var(--amber); flex-shrink: 0; }
+.dn-exp-status { flex-shrink: 0; font-weight: 700; }
+
+.dn-scan-section {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--emerald-line-soft);
+    border-radius: var(--radius);
+    padding: var(--sp-2);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-1);
+}
+
+.dn-scan-output {
+    min-height: 80px;
+    max-height: 120px;
+    overflow-y: auto;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+}

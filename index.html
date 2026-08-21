@@ -82,6 +82,8 @@
                 <button class="icon-btn" id="btn-cam" title="Drone &amp; CCTV Surveillance Matrix" aria-label="Drone Cam">📹</button>
                 <button class="icon-btn" id="btn-cipher" title="Cipher &amp; Steganography Lab" aria-label="Cipher Lab">🔐</button>
                 <button class="icon-btn" id="btn-exploit" title="Zero-Day Exploit Chain Builder" aria-label="Exploit Builder">🛠️</button>
+                <button class="icon-btn" id="btn-hashcrack" title="GPU Hash Cracker" aria-label="GPU Hash Cracker">⚙️</button>
+                <button class="icon-btn" id="btn-darknet" title="Darknet Intelligence Feed" aria-label="Darknet Feed">🕷️</button>
                 <button class="icon-btn" id="btn-cw" title="Launch Cyber Defense Wargame" aria-label="Cyber Defense Game">⚡</button>
                 <button class="icon-btn" id="btn-mute" title="Toggle sound" aria-label="Toggle sound">
                     <span class="icon-mute-off">♪</span><span class="icon-mute-on">✕</span>
@@ -151,10 +153,10 @@
             <section class="terminal-region panel" id="region-terminal">
                 <div class="panel-titlebar">
                     <div class="term-tabs">
-                        <div class="term-tab active"><span class="tab-title">01 // ROOT_SHELL</span><span class="tab-x">✕</span></div>
-                        <div class="term-tab"><span class="tab-title">02 // SNIFFER</span><span class="tab-x">✕</span></div>
-                        <div class="term-tab"><span class="tab-title">03 // BOTNET_C2</span><span class="tab-x">✕</span></div>
-                        <div class="term-tab"><span class="tab-title">04 // CRYPTO</span><span class="tab-x">✕</span></div>
+                        <div class="term-tab active" data-tab-id="tab-1"><span class="tab-title">01 // ROOT_SHELL</span><span class="tab-x">✕</span></div>
+                        <div class="term-tab" data-tab-id="tab-2"><span class="tab-title">02 // SNIFFER</span><span class="tab-x">✕</span></div>
+                        <div class="term-tab" data-tab-id="tab-3"><span class="tab-title">03 // BOTNET_C2</span><span class="tab-x">✕</span></div>
+                        <div class="term-tab" data-tab-id="tab-4"><span class="tab-title">04 // CRYPTO</span><span class="tab-x">✕</span></div>
                         <button class="term-tab-add" title="New tab">+</button>
                     </div>
                     <div class="panel-controls">
@@ -439,6 +441,78 @@
         </div>
     </div>
 
+    <!-- ============================ GPU HASH CRACKER MODAL ============================ -->
+    <div id="hashcracker-modal" class="cipher-modal" aria-hidden="true">
+        <div class="cipher-box hc-box">
+            <div class="cipher-header">
+                <div class="cipher-title">⚙️ SPECTRE-9 // GPU HASH CRACKER v3.1.7</div>
+                <div style="display:flex;align-items:center;gap:12px">
+                    <span id="hc-status" class="hc-status-idle">IDLE</span>
+                    <button class="cipher-btn" id="btn-hc-close">✕</button>
+                </div>
+            </div>
+            <div class="hc-controls">
+                <select id="hc-algo" class="cipher-select">
+                    <option value="md5">MD5-128bit (8.4 GH/s)</option>
+                    <option value="sha1">SHA-1 160bit (3.2 GH/s)</option>
+                    <option value="sha256">SHA-256 256bit (1.1 GH/s)</option>
+                    <option value="ntlm">NTLM / Windows (16.2 GH/s)</option>
+                    <option value="bcrypt">bcrypt $2b$12$ (23.4 KH/s)</option>
+                </select>
+                <select id="hc-wordlist" class="cipher-select">
+                    <option value="rockyou">RockYou 14M</option>
+                    <option value="common">Common Passwords</option>
+                    <option value="spectre">SPECTRE Custom Dict</option>
+                </select>
+                <button class="cipher-btn" id="btn-hc-gen">GENERATE HASH</button>
+                <button class="cipher-btn" id="btn-hc-crack" style="color:var(--green-core);border-color:var(--green)">▶ CRACK</button>
+                <button class="cipher-btn" id="btn-hc-stop" style="color:var(--red);border-color:var(--red-dim)">■ STOP</button>
+            </div>
+            <input type="text" id="hc-hash-input" class="cipher-textarea hc-hash-field" placeholder="Paste hash here or click GENERATE HASH..." style="height:36px;resize:none;font-size:11px">
+            <div class="hc-progress-wrap">
+                <div class="hc-progress-track"><div class="hc-progress-fill" id="hc-progress-fill"></div></div>
+                <span class="hc-progress-label" id="hc-progress-label">0%</span>
+            </div>
+            <div class="hc-log-wrap" id="hc-log"></div>
+        </div>
+    </div>
+
+    <!-- ============================ DARKNET INTEL FEED MODAL ============================ -->
+    <div id="darknet-modal" class="cipher-modal" aria-hidden="true">
+        <div class="cipher-box dn-box">
+            <div class="cipher-header">
+                <div class="cipher-title">🕷️ DARKNET // THREAT INTELLIGENCE FEED</div>
+                <div style="display:flex;gap:8px">
+                    <button class="cipher-btn" id="btn-dn-scan">🔍 SCAN NOW</button>
+                    <button class="cipher-btn" id="btn-dn-refresh">↺ REFRESH</button>
+                    <button class="cipher-btn" id="btn-dn-close">✕</button>
+                </div>
+            </div>
+            <div class="dn-grid">
+                <div class="dn-section">
+                    <div class="dn-section-title">💾 RECENT DATA BREACHES</div>
+                    <div class="dn-breach-list" id="dn-breach-list"></div>
+                </div>
+                <div class="dn-section">
+                    <div class="dn-section-title">📡 C2 BEACON TRACKER</div>
+                    <div class="dn-c2-list" id="dn-c2-list"></div>
+                </div>
+                <div class="dn-section">
+                    <div class="dn-section-title">💀 EXPLOIT MARKET (LIVE)</div>
+                    <div class="dn-exploit-list" id="dn-exploit-list"></div>
+                </div>
+                <div class="dn-section">
+                    <div class="dn-section-title">🔴 LIVE THREAT FEED</div>
+                    <div class="dn-live-feed" id="dn-live-feed"></div>
+                </div>
+            </div>
+            <div class="dn-scan-section">
+                <div class="dn-section-title">🌐 RECON SCAN OUTPUT</div>
+                <div class="dn-scan-output" id="dn-scan-output"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- ============================ SCRIPTS ============================ -->
     <script src="js/audio.js"></script>
     <script src="js/synth.js"></script>
@@ -452,6 +526,8 @@
     <script src="js/surveillance.js"></script>
     <script src="js/stego.js"></script>
     <script src="js/exploitbuilder.js"></script>
+    <script src="js/hashcracker.js"></script>
+    <script src="js/darknet.js"></script>
     <script src="js/memory.js"></script>
     <script src="js/cyberwar.js"></script>
     <script src="js/eventlog.js"></script>

@@ -89,10 +89,13 @@
                 t.onclick = (e) => {
                     if (e.target.classList.contains('tab-x')) {
                         e.stopPropagation();
-                        if (tabs.length > 1) {
+                        const allTabs = document.querySelectorAll('.term-tab');
+                        if (allTabs.length > 1) {
                             delete this.sessions[tabId];
                             t.remove();
-                            this.switchTab('tab-1');
+                            // Switch to first available session
+                            const remaining = Object.keys(this.sessions);
+                            if (remaining.length > 0) this.switchTab(remaining[0]);
                         }
                         return;
                     }
@@ -103,9 +106,10 @@
 
         switchTab(tabId) {
             if (!this.sessions[tabId]) return;
-            // Save active session html
+            // Save active session html + history
             if (this.sessions[this.activeTab]) {
                 this.sessions[this.activeTab].html = this.out.innerHTML;
+                this.sessions[this.activeTab].history = this.history.slice();
             }
             this.activeTab = tabId;
 
@@ -114,11 +118,34 @@
                 x.classList.toggle('active', x.getAttribute('data-tab-id') === tabId);
             });
 
-            // Restore HTML
+            // Restore HTML and history
             this.out.innerHTML = this.sessions[tabId].html || '';
-            if (this.promptEl) this.promptEl.textContent = this.sessions[tabId].prompt;
+            this.history = (this.sessions[tabId].history || []).slice();
+            this.histIdx = -1;
+
+            // Update prompt display using innerHTML to preserve styled spans
+            if (this.promptEl) {
+                const p = this.sessions[tabId].prompt || 'operator@spectre-9:~$';
+                // Parse prompt format: user@host:path$ 
+                const match = p.match(/^([^@]+)@([^:]+):([^$]+)(\$)$/);
+                if (match) {
+                    this.promptEl.innerHTML =
+                        '<span class="prompt-user">' + match[1] + '@' + match[2] + '</span>' +
+                        '<span class="prompt-sep">:</span>' +
+                        '<span class="prompt-path">' + match[3] + '</span>' +
+                        '<span class="prompt-dollar">$</span>';
+                } else {
+                    this.promptEl.innerHTML = '<span class="prompt-user">' + p + '</span>';
+                }
+            }
+
             if (window.NexusAudio) window.NexusAudio.blip(740, 0.03, 'square', 0.05);
+            this._scrollToBottom();
             this.focus();
+        },
+
+        _scrollToBottom() {
+            if (this.body) this.body.scrollTop = this.body.scrollHeight;
         },
 
         focus() { if (this.input && !this.busy) this.input.focus(); },
@@ -1389,6 +1416,35 @@
             NX.line(this.out, 'There is no escape. The tactical grid is absolute.', 't-warn');
             NX.spacer(this.out);
             if (window.NexusAudio) window.NexusAudio.warn();
+        },
+
+        async crack(args) {
+            const NX = NXref();
+            const hash = args && args[0] ? args[0] : null;
+            NX.line(this.out, '>> LAUNCHING GPU HASH CRACKER v3.1.7', 't-head');
+            if (hash) NX.line(this.out, '  Target Hash: ' + hash, 't-cyan');
+            NX.spacer(this.out);
+            if (window.HashCracker) {
+                if (hash) {
+                    const inp = document.getElementById('hc-hash-input');
+                    if (inp) inp.value = hash;
+                }
+                window.HashCracker.open();
+            } else {
+                NX.line(this.out, 'ERROR: Hash cracker module not initialized', 't-err');
+            }
+        },
+
+        async darknet() {
+            const NX = NXref();
+            NX.line(this.out, '>> ROUTING TO DARKNET INTELLIGENCE FEED', 't-warn');
+            NX.line(this.out, '  Establishing anonymous TOR circuit...', 't-dim');
+            NX.spacer(this.out);
+            if (window.DarknetFeed) {
+                window.DarknetFeed.open();
+            } else {
+                NX.line(this.out, 'ERROR: Darknet feed module not initialized', 't-err');
+            }
         }
     };
 
@@ -1411,6 +1467,9 @@
     COMMANDS.defend = COMMANDS.game;
     COMMANDS.wargame = COMMANDS.game;
     COMMANDS.sfx = COMMANDS.audio;
+    COMMANDS.hashcrack = COMMANDS.crack;
+    COMMANDS.tor = COMMANDS.darknet;
+    COMMANDS.intel = COMMANDS.darknet;
 
     /* =====================================================
        EASTER EGGS

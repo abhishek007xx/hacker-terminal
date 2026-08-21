@@ -212,8 +212,10 @@
         // Public: burst of packets + turn a node red (used in breach/scan)
         surge() {
             for (let i = 0; i < 8; i++) setTimeout(() => this._spawnPacket(), i * 60);
-            const n = this.pickNonCore();
-            if (n) n.state = 'SIM ACCESS';
+            const nonCore = this.nodes.filter(n => !n.core);
+            if (nonCore.length > 0) {
+                nonCore[Math.floor(Math.random() * nonCore.length)].state = 'SIM ACCESS';
+            }
         }
     };
 

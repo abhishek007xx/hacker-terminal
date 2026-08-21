@@ -29,9 +29,6 @@
             this.canvas = document.getElementById('surv-canvas');
             if (this.canvas) this.ctx = this.canvas.getContext('2d');
 
-            const btnCam = document.getElementById('btn-cam');
-            if (btnCam) btnCam.addEventListener('click', () => this.toggle());
-
             const btnClose = document.getElementById('btn-surv-close');
             if (btnClose) btnClose.addEventListener('click', () => this.close());
 

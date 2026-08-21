@@ -75,6 +75,8 @@
             this._safe(() => window.Surveillance && window.Surveillance.init());
             this._safe(() => window.StegoLab && window.StegoLab.init());
             this._safe(() => window.ExploitBuilder && window.ExploitBuilder.init());
+            this._safe(() => window.HashCracker && window.HashCracker.init());
+            this._safe(() => window.DarknetFeed && window.DarknetFeed.init());
             this._safe(() => window.NexusSynth && window.NexusSynth.init());
             this._safe(() => window.Memory && window.Memory.init());
             this._safe(() => window.CyberWar && window.CyberWar.init());
@@ -118,6 +120,10 @@
             if (cipher && cipher.classList.contains('active')) return;
             const exp = document.getElementById('exploit-modal');
             if (exp && exp.classList.contains('active')) return;
+            const hc = document.getElementById('hashcracker-modal');
+            if (hc && hc.classList.contains('active')) return;
+            const dn = document.getElementById('darknet-modal');
+            if (dn && dn.classList.contains('active')) return;
 
             // only hijack plain printable keys (no modifiers)
             if (e.ctrlKey || e.metaKey || e.altKey) return;
@@ -180,6 +186,14 @@
                     if (window.CyberWar) window.CyberWar.start();
                 });
             }
+
+            // GPU Hash Cracker button
+            const btnHC = document.getElementById('btn-hashcrack');
+            if (btnHC) btnHC.addEventListener('click', () => window.HashCracker && window.HashCracker.open());
+
+            // Darknet Intelligence Feed button
+            const btnDN = document.getElementById('btn-darknet');
+            if (btnDN) btnDN.addEventListener('click', () => window.DarknetFeed && window.DarknetFeed.open());
 
             // Sync with browser native fullscreen state (F11 or esc)
             document.addEventListener('fullscreenchange', () => {
