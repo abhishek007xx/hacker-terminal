@@ -22,6 +22,9 @@
                     document.body.classList.add('theme-' + savedTheme);
                     const thLabel = document.getElementById('theme-name');
                     if (thLabel) thLabel.textContent = savedTheme.toUpperCase();
+                    this._updateFavicon(savedTheme);
+                } else {
+                    this._updateFavicon('green');
                 }
             } catch (e) {}
 
@@ -175,6 +178,7 @@
 
                     const thLabel = document.getElementById('theme-name');
                     if (thLabel) thLabel.textContent = nextTheme.toUpperCase();
+                    this._updateFavicon(nextTheme);
                     if (window.NexusAudio) window.NexusAudio.blip(800, 0.04, 'sine', 0.1);
                 });
             }
@@ -202,6 +206,21 @@
                 setTimeout(() => window.dispatchEvent(new Event('resize')), 60);
                 setTimeout(() => window.dispatchEvent(new Event('resize')), 300);
             });
+        },
+
+        _updateFavicon(theme) {
+            const colors = {
+                green: { primary: '#37ff8b', core: '#4dffa0', dim: '#12563a' },
+                cyan: { primary: '#3fe0ff', core: '#70ecff', dim: '#0d4659' },
+                amber: { primary: '#ffb340', core: '#ffcb65', dim: '#593907' },
+                red: { primary: '#ff4155', core: '#ff6e7f', dim: '#590913' },
+                purple: { primary: '#b98bff', core: '#d4b3ff', dim: '#3d1b70' }
+            };
+            const c = colors[theme] || colors.green;
+            const link = document.getElementById('favicon-link');
+            if (!link) return;
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64"><rect width="64" height="64" rx="14" fill="#030806" stroke="${c.dim}" stroke-width="1.5"/><polygon points="32,6 54,18 54,46 32,58 10,46 10,18" fill="#05120c" stroke="${c.primary}" stroke-width="2"/><path d="M 21 24 L 28 32 L 21 40" fill="none" stroke="${c.core}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><line x1="34" y1="23" x2="33" y2="41" stroke="${c.core}" stroke-width="2.2" stroke-linecap="round"/><line x1="41" y1="23" x2="40" y2="41" stroke="${c.core}" stroke-width="2.2" stroke-linecap="round"/><line x1="30" y1="28" x2="45" y2="28" stroke="${c.core}" stroke-width="2.2" stroke-linecap="round"/><line x1="29" y1="36" x2="44" y2="36" stroke="${c.core}" stroke-width="2.2" stroke-linecap="round"/><path d="M 4 14 L 4 4 L 14 4" fill="none" stroke="${c.primary}" stroke-width="2"/><path d="M 50 4 L 60 4 L 60 14" fill="none" stroke="${c.primary}" stroke-width="2"/><path d="M 4 50 L 4 60 L 14 60" fill="none" stroke="${c.primary}" stroke-width="2"/><path d="M 50 60 L 60 60 L 60 50" fill="none" stroke="${c.primary}" stroke-width="2"/></svg>`;
+            link.href = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
         },
 
         _toggleFullscreen() {

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#020806" />
+      <stop offset="50%" stop-color="#051510" />
+      <stop offset="100%" stop-color="#020608" />
+    </linearGradient>
+
+    <!-- Glowing Green Gradient -->
+    <linearGradient id="neonGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#70ffb0" />
+      <stop offset="100%" stop-color="#00e676" />
+    </linearGradient>
+
+    <!-- Core Glow Filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="0.8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="64" height="64" rx="14" fill="url(#bgGrad)" stroke="#1a5235" stroke-width="1.5" />
+
+  <!-- Subtle Circuit Lines -->
+  <path d="M 8 18 L 20 18 L 26 24 M 56 46 L 44 46 L 38 40 M 18 56 L 18 44 L 24 38 M 46 8 L 46 20 L 40 26" 
+        stroke="#0d3822" stroke-width="1.2" fill="none" stroke-linecap="round" />
+  
+  <circle cx="26" cy="24" r="1.5" fill="#1b633d" />
+  <circle cx="38" cy="40" r="1.5" fill="#1b633d" />
+  <circle cx="24" cy="38" r="1.5" fill="#1b633d" />
+  <circle cx="40" cy="26" r="1.5" fill="#1b633d" />
+
+  <!-- Cyber Hexagon Shield Outer Contour -->
+  <polygon points="32,6 54,18 54,46 32,58 10,46 10,18" 
+           fill="#04120c" stroke="#25df7f" stroke-width="1.8" filter="url(#softGlow)" />
+
+  <polygon points="32,10 50,20 50,44 32,54 14,44 14,20" 
+           fill="none" stroke="#12482c" stroke-width="1" stroke-dasharray="3,2" />
+
+  <!-- Tactical Crosshair Markers -->
+  <line x1="32" y1="12" x2="32" y2="16" stroke="#4dffa0" stroke-width="1.5" stroke-linecap="round" />
+  <line x1="32" y1="48" x2="32" y2="52" stroke="#4dffa0" stroke-width="1.5" stroke-linecap="round" />
+  <line x1="16" y1="32" x2="20" y2="32" stroke="#4dffa0" stroke-width="1.5" stroke-linecap="round" />
+  <line x1="44" y1="32" x2="48" y2="32" stroke="#4dffa0" stroke-width="1.5" stroke-linecap="round" />
+
+  <!-- Center Holographic Hacker Terminal Symbol: ># (or Tactical Skull / Core) -->
+  <g filter="url(#glow)">
+    <!-- Terminal Chevron > -->
+    <path d="M 21 24 L 28 32 L 21 40" 
+          fill="none" stroke="url(#neonGreen)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+
+    <!-- Terminal Hash # / Cursor Block -->
+    <!-- Hash bars -->
+    <line x1="34" y1="23" x2="33" y2="41" stroke="url(#neonGreen)" stroke-width="2.2" stroke-linecap="round" />
+    <line x1="41" y1="23" x2="40" y2="41" stroke="url(#neonGreen)" stroke-width="2.2" stroke-linecap="round" />
+    <line x1="30" y1="28" x2="45" y2="28" stroke="url(#neonGreen)" stroke-width="2.2" stroke-linecap="round" />
+    <line x1="29" y1="36" x2="44" y2="36" stroke="url(#neonGreen)" stroke-width="2.2" stroke-linecap="round" />
+  </g>
+
+  <!-- Corner Tech Accents -->
+  <path d="M 4 14 L 4 4 L 14 4" fill="none" stroke="#37ff8b" stroke-width="2" stroke-linecap="round" />
+  <path d="M 50 4 L 60 4 L 60 14" fill="none" stroke="#37ff8b" stroke-width="2" stroke-linecap="round" />
+  <path d="M 4 50 L 4 60 L 14 60" fill="none" stroke="#37ff8b" stroke-width="2" stroke-linecap="round" />
+  <path d="M 50 60 L 60 60 L 60 50" fill="none" stroke="#37ff8b" stroke-width="2" stroke-linecap="round" />
+</svg>
