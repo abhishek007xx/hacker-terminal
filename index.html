@@ -77,6 +77,8 @@
             </div>
             <div class="topbar-right">
                 <span class="topbar-clock" id="topbar-clock">00:00:00</span>
+                <button class="theme-picker-btn" id="btn-theme" title="Cycle CRT Color Theme"><span class="theme-dot"></span> <span id="theme-name">GREEN</span></button>
+                <button class="icon-btn" id="btn-cw" title="Launch Cyber Defense Wargame" aria-label="Cyber Defense Game">⚡</button>
                 <button class="icon-btn" id="btn-mute" title="Toggle sound" aria-label="Toggle sound">
                     <span class="icon-mute-off">♪</span><span class="icon-mute-on">✕</span>
                 </button>
@@ -91,6 +93,7 @@
                 <span class="led led-green" id="led-online"><i></i>SYSTEM ONLINE</span>
                 <span class="led led-green" id="led-encrypted"><i></i>ENCRYPTED</span>
                 <span class="led led-cyan" id="led-proxy"><i></i>PROXY ACTIVE</span>
+                <span class="led led-green" id="led-defcon"><i></i>DEFCON: <b>5</b></span>
                 <span class="led led-amber" id="led-trace"><i></i>TRACE: <em id="trace-value">0%</em></span>
             </div>
             <div class="status-sim" id="status-sim">
@@ -133,6 +136,7 @@
                 </div>
 
                 <div class="side-actions">
+                    <button class="action-btn action-cw" id="btn-side-cw">⚡ CYBER DEFENSE WARGAME</button>
                     <button class="action-btn action-hacker" id="btn-hacker">[ HACKER TYPER ]</button>
                     <button class="action-btn action-matrix" id="btn-matrix">[ ENTER MATRIX MODE ]</button>
                     <button class="action-btn action-breach" id="btn-breach">RUN BREACH SIMULATION</button>
@@ -220,10 +224,10 @@
                     </div>
                 </section>
 
-                <!-- ENCRYPTION ENGINE -->
+                <!-- ENCRYPTION ENGINE & SATELLITE TELEMETRY -->
                 <section class="panel crypto-panel" data-panel="crypto">
                     <div class="panel-titlebar">
-                        <span class="panel-title">ENCRYPTION ENGINE</span>
+                        <span class="panel-title">SATELLITE RECON // ENCRYPTION ENGINE</span>
                         <span class="panel-controls"><span class="pc">─</span><span class="pc">▢</span><span
                                 class="pc">✕</span></span>
                     </div>
@@ -233,17 +237,17 @@
                                 <div class="crypto-key">KEY GENERATION</div>
                                 <div class="crypto-genbar"><i id="crypto-genbar"></i></div>
                             </div>
-                            <div class="crypto-field"><span class="crypto-key">HASH:</span> <span
-                                    class="crypto-val mono-ellipsis" id="crypto-hash">8F7A2C91D4E8A92F...</span></div>
                             <div class="crypto-field"><span class="crypto-key">SESSION KEY:</span> <span
                                     class="crypto-val" id="crypto-session">A91F-72CD-8841-29FA</span></div>
-                            <div class="crypto-field"><span class="crypto-key">ALGORITHM:</span> <span
-                                    class="crypto-val">AES-256-GCM</span></div>
-                            <div class="crypto-field"><span class="crypto-key">STATUS:</span> <span
-                                    class="crypto-val val-ok" id="crypto-status">SECURE</span></div>
+                            <div class="crypto-field"><span class="crypto-key">AZIMUTH:</span> <span
+                                    class="crypto-val val-cyan" id="sat-azimuth">142.4°</span></div>
+                            <div class="crypto-field"><span class="crypto-key">ELEVATION:</span> <span
+                                    class="crypto-val val-ok" id="sat-elevation">58.2°</span></div>
+                            <div class="crypto-field"><span class="crypto-key">PACKETS:</span> <span
+                                    class="crypto-val" id="sat-packets">4,182</span></div>
                         </div>
                         <div class="crypto-right">
-                            <canvas id="crypto-canvas" class="crypto-canvas"></canvas>
+                            <canvas id="sat-canvas" class="sat-canvas" title="Satellite Orbital Recon Link"></canvas>
                         </div>
                     </div>
                 </section>
@@ -252,23 +256,23 @@
             <!-- ===== EVENT LOG ===== -->
             <section class="panel eventlog-panel" id="region-logs" data-panel="logs">
                 <div class="panel-titlebar">
-                    <span class="panel-title">EVENT LOG</span>
+                    <span class="panel-title">TACTICAL EVENT LOG</span>
                     <span class="panel-controls"><span class="pc">─</span><span class="pc pc-clearlog" id="btn-clearlog"
                             title="Clear log">✕</span></span>
                 </div>
                 <div class="panel-content eventlog-content" id="eventlog-content"></div>
             </section>
 
-            <!-- ===== DATA STREAM ===== -->
+            <!-- ===== DATA STREAM & LIVE DISASSEMBLER ===== -->
             <section class="panel datastream-panel" data-panel="stream">
                 <div class="panel-titlebar">
-                    <span class="panel-title">DATA STREAM</span>
+                    <span class="panel-title">DATA STREAM &amp; MEMORY DISASSEMBLER</span>
                     <span class="panel-controls"><span class="pc">✕</span></span>
                 </div>
                 <div class="panel-content datastream-content">
-                    <div class="ds-hex" id="ds-hex"></div>
-                    <div class="ds-ascii" id="ds-ascii"></div>
-                    <canvas id="ds-canvas" class="ds-canvas"></canvas>
+                    <div class="ds-hex" id="ds-hex" title="Hex Stream"></div>
+                    <div class="mem-disasm" id="mem-disasm-content" title="Live x86_64 Disassembly"></div>
+                    <canvas id="ds-canvas" class="ds-canvas" title="RF Spectrum"></canvas>
                 </div>
             </section>
 
@@ -287,6 +291,38 @@
             <button class="mtab" data-tab="network">NET</button>
             <button class="mtab" data-tab="log">LOG</button>
         </nav>
+    </div>
+
+    <!-- ============================ EMP SHOCKWAVE ============================ -->
+    <div id="emp-shockwave" class="emp-shockwave" aria-hidden="true"></div>
+
+    <!-- ============================ CYBER DEFENSE WARGAME MODAL ============================ -->
+    <div id="cyberwar-modal" class="cyberwar-modal" aria-hidden="true">
+        <div class="cyberwar-box">
+            <div class="cw-header">
+                <div class="cw-title">⚡ SPECTRE-9 CYBER DEFENSE WARGAME</div>
+                <div class="cw-hud-stats">
+                    <span class="cw-score" id="cw-score">SCORE: 0</span>
+                    <span class="cw-threat" id="cw-threat">THREAT: 75%</span>
+                </div>
+            </div>
+            <div class="cw-body">
+                <div class="cw-vector">
+                    <div id="cw-vector-title">INCOMING THREAT DETECTED</div>
+                    <div class="cw-vector-detail" id="cw-vector-detail">Analyzing attack vectors...</div>
+                </div>
+                <div class="cw-timer-wrap">
+                    <div class="cw-timer-fill" id="cw-timer-fill"></div>
+                </div>
+                <div class="cw-command-needed" id="cw-command-needed">
+                    TYPE COUNTERMEASURE: <b>firewall drop</b>
+                </div>
+                <div class="cw-inputline">
+                    <span>operator@spectre-9:~$</span>
+                    <input type="text" id="cw-input" class="cw-input" placeholder="Type countermeasure command..." autocomplete="off" spellcheck="false">
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- ============================ MATRIX MODE ============================ -->
@@ -313,6 +349,9 @@
     <script src="js/monitor.js"></script>
     <script src="js/topology.js"></script>
     <script src="js/encryption.js"></script>
+    <script src="js/satfeed.js"></script>
+    <script src="js/memory.js"></script>
+    <script src="js/cyberwar.js"></script>
     <script src="js/eventlog.js"></script>
     <script src="js/datastream.js"></script>
     <script src="js/matrix.js"></script>

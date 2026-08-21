@@ -791,3 +791,297 @@ body.hacker-typing .terminal-caret {
 body.hacker-typing .terminal-inputline {
     display: none;
 }
+
+/* ============================ SATELLITE RECON ORBIT VIEW ============================ */
+.satfeed-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: var(--sp-2);
+    gap: var(--sp-2);
+    min-height: 0;
+    overflow: hidden;
+}
+
+.sat-canvas-wrap {
+    flex: 1;
+    min-height: 80px;
+    position: relative;
+    border: 1px solid var(--emerald-line-soft);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.sat-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.sat-telemetry {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-1);
+    font-size: var(--fs-xs);
+    background: rgba(0, 0, 0, 0.25);
+    padding: var(--sp-1) var(--sp-2);
+    border-radius: 2px;
+}
+
+.sat-tele-item {
+    display: flex;
+    gap: var(--sp-1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sat-tele-item span {
+    color: var(--text-dim);
+}
+
+.sat-tele-item b {
+    color: var(--green-core);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ============================ MEMORY DISASSEMBLER ============================ */
+.mem-disasm {
+    font-family: var(--font-tech);
+    font-size: var(--fs-xs);
+    line-height: 1.5;
+    padding: var(--sp-2) var(--sp-3);
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    flex: 1;
+}
+
+.mem-row {
+    display: flex;
+    gap: var(--sp-2);
+    white-space: nowrap;
+    align-items: baseline;
+}
+
+.mem-addr {
+    color: var(--text-dim);
+    font-variant-numeric: tabular-nums;
+    min-width: 60px;
+    flex-shrink: 0;
+}
+
+.mem-bytes {
+    color: var(--text-muted);
+    min-width: 72px;
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+}
+
+.mem-op {
+    color: var(--cyan);
+    font-weight: 700;
+    min-width: 48px;
+    flex-shrink: 0;
+}
+
+.mem-args {
+    color: var(--text-bright);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mem-args .reg {
+    color: var(--green-core);
+}
+
+.mem-args .imm {
+    color: var(--amber);
+}
+
+.mem-args .sym {
+    color: #b98bff;
+}
+
+/* ============================ THEME SELECTOR & QUICK DOCK ============================ */
+.theme-picker-btn {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 1px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: var(--radius);
+    background: rgba(55, 255, 139, 0.08);
+    border: 1px solid var(--emerald-line);
+    color: var(--green-core);
+    cursor: pointer;
+    transition: all 0.2s var(--ease);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.theme-picker-btn:hover {
+    background: rgba(55, 255, 139, 0.2);
+    box-shadow: var(--glow-green-sm);
+}
+
+.theme-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green-core);
+    display: inline-block;
+    box-shadow: 0 0 6px var(--green-core);
+}
+
+/* ============================ CYBERWAR DEFENSE GAME OVERLAY ============================ */
+.cyberwar-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9300;
+    background: rgba(2, 6, 8, 0.94);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.cyberwar-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.cyberwar-box {
+    width: min(680px, 94vw);
+    background: rgba(6, 18, 16, 0.92);
+    border: 2px solid var(--emerald-line);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0 80px rgba(55, 255, 139, 0.15), var(--shadow-deep);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+    padding: var(--sp-5);
+    position: relative;
+}
+
+.cw-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--emerald-line);
+    padding-bottom: var(--sp-3);
+}
+
+.cw-title {
+    font-size: var(--fs-lg);
+    font-weight: 800;
+    color: var(--green-core);
+    letter-spacing: 2px;
+    text-shadow: var(--glow-green-md);
+}
+
+.cw-hud-stats {
+    display: flex;
+    gap: var(--sp-4);
+    font-size: var(--fs-sm);
+}
+
+.cw-score {
+    color: var(--cyan);
+    font-weight: 700;
+}
+
+.cw-threat {
+    color: var(--red);
+    font-weight: 700;
+    animation: led-pulse 1.2s infinite;
+}
+
+.cw-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    min-height: 180px;
+    font-family: var(--font-mono);
+}
+
+.cw-vector {
+    color: var(--amber);
+    font-size: var(--fs-base);
+    line-height: 1.5;
+    background: rgba(255, 179, 64, 0.08);
+    border: 1px solid rgba(255, 179, 64, 0.3);
+    padding: var(--sp-3);
+    border-radius: var(--radius);
+}
+
+.cw-vector-detail {
+    font-size: var(--fs-xs);
+    color: var(--text-mid);
+    margin-top: var(--sp-1);
+}
+
+.cw-timer-wrap {
+    height: 8px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--emerald-line);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.cw-timer-fill {
+    height: 100%;
+    width: 100%;
+    background: var(--green);
+    transition: width 0.1s linear, background-color 0.3s ease;
+}
+
+.cw-timer-fill.warn {
+    background: var(--amber);
+}
+
+.cw-timer-fill.crit {
+    background: var(--red);
+}
+
+.cw-command-needed {
+    font-size: var(--fs-md);
+    color: var(--text-bright);
+    letter-spacing: 1px;
+}
+
+.cw-command-needed b {
+    color: var(--green-core);
+    border: 1px solid var(--green-dim);
+    padding: 2px 8px;
+    border-radius: 3px;
+    text-shadow: var(--glow-green-sm);
+}
+
+.cw-inputline {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    border: 1px solid var(--emerald-line);
+    padding: var(--sp-2) var(--sp-3);
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: var(--radius);
+}
+
+.cw-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--green-core);
+    font-family: var(--font-mono);
+    font-size: var(--fs-base);
+    caret-color: var(--green-core);
+}

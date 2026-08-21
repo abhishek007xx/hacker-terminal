@@ -160,6 +160,92 @@
             osc.start(t); osc.stop(t + 1.5);
         },
 
+        // EMP shockwave blast (heavy sub-bass + resonance drop)
+        emp() {
+            if (!this.ctx || !this.enabled) return;
+            const t = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const g = this.ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(140, t);
+            osc.frequency.exponentialRampToValueAtTime(24, t + 1.2);
+            g.gain.setValueAtTime(0.0001, t);
+            g.gain.exponentialRampToValueAtTime(0.35, t + 0.05);
+            g.gain.exponentialRampToValueAtTime(0.0001, t + 1.5);
+            const filter = this.ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(800, t);
+            filter.frequency.exponentialRampToValueAtTime(60, t + 1.2);
+            osc.connect(filter); filter.connect(g); g.connect(this.master);
+            osc.start(t); osc.stop(t + 1.6);
+        },
+
+        // Sonar ping with reverberation tail
+        sonar() {
+            if (!this.ctx || !this.enabled) return;
+            const t = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const g = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1440, t);
+            osc.frequency.exponentialRampToValueAtTime(1380, t + 0.8);
+            g.gain.setValueAtTime(0.0001, t);
+            g.gain.exponentialRampToValueAtTime(0.2, t + 0.015);
+            g.gain.exponentialRampToValueAtTime(0.0001, t + 0.9);
+            osc.connect(g); g.connect(this.master);
+            osc.start(t); osc.stop(t + 1.0);
+        },
+
+        // Tactical radio communication static burst
+        radioStatic() {
+            if (!this.ctx || !this.enabled) return;
+            const t = this.ctx.currentTime;
+            const len = Math.floor(this.ctx.sampleRate * 0.12);
+            const buf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
+            const data = buf.getChannelData(0);
+            for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * 0.5;
+            const src = this.ctx.createBufferSource();
+            src.buffer = buf;
+            const filter = this.ctx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.value = 2200;
+            filter.Q.value = 3;
+            const g = this.ctx.createGain();
+            g.gain.value = 0.08;
+            src.connect(filter); filter.connect(g); g.connect(this.master);
+            src.start(t);
+        },
+
+        // Geiger counter click
+        geiger() {
+            if (!this.ctx || !this.enabled) return;
+            this.tone(1800 + Math.random() * 800, 0.008, 'sawtooth', 0.04);
+        },
+
+        // DEFCON emergency siren
+        defcon(level) {
+            if (!this.ctx || !this.enabled) return;
+            const now = this.ctx.currentTime;
+            const f1 = level === 1 ? 880 : 660;
+            const f2 = level === 1 ? 440 : 520;
+            this.tone(f1, 0.18, 'sawtooth', 0.14, now);
+            this.tone(f2, 0.18, 'sawtooth', 0.14, now + 0.2);
+            this.tone(f1, 0.18, 'sawtooth', 0.14, now + 0.4);
+            this.tone(f2, 0.18, 'sawtooth', 0.14, now + 0.6);
+        },
+
+        // Tactical morse telemetry
+        morse() {
+            if (!this.ctx || !this.enabled) return;
+            const now = this.ctx.currentTime;
+            const pattern = [0.05, 0.05, 0.12, 0.05, 0.05];
+            let acc = now;
+            for (const dur of pattern) {
+                this.tone(1200, dur, 'sine', 0.06, acc);
+                acc += dur + 0.04;
+            }
+        },
+
         // Continuous soft electronic hum bed
         _startHum() {
             if (!this.ctx) return;

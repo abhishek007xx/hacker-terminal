@@ -232,44 +232,53 @@
 
             const categories = [
                 {
-                    title: '▶ RECONNAISSANCE & SCANNING',
+                    title: '▶ RECONNAISSANCE & GEO-INTELLIGENCE',
                     cls: 't-cyan',
                     cmds: [
-                        ['scan [target]', 'execute deep multi-port scan, subnet ARP sweep & CVE mapping'],
+                        ['scan [target]', 'deep multi-port scan, subnet ARP sweep & CVE mapping'],
                         ['trace [ip]', 'orbital satellite triangulation & multi-hop route tracking'],
-                        ['nodes', 'display live darknet routing table with defense metrics'],
+                        ['geoip [ip]', 'orbital geo-intelligence dossier & AS routing lookup'],
                         ['sat', 'lock orbital reconnaissance satellite & intercept telemetry'],
+                        ['nodes', 'display live darknet routing table with defense metrics'],
                         ['airmon', 'simulate 802.11 RF monitor mode & WPA3 handshake capture']
                     ]
                 },
                 {
-                    title: '▶ OFFENSIVE & EXPLOITATION',
+                    title: '▶ OFFENSIVE WARFARE & EXPLOITATION',
                     cls: 't-crit',
                     cmds: [
-                        ['payload', 'synthesize polymorphic x86_64 shellcode / memory stager'],
-                        ['ddos [target]', 'simulate high-bandwidth 256-node packet swarm assault'],
+                        ['mitm [target]', 'man-in-the-middle ARP poison & session token interceptor'],
+                        ['nuke [target]', 'orbital EMP pulse shockwave & subnet blackout simulation'],
+                        ['inject [pid]', 'memory thread hijack & DLL injection diagnostics'],
                         ['breach', 'launch full 6-tier military-grade penetration simulation'],
-                        ['decrypt [hash]', 'run multi-threaded rainbow dictionary attack on ciphertext'],
-                        ['hacker', 'toggle HACKER TYPER mode (mash any keys to pour code)']
+                        ['decrypt [hash]', 'multi-threaded quantum rainbow table brute-force solver'],
+                        ['payload', 'synthesize polymorphic x86_64 shellcode / memory stager'],
+                        ['ddos [target]', 'high-bandwidth 256-node virtual botnet swarm assault']
                     ]
                 },
                 {
-                    title: '▶ NETWORK & DEFENSE',
+                    title: '▶ CYBER DEFENSE & WARGAMES',
                     cls: 't-ok',
                     cmds: [
-                        ['connect [ip]', 'establish 5-hop encrypted onion tunnel with anti-DPI cloak'],
-                        ['status', 'inspect 8-core CPU distribution, entropy reserves & defenses'],
-                        ['matrix', 'enter fullscreen falling-glyph cyber construct mode']
+                        ['game / defend', 'launch real-time interactive APT attack defense wargame'],
+                        ['defcon [1-5]', 'change military cyber readiness level & alarm strobes'],
+                        ['theme [name]', 'switch CRT phosphor color (green, cyan, amber, red, purple)'],
+                        ['matrix', 'enter fullscreen falling-glyph cyber construct mode'],
+                        ['hacker', 'toggle HACKER TYPER mode (mash any keys to pour code)']
                     ]
                 },
                 {
                     title: '▶ SYSTEM & CLASSIFIED UTILITIES',
                     cls: 't-warn',
                     cmds: [
+                        ['status', 'inspect 8-core CPU distribution, entropy reserves & defenses'],
+                        ['connect [ip]', 'establish 5-hop encrypted onion tunnel with anti-DPI cloak'],
+                        ['keygen', 'procedural black-ops serial license key generator'],
                         ['whoami', 'print operative clearance dossier & cryptographic keys'],
-                        ['about', 'inspect SPECTRE-9 black-ops engine specifications'],
+                        ['audio [sfx]', 'synthesize tactical SFX (emp, sonar, static, siren, morse)'],
                         ['purge', 'emergency DoD 3-pass cryptographic data zeroization'],
                         ['clear', 'sanitize terminal buffer (alias: cls)'],
+                        ['about', 'inspect SPECTRE-9 black-ops engine specifications'],
                         ['exit', 'attempt disconnection from tactical grid']
                     ]
                 }
@@ -278,11 +287,11 @@
             for (const cat of categories) {
                 NX.line(this.out, cat.title, cat.cls);
                 for (const [c, d] of cat.cmds) {
-                    const pad = '               '.slice(0, Math.max(1, 16 - c.length));
+                    const pad = '                 '.slice(0, Math.max(1, 18 - c.length));
                     NX.line(this.out, '  <span class="t-key">' + c + '</span>' + pad + '<span class="t-dim">' + d + '</span>', '');
                 }
                 NX.spacer(this.out);
-                await NX.sleep(40);
+                await NX.sleep(30);
             }
 
             NX.line(this.out, '>> SIMULATION MODE // ZERO REAL NETWORK TRAFFIC TRANSMITTED <<', 't-sim-line');
@@ -911,6 +920,232 @@
             NX.spacer(this.out);
         },
 
+        async theme(args) {
+            const NX = NXref();
+            const A = window.NexusAudio;
+            const tName = args && args[0] ? args[0].toLowerCase() : '';
+            const valid = ['green', 'cyan', 'amber', 'red', 'purple'];
+
+            if (!valid.includes(tName)) {
+                NX.line(this.out, 'AVAILABLE CRT PHOSPHOR THEMES:', 't-head');
+                NX.line(this.out, '  - <span class="t-ok">green</span>   (Spectre Phosphor Matrix — Default)', '');
+                NX.line(this.out, '  - <span class="t-cyan">cyan</span>    (Cyber Ice HUD / Military Blue)', '');
+                NX.line(this.out, '  - <span class="t-warn">amber</span>   (Tactical Fallout Amber / CRT)', '');
+                NX.line(this.out, '  - <span class="t-crit">red</span>     (DEFCON 1 Red Alert / Crimson)', '');
+                NX.line(this.out, '  - <span class="t-key">purple</span>  (Obsidian Void / Stealth Violet)', '');
+                NX.spacer(this.out);
+                NX.line(this.out, "Usage: '<span class=\"t-key\">theme cyan</span>' or '<span class=\"t-key\">theme amber</span>'", 't-dim');
+                NX.spacer(this.out);
+                return;
+            }
+
+            // Apply theme
+            document.body.classList.remove('theme-green', 'theme-cyan', 'theme-amber', 'theme-red', 'theme-purple');
+            if (tName !== 'green') document.body.classList.add('theme-' + tName);
+            try { localStorage.setItem('spectre-theme', tName); } catch (e) {}
+
+            NX.line(this.out, '>> SWITCHING PHOSPHOR CRT COLOR PROFILE :: ' + tName.toUpperCase() + ' <<', 't-ok');
+            NX.spacer(this.out);
+            if (A) { A.confirm(); A.blip(880, 0.05, 'sine', 0.15); }
+        },
+
+        async mitm(args) {
+            const NX = NXref();
+            const A = window.NexusAudio;
+            const target = args && args[0] ? args[0] : '192.168.1.105';
+
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  [MITM ATTACK] INITIATING ARP CACHE POISONING :: ' + target, 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.spacer(this.out);
+
+            if (A) A.warn();
+            await NX.type(this.out, 'Broadcasting gratuitous ARP responses to gateway (10.99.14.1)...', { className: 't-dim', speed: 12, sound: true });
+            await NX.animateBar(this.out, { width: 22, duration: 1200, className: 't-indent t-bar-green', label: 'POISONING ' });
+
+            NX.line(this.out, '<span class="t-ok">[✓] ARP CACHE POISONED</span> — Target gateway diverted through operative node', 't-indent');
+            NX.spacer(this.out);
+
+            await NX.type(this.out, 'Engaging SSL/TLS downgrade proxy & session interceptor...', { className: 't-dim', speed: 10 });
+            if (A) A.connect();
+            await NX.sleep(400);
+
+            NX.line(this.out, '>> INTERCEPTED LIVE DATA STREAM (SIMULATED):', 't-cyan');
+            const packets = [
+                ['HTTP POST', '/api/v2/auth/login', 'USER=root_admin&PASS=******** [CAPTURED]'],
+                ['BEARER TOKEN', 'Authorization: Bearer', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'],
+                ['COOKIE INJECT', 'Set-Cookie: session_id=', '0x8F9A2C11D4E9 [SESSION HIJACKED]']
+            ];
+            for (const [p, h, d] of packets) {
+                await NX.sleep(200);
+                NX.line(this.out, '  <span class="t-warn">' + p + '</span> <span class="t-dim">' + h + '</span> <span class="t-ok">' + d + '</span>', 't-indent');
+                if (A) A.key();
+            }
+
+            NX.spacer(this.out);
+            NX.line(this.out, '[✓] MITM SESSION INGEST COMPLETE // ZERO REAL PACKETS SENT', 't-sim-line');
+            NX.spacer(this.out);
+            if (window.EventLog) window.EventLog.push('OK', 'MITM session intercept simulation completed on ' + target);
+        },
+
+        async nuke(args) {
+            const NX = NXref();
+            const A = window.NexusAudio;
+            const target = args && args[0] ? args[0] : 'ALL VIRTUAL NODES';
+
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  ⚠ CRITICAL // TACTICAL EMP ORBITAL STRIKE :: ' + target, 't-crit');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.spacer(this.out);
+
+            if (A) A.defcon(1);
+            for (let i = 3; i >= 1; i--) {
+                NX.line(this.out, '  >> EMP DETONATION IN ' + i + ' SECONDS... <<', 't-warn');
+                if (A) A.blip(400 + i * 150, 0.08, 'sawtooth', 0.15);
+                document.body.classList.add('screen-shake');
+                setTimeout(() => document.body.classList.remove('screen-shake'), 180);
+                await NX.sleep(700);
+            }
+
+            // EMP trigger
+            const empEl = document.getElementById('emp-shockwave');
+            if (empEl) {
+                empEl.classList.add('active');
+                setTimeout(() => empEl.classList.remove('active'), 1600);
+            }
+            if (A) A.emp();
+            if (window.FX) window.FX.glitch(true);
+            if (window.Memory) window.Memory.corrupt(8);
+            if (window.Topology) window.Topology.surge();
+
+            document.body.classList.add('screen-shake');
+            setTimeout(() => document.body.classList.remove('screen-shake'), 600);
+
+            NX.spacer(this.out);
+            NX.line(this.out, '★ EMP SHOCKWAVE DISCHARGED // ALL TARGET SUBNETS BLACKED OUT ★', 't-crit');
+            NX.line(this.out, 'Telemetry sanitized. RF spectrum zeroized. Nodes offline.', 't-dim');
+            NX.spacer(this.out);
+            if (window.EventLog) window.EventLog.push('ERR', 'Tactical EMP pulse simulated: virtual grid reset.');
+        },
+
+        async inject(args) {
+            const NX = NXref();
+            const A = window.NexusAudio;
+            const pid = args && args[0] ? args[0] : NX.randInt(1000, 9999);
+
+            NX.line(this.out, '>> INITIATING MEMORY THREAD HIJACK ON PID: ' + pid + ' <<', 't-head');
+            await NX.type(this.out, 'Attaching ptrace debugger to process heap...', { className: 't-dim', speed: 12 });
+            if (A) A.connect();
+            await NX.sleep(300);
+
+            NX.line(this.out, '  [1] VirtualAllocEx(0x7FFF8000, 4096, MEM_COMMIT, PAGE_EXECUTE_READWRITE) = <span class="t-ok">SUCCESS</span>', 't-indent');
+            NX.line(this.out, '  [2] WriteProcessMemory(PID ' + pid + ', 0x7FFF8000, shellcode, 64) = <span class="t-ok">64 BYTES WRITTEN</span>', 't-indent');
+            NX.line(this.out, '  [3] CreateRemoteThread(PID ' + pid + ', 0x7FFF8000) = <span class="t-ok">THREAD 0x4A ACTIVE</span>', 't-indent');
+
+            if (window.Memory) window.Memory.corrupt(4);
+            if (A) A.confirm();
+
+            NX.spacer(this.out);
+            NX.line(this.out, '[✓] SHELLCODE EXECUTED IN TARGET MEMORY CONTEXT', 't-sim-line');
+            NX.spacer(this.out);
+        },
+
+        async defcon(args) {
+            const NX = NXref();
+            const A = window.NexusAudio;
+            const lvl = parseInt(args && args[0], 10) || 1;
+
+            if (lvl < 1 || lvl > 5) {
+                NX.line(this.out, "Usage: '<span class=\"t-key\">defcon 1</span>' (Max Readiness) to '<span class=\"t-key\">defcon 5</span>' (Normal)", 't-dim');
+                NX.spacer(this.out);
+                return;
+            }
+
+            document.body.classList.remove('defcon-1', 'defcon-2', 'defcon-3', 'defcon-4', 'defcon-5');
+            if (lvl <= 2) document.body.classList.add('defcon-' + lvl);
+
+            const defconDesc = {
+                1: 'DEFCON 1 :: MAXIMUM READINESS // NUCLEAR & CYBER WARFARE ARMED',
+                2: 'DEFCON 2 :: ARMED FORCES READY // CRITICAL INTRUSION DETECTED',
+                3: 'DEFCON 3 :: INCREASE IN READINESS // ADVERSARY RECON MONITORED',
+                4: 'DEFCON 4 :: INCREASED INTELLIGENCE WATCH // STEALTH ACTIVE',
+                5: 'DEFCON 5 :: NORMAL PEACETIME MILITARY CYBER READINESS'
+            };
+
+            const cls = lvl === 1 ? 't-crit' : (lvl === 2 ? 't-warn' : 't-ok');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  ' + defconDesc[lvl], cls);
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.spacer(this.out);
+
+            if (A) A.defcon(lvl);
+            if (window.EventLog) window.EventLog.push(lvl <= 2 ? 'WARN' : 'INFO', 'DEFCON readiness level set to ' + lvl);
+        },
+
+        async geoip(args) {
+            const NX = NXref();
+            const A = window.NexusAudio;
+            const ip = args && args[0] ? args[0] : '10.99.14.88';
+            const data = NX.geo(ip);
+
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  ORBITAL GEO-INTELLIGENCE REPORT :: ' + data.ip, 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.spacer(this.out);
+
+            NX.line(this.out, '  <span class="t-key">LOCATION :</span> ' + data.city + ', ' + data.country, 't-indent');
+            NX.line(this.out, '  <span class="t-key">COORDS   :</span> ' + data.coords, 't-indent');
+            NX.line(this.out, '  <span class="t-key">PROVIDER :</span> ' + data.isp, 't-indent');
+            NX.line(this.out, '  <span class="t-key">AUTONOM  :</span> ' + data.as, 't-indent');
+            NX.line(this.out, '  <span class="t-key">THREAT IX:</span> <span class="t-crit">' + data.threatIndex + '</span>', 't-indent');
+            NX.spacer(this.out);
+
+            if (window.WorldMap) {
+                // Flash worldmap target
+                if (A) A.sonar();
+            }
+            NX.line(this.out, '[✓] GEO-DOSSIER SYNTHESIZED FROM SIMULATED INTELLIGENCE', 't-sim-line');
+            NX.spacer(this.out);
+        },
+
+        async keygen() {
+            const NX = NXref();
+            const A = window.NexusAudio;
+            NX.line(this.out, '>> PROCEDURAL BLACK-OPS SERIAL CIPHER GENERATOR <<', 't-head');
+            NX.spacer(this.out);
+
+            for (let i = 0; i < 4; i++) {
+                await NX.sleep(120);
+                const key = 'SP9-' + NX.hex(4) + '-' + NX.hex(4) + '-' + NX.hex(4) + '-' + NX.hex(4);
+                NX.line(this.out, '  [KEY 0' + (i + 1) + ']  <span class="t-ok">' + key + '</span>  <span class="t-dim">[CHECKSUM: VALID]</span>', 't-indent');
+                if (A) A.key();
+            }
+            NX.spacer(this.out);
+            if (A) A.confirm();
+        },
+
+        async game() {
+            if (window.CyberWar) {
+                window.CyberWar.start();
+            }
+        },
+
+        async audio(args) {
+            const A = window.NexusAudio;
+            if (!A) return;
+            const fx = args && args[0] ? args[0].toLowerCase() : '';
+            if (fx === 'sonar') A.sonar();
+            else if (fx === 'emp') A.emp();
+            else if (fx === 'static') A.radioStatic();
+            else if (fx === 'siren' || fx === 'defcon') A.defcon(1);
+            else if (fx === 'geiger') A.geiger();
+            else if (fx === 'morse') A.morse();
+            else {
+                NXref().line(this.out, 'Available SFX: sonar, emp, static, siren, geiger, morse', 't-dim');
+                NXref().spacer(this.out);
+            }
+        },
+
         async exit() {
             const NX = NXref();
             await NX.type(this.out, 'Attempting to disconnect from SPECTRE tactical grid...', { className: 't-dim', speed: 14 });
@@ -932,8 +1167,11 @@
     COMMANDS.satellite = COMMANDS.sat;
     COMMANDS.wifi = COMMANDS.airmon;
     COMMANDS.flood = COMMANDS.ddos;
-    COMMANDS.nuke = COMMANDS.purge;
     COMMANDS.id = COMMANDS.whoami;
+    COMMANDS.cyberwar = COMMANDS.game;
+    COMMANDS.defend = COMMANDS.game;
+    COMMANDS.wargame = COMMANDS.game;
+    COMMANDS.sfx = COMMANDS.audio;
 
     /* =====================================================
        EASTER EGGS

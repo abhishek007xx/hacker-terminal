@@ -15,6 +15,16 @@
             this.appEl = document.getElementById('app');
             document.body.setAttribute('data-mtab', 'terminal');
 
+            // Restore saved theme preference
+            try {
+                const savedTheme = localStorage.getItem('spectre-theme');
+                if (savedTheme && savedTheme !== 'green') {
+                    document.body.classList.add('theme-' + savedTheme);
+                    const thLabel = document.getElementById('theme-name');
+                    if (thLabel) thLabel.textContent = savedTheme.toUpperCase();
+                }
+            } catch (e) {}
+
             // Randomize the session id for a fresh feel each load
             const sess = document.getElementById('meta-session');
             if (sess && window.NX) sess.textContent = window.NX.hex(4) + '-' + window.NX.hex(4);
@@ -61,6 +71,9 @@
             this._safe(() => window.Topology && window.Topology.init());
             this._safe(() => window.Encryption && window.Encryption.init());
             this._safe(() => window.WorldMap && window.WorldMap.init());
+            this._safe(() => window.SatFeed && window.SatFeed.init());
+            this._safe(() => window.Memory && window.Memory.init());
+            this._safe(() => window.CyberWar && window.CyberWar.init());
             this._safe(() => window.EventLog && window.EventLog.init());
             this._safe(() => window.DataStream && window.DataStream.init());
             this._safe(() => window.Matrix && window.Matrix.init());
@@ -92,6 +105,8 @@
             if (document.body.classList.contains('hacker-typing')) return;
             const breach = document.getElementById('breach-overlay');
             if (breach && breach.classList.contains('active')) return;
+            const cw = document.getElementById('cyberwar-modal');
+            if (cw && cw.classList.contains('active')) return;
             // only hijack plain printable keys (no modifiers)
             if (e.ctrlKey || e.metaKey || e.altKey) return;
             if (e.key && e.key.length === 1) {
@@ -110,6 +125,36 @@
             const fs = document.getElementById('btn-fullscreen');
             if (fs) {
                 fs.addEventListener('click', () => this._toggleFullscreen());
+            }
+
+            // Theme Cycle button
+            const btnTheme = document.getElementById('btn-theme');
+            if (btnTheme) {
+                const themes = ['green', 'cyan', 'amber', 'red', 'purple'];
+                btnTheme.addEventListener('click', () => {
+                    let current = 'green';
+                    for (const th of themes) {
+                        if (document.body.classList.contains('theme-' + th)) current = th;
+                    }
+                    const nextIdx = (themes.indexOf(current) + 1) % themes.length;
+                    const nextTheme = themes[nextIdx];
+
+                    document.body.classList.remove('theme-green', 'theme-cyan', 'theme-amber', 'theme-red', 'theme-purple');
+                    if (nextTheme !== 'green') document.body.classList.add('theme-' + nextTheme);
+                    try { localStorage.setItem('spectre-theme', nextTheme); } catch (e) {}
+
+                    const thLabel = document.getElementById('theme-name');
+                    if (thLabel) thLabel.textContent = nextTheme.toUpperCase();
+                    if (window.NexusAudio) window.NexusAudio.blip(800, 0.04, 'sine', 0.1);
+                });
+            }
+
+            // Wargame launcher button in topbar
+            const btnCw = document.getElementById('btn-cw');
+            if (btnCw) {
+                btnCw.addEventListener('click', () => {
+                    if (window.CyberWar) window.CyberWar.start();
+                });
             }
 
             // Sync with browser native fullscreen state (F11 or esc)
@@ -157,6 +202,11 @@
             if (br) br.addEventListener('click', () => {
                 if (window.FX) window.FX.raiseTrace(38);
                 if (window.Breach) window.Breach.run();
+            });
+
+            const sideCw = document.getElementById('btn-side-cw');
+            if (sideCw) sideCw.addEventListener('click', () => {
+                if (window.CyberWar) window.CyberWar.start();
             });
 
             const clearLog = document.getElementById('btn-clearlog');

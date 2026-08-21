@@ -206,3 +206,88 @@ body::after {
 .val-dim {
     color: var(--text-dim);
 }
+
+/* ============================ THEMES ============================ */
+body.theme-cyan {
+    --green: #3fe0ff;
+    --green-core: #70ecff;
+    --green-dim: #197a99;
+    --green-faint: #0d4659;
+    --green-ghost: rgba(63, 224, 255, 0.14);
+    --emerald: #0b2f3d;
+    --emerald-line: rgba(63, 224, 255, 0.25);
+    --emerald-line-soft: rgba(63, 224, 255, 0.12);
+    --text-bright: #e0faff;
+    --text: #8be4ff;
+    --text-mid: #49bce3;
+    --text-dim: #267491;
+    --text-muted: #154c61;
+    --glow-green-sm: 0 0 4px rgba(63, 224, 255, 0.5);
+    --glow-green-md: 0 0 10px rgba(63, 224, 255, 0.45);
+    --glow-green-lg: 0 0 20px rgba(63, 224, 255, 0.5);
+    --text-glow: 0 0 3px rgba(63, 224, 255, 0.6);
+    --text-glow-soft: 0 0 1px rgba(139, 228, 255, 0.4);
+}
+
+body.theme-amber {
+    --green: #ffb340;
+    --green-core: #ffcb65;
+    --green-dim: #b5761a;
+    --green-faint: #593907;
+    --green-ghost: rgba(255, 179, 64, 0.14);
+    --emerald: #3d2707;
+    --emerald-line: rgba(255, 179, 64, 0.25);
+    --emerald-line-soft: rgba(255, 179, 64, 0.12);
+    --text-bright: #fff2d9;
+    --text: #ffd080;
+    --text-mid: #d69830;
+    --text-dim: #8c5d14;
+    --text-muted: #5e3b08;
+    --glow-green-sm: 0 0 4px rgba(255, 179, 64, 0.5);
+    --glow-green-md: 0 0 10px rgba(255, 179, 64, 0.45);
+    --glow-green-lg: 0 0 20px rgba(255, 179, 64, 0.5);
+    --text-glow: 0 0 3px rgba(255, 179, 64, 0.6);
+    --text-glow-soft: 0 0 1px rgba(255, 208, 128, 0.4);
+}
+
+body.theme-red {
+    --green: #ff4155;
+    --green-core: #ff6e7f;
+    --green-dim: #a8192a;
+    --green-faint: #590913;
+    --green-ghost: rgba(255, 65, 85, 0.14);
+    --emerald: #3d090f;
+    --emerald-line: rgba(255, 65, 85, 0.28);
+    --emerald-line-soft: rgba(255, 65, 85, 0.14);
+    --text-bright: #ffe6e8;
+    --text: #ff8593;
+    --text-mid: #d94153;
+    --text-dim: #8c1e2b;
+    --text-muted: #5e0d16;
+    --glow-green-sm: 0 0 4px rgba(255, 65, 85, 0.55);
+    --glow-green-md: 0 0 12px rgba(255, 65, 85, 0.5);
+    --glow-green-lg: 0 0 22px rgba(255, 65, 85, 0.55);
+    --text-glow: 0 0 4px rgba(255, 65, 85, 0.65);
+    --text-glow-soft: 0 0 1px rgba(255, 133, 147, 0.4);
+}
+
+body.theme-purple {
+    --green: #b98bff;
+    --green-core: #d4b3ff;
+    --green-dim: #794bbd;
+    --green-faint: #3d1b70;
+    --green-ghost: rgba(185, 139, 255, 0.14);
+    --emerald: #240d47;
+    --emerald-line: rgba(185, 139, 255, 0.26);
+    --emerald-line-soft: rgba(185, 139, 255, 0.12);
+    --text-bright: #f4ecff;
+    --text: #cca8ff;
+    --text-mid: #a06eeb;
+    --text-dim: #6038a3;
+    --text-muted: #3b1b6e;
+    --glow-green-sm: 0 0 4px rgba(185, 139, 255, 0.5);
+    --glow-green-md: 0 0 10px rgba(185, 139, 255, 0.45);
+    --glow-green-lg: 0 0 20px rgba(185, 139, 255, 0.5);
+    --text-glow: 0 0 3px rgba(185, 139, 255, 0.6);
+    --text-glow-soft: 0 0 1px rgba(204, 168, 255, 0.4);
+}

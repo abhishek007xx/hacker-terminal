@@ -159,6 +159,51 @@
                 }
                 el = el.parentElement;
             }
+        },
+
+        // Generate procedural x86_64 disassembly instruction
+        disasmLine(addr) {
+            const hexAddr = '0x' + (addr || (0x7FFF0000 + Math.floor(Math.random() * 0xFFFF))).toString(16).toUpperCase();
+            const opcodes = [
+                { op: 'MOV', bytes: '48 89 E5', args: '<span class="reg">RAX</span>, [<span class="reg">RSP</span>+<span class="imm">0x18</span>]' },
+                { op: 'XOR', bytes: '31 C0', args: '<span class="reg">EAX</span>, <span class="reg">EAX</span>' },
+                { op: 'LEA', bytes: '48 8D 3D', args: '<span class="reg">RDI</span>, [<span class="sym">.rodata</span>]' },
+                { op: 'CALL', bytes: 'E8 72 04', args: '<span class="sym">sys_ptrace_scope</span>' },
+                { op: 'TEST', bytes: '85 C0', args: '<span class="reg">EAX</span>, <span class="reg">EAX</span>' },
+                { op: 'JNZ', bytes: '75 1A', args: '<span class="imm">0x' + (addr ? (addr + 0x1A).toString(16) : '7FFF0042') + '</span>' },
+                { op: 'PUSH', bytes: '55', args: '<span class="reg">RBP</span>' },
+                { op: 'SYSCALL', bytes: '0F 05', args: '<span class="sym">/* sys_execve */</span>' },
+                { op: 'NOP', bytes: '90', args: '<span class="sym">/* sled-pad */</span>' },
+                { op: 'INT', bytes: 'CD 80', args: '<span class="imm">0x80</span>' }
+            ];
+            const item = this.pick(opcodes);
+            return {
+                addr: hexAddr,
+                bytes: item.bytes,
+                op: item.op,
+                args: item.args
+            };
+        },
+
+        // Generate procedural Geo-Intelligence dossier
+        geo(ip) {
+            const locations = [
+                { city: 'Reykjavik', country: 'Iceland', lat: '64.1466° N', lon: '21.9426° W', isp: 'Fjarskipti Darknet Grid', as: 'AS44192 (IS-NORD)' },
+                { city: 'Zurich', country: 'Switzerland', lat: '47.3769° N', lon: '8.5417° E', isp: 'Helvetia Quantum Backbone', as: 'AS13030 (CH-SEC)' },
+                { city: 'Tokyo', country: 'Japan', lat: '35.6762° N', lon: '139.6503° E', isp: 'NTT Cyber Warfare Uplink', as: 'AS2516 (JP-CORE)' },
+                { city: 'Frankfurt', country: 'Germany', lat: '50.1109° N', lon: '8.6821° E', isp: 'DE-CIX Shadow Exchange', as: 'AS8800 (EU-DE)' },
+                { city: 'Singapore', country: 'Singapore', lat: '1.3521° N', lon: '103.8198° E', isp: 'SingTel Classified Gateway', as: 'AS7473 (SG-NODE)' }
+            ];
+            const loc = this.pick(locations);
+            return {
+                ip: ip || ('10.' + this.randInt(10, 240) + '.' + this.randInt(1, 254) + '.' + this.randInt(1, 254)),
+                city: loc.city,
+                country: loc.country,
+                coords: loc.lat + ', ' + loc.lon,
+                isp: loc.isp,
+                as: loc.as,
+                threatIndex: this.randInt(78, 99) + '%'
+            };
         }
     };
 
