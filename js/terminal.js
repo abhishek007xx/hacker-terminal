@@ -9,6 +9,12 @@
     const Terminal = {
         out: null, input: null, mirror: null, caret: null, inputline: null,
         history: [], histIdx: -1, busy: false, booted: false,
+        vfs: {
+            'exploit.py': '#!/usr/bin/env python3\nimport sys, socket\nTARGET = "10.99.14.88"\nPORT = 443\nprint(f"[+] Connecting to {TARGET}:{PORT}...")\npayload = b"\\x90"*32 + b"\\x31\\xc0\\x50\\x48\\xbb...\\x0f\\x05"\nprint("[+] Exploit payload synthesized successfully.")\n',
+            'target_hashes.txt': '8F7A2C91D4E8A92F :: root_admin (AES-256)\n4B2199AF012C88EA :: sys_sec_lead (SHA-512)\nDE8841029FA77312 :: sat_relay_09 (Grover Quantum)\n',
+            'recon_notes.md': '# SPECTRE-9 TARGET DOSSIER\n- Subnet: 10.99.14.0/24\n- Critical Nodes: SPECTRE-ALPHA (10.99.14.01), SPECTRE-DELTA (10.99.14.04)\n- Defense: WPA3 / Quantum-AES Cloak Active\n',
+            'mission_brief.sp9': '[CLASSIFIED] OPERATION BLACKOUT :: INITIATE MESH TAKEDOWN\nAUTHORIZATION: LEVEL-5 ROOT\n'
+        },
 
         init() {
             this.out = document.getElementById('terminal-output');
@@ -16,6 +22,17 @@
             this.mirror = document.getElementById('terminal-input-mirror');
             this.inputline = document.getElementById('terminal-inputline');
             this.body = document.getElementById('terminal-body');
+
+            // Wire terminal tabs
+            const tabs = document.querySelectorAll('.term-tab');
+            tabs.forEach((t) => {
+                t.addEventListener('click', () => {
+                    tabs.forEach(x => x.classList.remove('active'));
+                    t.classList.add('active');
+                    if (window.NexusAudio) window.NexusAudio.blip(720, 0.03, 'square', 0.05);
+                    this.focus();
+                });
+            });
 
             if (this.input) {
                 this.input.addEventListener('keydown', (e) => {
@@ -77,7 +94,8 @@
             const extra = [
                 'sudo matrix', 'sudo coffee', 'hack the planet', 'hacker typer',
                 'scan 192.168.1.1', 'connect 10.99.14.88', 'decrypt 0x8F7A', 'trace 172.16.0.4',
-                'payload meterpreter', 'ddos target', 'airmon wlan0', 'sat link', 'purge data'
+                'payload meterpreter', 'ddos target', 'airmon wlan0', 'sat link', 'purge data',
+                'cam', 'drone', 'synth', 'cipher', 'exploit', 'nano exploit.py', 'ls', 'cat target_hashes.txt'
             ];
             const cmds = Object.keys(COMMANDS).concat(extra);
             const match = cmds.find((c) => c.startsWith(val));
@@ -125,6 +143,23 @@
 
         async _dispatch(cmd) {
             const lower = cmd.toLowerCase();
+
+            // Check for command piping: e.g. "nodes | grep 10.99"
+            if (cmd.includes('|')) {
+                const pipeParts = cmd.split('|').map(s => s.trim());
+                const firstCmd = pipeParts[0];
+                const pipeCmd = pipeParts[1] || '';
+
+                if (pipeCmd.toLowerCase().startsWith('grep ')) {
+                    const pattern = pipeCmd.slice(5).trim();
+                    const NX = window.NX;
+                    NX.line(this.out, '>> PIPING OUTPUT THROUGH GREP FILTER: [' + pattern + '] <<', 't-cyan');
+                    // Execute base command and display filter notice
+                    await this._dispatch(firstCmd);
+                    return;
+                }
+            }
+
             // multi-word easter eggs first
             if (EGGS[lower]) { await EGGS[lower].call(this); return; }
             const parts = lower.split(/\s+/);
@@ -1146,6 +1181,142 @@
             }
         },
 
+        async ls() {
+            const NX = NXref();
+            NX.line(this.out, 'TOTAL: ' + Object.keys(Terminal.vfs).length + ' FILES // PERMISSIONS: -RWX------ (ROOT:ROOT)', 't-head');
+            for (const [name, content] of Object.entries(Terminal.vfs)) {
+                const sz = content.length + ' B';
+                const pad = '                   '.slice(0, Math.max(1, 20 - name.length));
+                NX.line(this.out, '  <span class="t-ok">-rwxr-xr-x</span>  1 root  root  <span class="t-dim">' + sz.padStart(6) + '</span>  <span class="t-cyan">' + name + '</span>', 't-indent');
+            }
+            NX.spacer(this.out);
+        },
+
+        async cat(args) {
+            const NX = NXref();
+            const filename = args && args[0] ? args[0] : '';
+            if (!filename) {
+                NX.line(this.out, "Usage: '<span class=\"t-key\">cat &lt;filename&gt;</span>' (e.g. cat target_hashes.txt)", 't-dim');
+                NX.spacer(this.out);
+                return;
+            }
+            if (Terminal.vfs[filename] != null) {
+                const lines = Terminal.vfs[filename].split('\n');
+                for (const l of lines) {
+                    NX.line(this.out, NX._esc(l), 't-indent');
+                }
+                NX.spacer(this.out);
+            } else {
+                NX.line(this.out, 'cat: ' + filename + ': No such file or encrypted stream in current scope', 't-err');
+                NX.spacer(this.out);
+                if (window.NexusAudio) window.NexusAudio.warn();
+            }
+        },
+
+        async touch(args) {
+            const NX = NXref();
+            const filename = args && args[0] ? args[0] : '';
+            if (!filename) {
+                NX.line(this.out, "Usage: '<span class=\"t-key\">touch &lt;filename&gt;</span>'", 't-dim');
+                NX.spacer(this.out);
+                return;
+            }
+            if (!Terminal.vfs[filename]) {
+                Terminal.vfs[filename] = '# Empty memory stream created by operator\n';
+            }
+            NX.line(this.out, '[✓] VFS node allocated: ' + filename, 't-ok');
+            NX.spacer(this.out);
+            if (window.NexusAudio) window.NexusAudio.confirm();
+        },
+
+        async rm(args) {
+            const NX = NXref();
+            const filename = args && args[0] ? args[0] : '';
+            if (Terminal.vfs[filename]) {
+                delete Terminal.vfs[filename];
+                NX.line(this.out, '[✓] Zeroized & unlinked VFS node: ' + filename, 't-ok');
+            } else {
+                NX.line(this.out, 'rm: ' + filename + ': No such file', 't-err');
+            }
+            NX.spacer(this.out);
+        },
+
+        async echo(args) {
+            const NX = NXref();
+            const str = args.join(' ');
+            if (str.includes('>')) {
+                const [textPart, filePart] = str.split('>').map(s => s.trim());
+                Terminal.vfs[filePart] = textPart + '\n';
+                NX.line(this.out, '[✓] Written ' + textPart.length + ' bytes to ' + filePart, 't-ok');
+            } else {
+                NX.line(this.out, NX._esc(str), 't-indent');
+            }
+            NX.spacer(this.out);
+        },
+
+        async nano(args) {
+            const NX = NXref();
+            const filename = args && args[0] ? args[0] : 'untitled.sp9';
+            const initial = Terminal.vfs[filename] || '# SPECTRE-9 SCRIPT BUFFER\n# Edit and close to commit to VFS\n\n';
+
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  GNU nano 8.2 — ' + filename + ' [IN-TERMINAL BUFFER]', 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
+            
+            const editBox = document.createElement('textarea');
+            editBox.className = 'nano-editor-textarea';
+            editBox.value = initial;
+            this.out.appendChild(editBox);
+            editBox.focus();
+
+            NX.line(this.out, '  [Press ESC to Save & Exit buffer]', 't-dim');
+            NX.spacer(this.out);
+
+            return new Promise((resolve) => {
+                const onKey = (e) => {
+                    if (e.key === 'Escape') {
+                        editBox.removeEventListener('keydown', onKey);
+                        Terminal.vfs[filename] = editBox.value;
+                        editBox.disabled = true;
+                        editBox.style.opacity = '0.6';
+                        NX.line(this.out, '[✓] File ' + filename + ' committed to memory buffer (' + editBox.value.length + ' bytes)', 't-ok');
+                        NX.spacer(this.out);
+                        if (window.NexusAudio) window.NexusAudio.confirm();
+                        resolve();
+                    }
+                };
+                editBox.addEventListener('keydown', onKey);
+            });
+        },
+
+        async cam() {
+            if (window.Surveillance) window.Surveillance.open();
+        },
+
+        async synth() {
+            if (window.NexusSynth) window.NexusSynth.toggle();
+        },
+
+        async cipher() {
+            if (window.StegoLab) window.StegoLab.open();
+        },
+
+        async builder() {
+            if (window.ExploitBuilder) window.ExploitBuilder.open();
+        },
+
+        async calc(args) {
+            const NX = NXref();
+            try {
+                const expr = args.join(' ').replace(/[^0-9+\-*/().%]/g, '');
+                const res = Function('"use strict"; return (' + expr + ')')();
+                NX.line(this.out, 'CALC :: ' + expr + ' = <span class="t-ok">' + res + '</span>', 't-indent');
+            } catch (e) {
+                NX.line(this.out, 'CALC ERROR: Invalid mathematical expression', 't-err');
+            }
+            NX.spacer(this.out);
+        },
+
         async exit() {
             const NX = NXref();
             await NX.type(this.out, 'Attempting to disconnect from SPECTRE tactical grid...', { className: 't-dim', speed: 14 });
@@ -1159,11 +1330,15 @@
 
     // Aliases
     COMMANDS.cls = COMMANDS.clear;
-    COMMANDS.ls = COMMANDS.nodes;
+    COMMANDS.dir = COMMANDS.ls;
     COMMANDS.man = COMMANDS.help;
     COMMANDS.sysinfo = COMMANDS.status;
     COMMANDS.netstat = COMMANDS.nodes;
-    COMMANDS.exploit = COMMANDS.breach;
+    COMMANDS.exploit = COMMANDS.builder;
+    COMMANDS.stego = COMMANDS.cipher;
+    COMMANDS.drone = COMMANDS.cam;
+    COMMANDS.cctv = COMMANDS.cam;
+    COMMANDS.music = COMMANDS.synth;
     COMMANDS.satellite = COMMANDS.sat;
     COMMANDS.wifi = COMMANDS.airmon;
     COMMANDS.flood = COMMANDS.ddos;

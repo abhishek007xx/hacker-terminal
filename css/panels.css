@@ -1085,3 +1085,197 @@ body.hacker-typing .terminal-inputline {
     font-size: var(--fs-base);
     caret-color: var(--green-core);
 }
+
+/* ============================ IN-TERMINAL NANO EDITOR ============================ */
+.nano-editor-textarea {
+    width: 100%;
+    min-height: 160px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--emerald-line);
+    color: var(--green-core);
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    line-height: 1.5;
+    padding: var(--sp-2);
+    outline: none;
+    resize: vertical;
+    border-radius: var(--radius);
+}
+
+/* ============================ SURVEILLANCE MATRIX MODAL ============================ */
+.surveillance-modal,
+.cipher-modal,
+.exploit-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9400;
+    background: rgba(2, 6, 8, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.surveillance-modal.active,
+.cipher-modal.active,
+.exploit-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.surv-box,
+.cipher-box,
+.exp-box {
+    width: min(780px, 94vw);
+    background: rgba(5, 14, 16, 0.95);
+    border: 2px solid var(--emerald-line);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0 80px rgba(55, 255, 139, 0.15), var(--shadow-deep);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    padding: var(--sp-4);
+}
+
+.surv-header,
+.cipher-header,
+.exp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--emerald-line-soft);
+    padding-bottom: var(--sp-2);
+}
+
+.surv-title,
+.cipher-title,
+.exp-title {
+    font-size: var(--fs-md);
+    font-weight: 800;
+    color: var(--green-core);
+    letter-spacing: 1.5px;
+}
+
+.surv-canvas-wrap {
+    width: 100%;
+    height: 320px;
+    background: #000;
+    border: 1px solid var(--emerald-line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+}
+
+.surv-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.surv-controls,
+.cipher-controls,
+.exp-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--sp-2);
+}
+
+.surv-btn,
+.cipher-btn,
+.exp-btn {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    padding: 6px 14px;
+    background: rgba(55, 255, 139, 0.1);
+    border: 1px solid var(--emerald-line);
+    color: var(--green-core);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s var(--ease);
+}
+
+.surv-btn:hover,
+.cipher-btn:hover,
+.exp-btn:hover {
+    background: rgba(55, 255, 139, 0.25);
+    box-shadow: var(--glow-green-sm);
+}
+
+/* ============================ CIPHER LAB STYLING ============================ */
+.cipher-io-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-3);
+}
+
+.cipher-textarea {
+    width: 100%;
+    height: 140px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--emerald-line);
+    color: var(--green-core);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    padding: var(--sp-2);
+    border-radius: var(--radius);
+    outline: none;
+    resize: none;
+}
+
+.cipher-select,
+.cipher-key-input {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--emerald-line);
+    color: var(--green-core);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    padding: 6px 10px;
+    border-radius: var(--radius);
+    outline: none;
+}
+
+/* ============================ EXPLOIT BUILDER STYLING ============================ */
+.exp-form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-3);
+}
+
+.exp-form-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: var(--fs-xs);
+    color: var(--text-mid);
+}
+
+.exp-select {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--emerald-line);
+    color: var(--green-core);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    padding: 6px 10px;
+    border-radius: var(--radius);
+    outline: none;
+}
+
+.exp-code-block {
+    background: rgba(0, 0, 0, 0.75);
+    border: 1px solid var(--emerald-line);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    line-height: 1.4;
+    padding: var(--sp-3);
+    border-radius: var(--radius);
+    height: 180px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+}

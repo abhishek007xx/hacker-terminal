@@ -72,6 +72,10 @@
             this._safe(() => window.Encryption && window.Encryption.init());
             this._safe(() => window.WorldMap && window.WorldMap.init());
             this._safe(() => window.SatFeed && window.SatFeed.init());
+            this._safe(() => window.Surveillance && window.Surveillance.init());
+            this._safe(() => window.StegoLab && window.StegoLab.init());
+            this._safe(() => window.ExploitBuilder && window.ExploitBuilder.init());
+            this._safe(() => window.NexusSynth && window.NexusSynth.init());
             this._safe(() => window.Memory && window.Memory.init());
             this._safe(() => window.CyberWar && window.CyberWar.init());
             this._safe(() => window.EventLog && window.EventLog.init());
@@ -100,6 +104,7 @@
             if (!window.Terminal || !window.Terminal.input) return;
             const active = document.activeElement;
             if (active === window.Terminal.input) return;
+            if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT')) return;
             // ignore when an overlay is active
             if (document.body.classList.contains('matrix-active')) return;
             if (document.body.classList.contains('hacker-typing')) return;
@@ -107,6 +112,13 @@
             if (breach && breach.classList.contains('active')) return;
             const cw = document.getElementById('cyberwar-modal');
             if (cw && cw.classList.contains('active')) return;
+            const surv = document.getElementById('surveillance-modal');
+            if (surv && surv.classList.contains('active')) return;
+            const cipher = document.getElementById('cipher-modal');
+            if (cipher && cipher.classList.contains('active')) return;
+            const exp = document.getElementById('exploit-modal');
+            if (exp && exp.classList.contains('active')) return;
+
             // only hijack plain printable keys (no modifiers)
             if (e.ctrlKey || e.metaKey || e.altKey) return;
             if (e.key && e.key.length === 1) {
@@ -126,6 +138,18 @@
             if (fs) {
                 fs.addEventListener('click', () => this._toggleFullscreen());
             }
+
+            // Surveillance Button
+            const btnCam = document.getElementById('btn-cam');
+            if (btnCam) btnCam.addEventListener('click', () => window.Surveillance && window.Surveillance.open());
+
+            // Cipher Lab Button
+            const btnCipher = document.getElementById('btn-cipher');
+            if (btnCipher) btnCipher.addEventListener('click', () => window.StegoLab && window.StegoLab.open());
+
+            // Exploit Builder Button
+            const btnExp = document.getElementById('btn-exploit');
+            if (btnExp) btnExp.addEventListener('click', () => window.ExploitBuilder && window.ExploitBuilder.open());
 
             // Theme Cycle button
             const btnTheme = document.getElementById('btn-theme');
