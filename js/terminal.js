@@ -1445,6 +1445,30 @@
             } else {
                 NX.line(this.out, 'ERROR: Darknet feed module not initialized', 't-err');
             }
+        },
+
+        async theme(args) {
+            const NX = NXref();
+            const themes = ['green', 'cyan', 'amber', 'red', 'purple'];
+            const target = args && args[0] ? args[0].toLowerCase() : '';
+            
+            if (themes.includes(target)) {
+                if (window.NexusApp) window.NexusApp.setTheme(target);
+                NX.line(this.out, '[✓] CRT Phosphor Theme Switched to: ' + target.toUpperCase(), 't-ok');
+                NX.line(this.out, '  Web tab logo and interface palette synchronized.', 't-dim');
+                NX.spacer(this.out);
+            } else if (!target) {
+                if (window.NexusApp) {
+                    const next = window.NexusApp.cycleTheme();
+                    NX.line(this.out, '[✓] Cycled CRT Phosphor Theme to: ' + next.toUpperCase(), 't-ok');
+                    NX.line(this.out, '  Web tab logo and interface palette synchronized.', 't-dim');
+                    NX.spacer(this.out);
+                }
+            } else {
+                NX.line(this.out, 'Usage: theme [green | cyan | amber | red | purple]', 't-err');
+                NX.line(this.out, 'Available Phosphor Matrices: ' + themes.join(', '), 't-dim');
+                NX.spacer(this.out);
+            }
         }
     };
 
