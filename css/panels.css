@@ -310,44 +310,56 @@
 
 .terminal-inputline {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: 0;
     padding-top: var(--sp-1);
     position: relative;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    min-width: 0;
 }
 
 .prompt-user {
     color: var(--green-core);
     font-weight: 700;
     text-shadow: var(--text-glow-soft);
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .prompt-sep {
     color: var(--text-dim);
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .prompt-path {
     color: var(--cyan);
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .prompt-dollar {
     color: var(--green-core);
     font-weight: 700;
     margin: 0 8px 0 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .terminal-input-wrap {
     position: relative;
     display: inline-flex;
-    align-items: center;
+    align-items: baseline;
     flex: 1;
     min-width: 0;
+    overflow: hidden;
 }
 
 .terminal-input-mirror {
     color: var(--text-bright);
-    white-space: pre;
+    white-space: pre-wrap;
+    word-break: break-all;
+    min-width: 0;
 }
 
 .terminal-caret {
@@ -355,6 +367,7 @@
     animation: caret-blink 1s steps(1) infinite;
     text-shadow: var(--glow-green-sm);
     margin-left: 1px;
+    flex-shrink: 0;
 }
 
 @keyframes caret-blink {
@@ -384,6 +397,7 @@
     position: absolute;
     inset: 0;
     width: 100%;
+    height: 100%;
     background: transparent;
     border: none;
     outline: none;
@@ -398,39 +412,46 @@
 /* ============================ SYSTEM MONITOR ============================ */
 .monitor-content {
     display: flex;
-    gap: var(--sp-3);
-    padding: var(--sp-3);
+    gap: var(--sp-2);
+    padding: var(--sp-2) var(--sp-3);
+    min-height: 0;
+    overflow: hidden;
 }
 
 .monitor-metrics {
     display: flex;
     flex-direction: column;
-    gap: var(--sp-2);
+    gap: var(--sp-1);
     flex: 1;
     min-width: 0;
 }
 
 .metric {
     display: grid;
-    grid-template-columns: 58px 1fr 38px;
+    grid-template-columns: 52px 1fr 34px;
     align-items: center;
-    gap: var(--sp-2);
-    font-size: var(--fs-sm);
+    gap: var(--sp-1);
+    font-size: var(--fs-xs);
+    min-width: 0;
 }
 
 .metric-label {
     color: var(--text-dim);
     letter-spacing: 1px;
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .metric-bar {
-    height: 9px;
+    height: 8px;
     background: var(--bg-inset);
     border: 1px solid var(--emerald-line-soft);
     border-radius: 2px;
     overflow: hidden;
     position: relative;
+    min-width: 20px;
 }
 
 .metric-bar i {
@@ -459,25 +480,30 @@
     font-weight: 700;
     text-align: right;
     font-variant-numeric: tabular-nums;
+    font-size: var(--fs-xs);
 }
 
 .metric-row {
     display: grid;
-    grid-template-columns: 58px 1fr;
-    gap: var(--sp-2);
-    font-size: var(--fs-sm);
-    margin-top: 2px;
+    grid-template-columns: 52px 1fr;
+    gap: var(--sp-1);
+    font-size: var(--fs-xs);
+    margin-top: 1px;
+    min-width: 0;
 }
 
 .metric-plain {
     color: var(--text-bright);
     font-weight: 700;
     font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .radar-wrap {
-    width: 118px;
-    height: 118px;
+    width: clamp(84px, 9vw, 110px);
+    height: clamp(84px, 9vw, 110px);
     flex-shrink: 0;
     align-self: center;
 }
@@ -494,11 +520,15 @@
 
 /* ============================ NETWORK TOPOLOGY ============================ */
 .topo-panel {
-    min-height: 0;
+    min-height: 130px;
 }
 
 .topo-content {
     padding: 0;
+    min-height: 100px;
+    flex: 1;
+    position: relative;
+    overflow: hidden;
 }
 
 .topo-canvas {
@@ -509,8 +539,10 @@
 /* ============================ ENCRYPTION ENGINE ============================ */
 .crypto-content {
     display: flex;
-    gap: var(--sp-3);
-    padding: var(--sp-3);
+    gap: var(--sp-2);
+    padding: var(--sp-2) var(--sp-3);
+    min-height: 0;
+    overflow: hidden;
 }
 
 .crypto-left {
@@ -518,26 +550,36 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: var(--sp-2);
+    gap: var(--sp-1);
 }
 
 .crypto-field {
-    font-size: var(--fs-sm);
+    font-size: var(--fs-xs);
+    min-width: 0;
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-1);
+    white-space: nowrap;
 }
 
 .crypto-key {
     color: var(--text-dim);
     letter-spacing: 1px;
+    flex-shrink: 0;
 }
 
 .crypto-val {
     color: var(--text-bright);
     font-weight: 700;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .mono-ellipsis {
     display: inline-block;
-    max-width: 170px;
+    max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -545,12 +587,13 @@
 }
 
 .crypto-genbar {
-    height: 10px;
+    height: 8px;
     background: var(--bg-inset);
     border: 1px solid var(--emerald-line-soft);
     border-radius: 2px;
     overflow: hidden;
-    margin-top: 3px;
+    margin-top: 2px;
+    width: 100%;
 }
 
 .crypto-genbar i {
@@ -562,31 +605,38 @@
 }
 
 .crypto-right {
-    width: 92px;
+    width: clamp(68px, 7vw, 84px);
+    height: clamp(68px, 7vw, 84px);
     flex-shrink: 0;
     display: grid;
     place-items: center;
+    align-self: center;
 }
 
 .crypto-canvas {
-    width: 92px;
-    height: 92px;
+    width: 100%;
+    height: 100%;
 }
 
 /* ============================ EVENT LOG ============================ */
 .eventlog-content {
     padding: var(--sp-2) var(--sp-3);
     overflow-y: auto;
-    font-size: var(--fs-sm);
-    line-height: 1.7;
+    overflow-x: hidden;
+    font-size: var(--fs-xs);
+    line-height: 1.6;
     display: flex;
     flex-direction: column;
+    min-height: 0;
+    flex: 1;
 }
 
 .log-line {
     display: flex;
-    gap: var(--sp-3);
+    gap: var(--sp-2);
     white-space: nowrap;
+    min-width: 0;
+    align-items: baseline;
     animation: log-in 0.35s var(--ease);
 }
 
@@ -605,11 +655,13 @@
 .log-time {
     color: var(--text-muted);
     font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
 }
 
 .log-tag {
     font-weight: 700;
-    min-width: 52px;
+    min-width: 46px;
+    flex-shrink: 0;
 }
 
 .log-tag.info {
@@ -632,26 +684,23 @@
     color: var(--text-mid);
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-/* When event log is displayed as two columns (wide) */
-.eventlog-content.two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0 var(--sp-6);
-    align-content: start;
+    white-space: nowrap;
+    min-width: 0;
+    flex: 1;
 }
 
 /* ============================ DATA STREAM ============================ */
 .datastream-content {
     display: grid;
-    grid-template-columns: 1fr 1fr auto;
-    gap: var(--sp-4);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    gap: var(--sp-2);
     padding: var(--sp-2) var(--sp-3);
     overflow: hidden;
+    min-height: 0;
+    flex: 1;
     font-family: var(--font-tech);
-    font-size: var(--fs-sm);
-    line-height: 1.55;
+    font-size: var(--fs-xs);
+    line-height: 1.45;
 }
 
 .ds-hex,
@@ -659,7 +708,8 @@
     overflow: hidden;
     white-space: pre;
     color: var(--text-dim);
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+    min-width: 0;
     position: relative;
     mask-image: linear-gradient(180deg, transparent, black 12%, black 82%, transparent);
     -webkit-mask-image: linear-gradient(180deg, transparent, black 12%, black 82%, transparent);
@@ -679,9 +729,10 @@
 }
 
 .ds-canvas {
-    width: 90px;
+    width: clamp(50px, 6vw, 80px);
     height: 100%;
     opacity: 0.8;
+    flex-shrink: 0;
 }
 
 /* ============================ HACKER TYPER ============================ */

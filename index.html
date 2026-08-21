@@ -5,9 +5,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <meta name="description"
-        content="NEXUS Secure Terminal — a cinematic, 100% simulated hacker terminal experience. No real network activity." />
+        content="SPECTRE-9 Cyber Warfare Terminal — a cinematic, military-grade simulated black-ops exploitation suite. No real network activity." />
     <meta name="color-scheme" content="dark" />
-    <title>NEXUS // SECURE TERMINAL</title>
+    <title>SPECTRE-9 // BLACK-OPS CYBER WARFARE</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -48,9 +48,9 @@
             </div>
             <div class="boot-ready" id="boot-ready">
                 <div class="boot-ready-title">SYSTEM READY</div>
-                <div class="boot-ready-sub">Welcome, operator.</div>
-                <div class="boot-ready-hint">Type <span>'help'</span> to begin.</div>
-                <button class="boot-enter-btn" id="boot-enter-btn" type="button">[ ENTER TERMINAL ]</button>
+                <div class="boot-ready-sub">Welcome, operative. Tactical interface armed.</div>
+                <div class="boot-ready-hint">Type <span>'help'</span> for black-ops command matrix.</div>
+                <button class="boot-enter-btn" id="boot-enter-btn" type="button">[ ENGAGE SPECTRE TERMINAL ]</button>
             </div>
         </div>
         <div class="boot-footer">SIMULATION MODE // NO REAL NETWORK ACTIVITY</div>
@@ -62,10 +62,10 @@
         <!-- ---------- TOP BAR ---------- -->
         <header class="topbar">
             <div class="topbar-brand">
-                <span class="brand-glyph">&gt;_</span>
-                <span class="brand-name">NEXUS</span>
+                <span class="brand-glyph">&gt;#</span>
+                <span class="brand-name">SPECTRE-9</span>
                 <span class="brand-sep">//</span>
-                <span class="brand-sub">SECURE TERMINAL</span>
+                <span class="brand-sub">BLACK-OPS WARFARE</span>
             </div>
             <div class="topbar-meta">
                 <div class="meta-item"><span class="meta-key">CONNECTION:</span> <span class="meta-val val-ok"
@@ -115,16 +115,16 @@
                 </nav>
 
                 <div class="identity-panel">
-                    <div class="identity-head">IDENTITY</div>
+                    <div class="identity-head">OPERATIVE PROFILE</div>
                     <div class="identity-rows">
-                        <div class="id-row"><span>USER:</span><b>root</b></div>
-                        <div class="id-row"><span>UID :</span><b>0</b></div>
-                        <div class="id-row"><span>GID :</span><b>0</b></div>
-                        <div class="id-row"><span>GROUPS:</span><b>superuser</b></div>
-                        <div class="id-row"><span>LOCATION:</span><b>unknown</b></div>
-                        <div class="id-row"><span>IP:</span><b id="id-ip">192.168.0.101</b></div>
+                        <div class="id-row"><span>USER:</span><b>operator</b></div>
+                        <div class="id-row"><span>UID :</span><b>0 [ROOT]</b></div>
+                        <div class="id-row"><span>GID :</span><b>0 [BLACK-OPS]</b></div>
+                        <div class="id-row"><span>GROUPS:</span><b>superuser,cyberwar</b></div>
+                        <div class="id-row"><span>SECTOR:</span><b>09 [CLASSIFIED]</b></div>
+                        <div class="id-row"><span>IP:</span><b id="id-ip">10.99.14.88</b></div>
                         <div class="id-row"><span>MASK:</span><b>255.255.255.0</b></div>
-                        <div class="id-row"><span>GATEWAY:</span><b>192.168.0.1</b></div>
+                        <div class="id-row"><span>GATEWAY:</span><b>10.99.14.1 [ONION]</b></div>
                     </div>
                     <div class="worldmap-wrap">
                         <canvas id="worldmap-canvas" class="worldmap-canvas"></canvas>
@@ -143,7 +143,7 @@
             <section class="terminal-region panel" id="region-terminal">
                 <div class="panel-titlebar">
                     <div class="term-tabs">
-                        <div class="term-tab active"><span class="tab-title">root@nexus:~</span><span
+                        <div class="term-tab active"><span class="tab-title">operator@spectre-9:~</span><span
                                 class="tab-x">✕</span></div>
                         <button class="term-tab-add" title="New tab (simulated)">+</button>
                     </div>
@@ -155,7 +155,7 @@
                 <div class="terminal-body" id="terminal-body">
                     <div class="terminal-output" id="terminal-output"></div>
                     <div class="terminal-inputline" id="terminal-inputline">
-                        <span class="prompt-user">root@nexus</span><span class="prompt-sep">:</span><span
+                        <span class="prompt-user">operator@spectre-9</span><span class="prompt-sep">:</span><span
                             class="prompt-path">~</span><span class="prompt-dollar">$</span>
                         <span class="terminal-input-wrap">
                             <span class="terminal-input-mirror" id="terminal-input-mirror"></span><span

@@ -1,5 +1,5 @@
 /* ============================================================
-   NEXUS // HACKER TYPER
+   SPECTRE-9 // HACKER TYPER
    The classic "mash any key, cinematic code pours out" mode.
    When active, every keystroke reveals the next chunk of a
    pre-written, syntax-highlighted code corpus. Nothing here is
@@ -14,11 +14,11 @@
        as on-screen set dressing (like a movie prop). --- */
     var CODE = [
         "/* ============================================================",
-        "   NEXUS SIMULATION KERNEL  ::  module: intrusion_visualizer",
+        "   SPECTRE-9 TACTICAL KERNEL  ::  module: blackops_visualizer",
         "   NOTE: fictional set-dressing. no real network activity.",
         "   ============================================================ */",
-        "#include <nexus/sim.h>",
-        "#include <nexus/proxy.h>",
+        "#include <spectre/tactical.h>",
+        "#include <spectre/onion_mesh.h>",
         "#include <stdint.h>",
         "#include <string.h>",
         "",
@@ -119,7 +119,7 @@
         "}",
         "",
         "int main(int argc, char **argv) {",
-        "    nx_banner(\"NEXUS OS v4.7.21 // SIMULATION MODE\");",
+        "    nx_banner(\"SPECTRE-9 OS v8.4.0 // BLACK-OPS SIMULATION\");",
         "    nx_proxy_t chain = {0};",
         "    if (nx_proxy_chain_init(&chain, 3) != 0) return 1;",
         "    nx_scan_simulated(g_nodes, &g_node_count);",

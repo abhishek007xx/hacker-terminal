@@ -24,9 +24,15 @@
             if (!this.canvas) return;
             this.ctx = this.canvas.getContext('2d');
             this.resize();
-            window.addEventListener('resize', () => { this.resize(); this._layout(); });
             this._build();
             this._layout();
+
+            window.addEventListener('resize', () => { this.resize(); this._layout(); });
+            if (window.ResizeObserver && this.canvas.parentElement) {
+                const ro = new ResizeObserver(() => { this.resize(); this._layout(); });
+                ro.observe(this.canvas.parentElement);
+            }
+
             this.loop = this.loop.bind(this);
             this.raf = requestAnimationFrame(this.loop);
             // random node state changes
@@ -36,20 +42,21 @@
         },
 
         resize() {
+            if (!this.canvas) return;
             const r = this.canvas.getBoundingClientRect();
             this.dpr = window.devicePixelRatio || 1;
-            this.canvas.width = Math.max(2, r.width * this.dpr);
-            this.canvas.height = Math.max(2, r.height * this.dpr);
+            this.canvas.width = Math.max(2, Math.floor(r.width * this.dpr));
+            this.canvas.height = Math.max(2, Math.floor(r.height * this.dpr));
         },
 
         _build() {
-            // CORE + 4 satellites, matching brief's diagram
+            // CORE + 4 satellites, matching tactical node diagram
             this.nodes = [
                 { id: 'CORE', ip: '10.0.0.1', rx: 0.5, ry: 0.5, state: 'ONLINE', core: true, phase: 0 },
-                { id: 'NODE-01', ip: '192.168.1.10', rx: 0.5, ry: 0.16, state: 'ONLINE', phase: 1 },
-                { id: 'NODE-02', ip: '192.168.1.20', rx: 0.84, ry: 0.5, state: 'SECURED', phase: 2 },
-                { id: 'NODE-03', ip: '192.168.1.30', rx: 0.16, ry: 0.5, state: 'ONLINE', phase: 3 },
-                { id: 'NODE-04', ip: '192.168.1.40', rx: 0.5, ry: 0.84, state: 'UNKNOWN', phase: 4 }
+                { id: 'NODE-01', ip: '192.168.1.10', rx: 0.5, ry: 0.15, state: 'ONLINE', phase: 1 },
+                { id: 'NODE-02', ip: '192.168.1.20', rx: 0.85, ry: 0.5, state: 'SECURED', phase: 2 },
+                { id: 'NODE-03', ip: '192.168.1.30', rx: 0.15, ry: 0.5, state: 'ONLINE', phase: 3 },
+                { id: 'NODE-04', ip: '192.168.1.40', rx: 0.5, ry: 0.85, state: 'UNKNOWN', phase: 4 }
             ];
             this.links = [
                 ['CORE', 'NODE-01'],
@@ -61,7 +68,10 @@
 
         _layout() {
             const W = this.canvas.width, H = this.canvas.height;
-            const padX = W * 0.14, padY = H * 0.16;
+            if (W <= 10 || H <= 10) return;
+            const dpr = this.dpr;
+            const padX = Math.min(W * 0.2, Math.max(34 * dpr, W * 0.15));
+            const padY = Math.min(H * 0.24, Math.max(26 * dpr, H * 0.2));
             for (const n of this.nodes) {
                 n.x = padX + n.rx * (W - padX * 2);
                 n.y = padY + n.ry * (H - padY * 2);
@@ -103,12 +113,15 @@
         draw() {
             const ctx = this.ctx;
             const W = this.canvas.width, H = this.canvas.height;
+            if (W <= 10 || H <= 10) return;
             ctx.clearRect(0, 0, W, H);
             const dpr = this.dpr;
+            const scale = Math.min(1.2, Math.max(0.65, Math.min(W / (320 * dpr), H / (180 * dpr))));
 
             // links
             for (const [a, b] of this.links) {
                 const na = this._node(a), nb = this._node(b);
+                if (!na || !nb) continue;
                 ctx.beginPath();
                 ctx.moveTo(na.x, na.y);
                 ctx.lineTo(nb.x, nb.y);
@@ -127,10 +140,11 @@
                 pk.p += pk.speed;
                 if (pk.p >= 1) { this.packets.splice(i, 1); continue; }
                 const na = this._node(pk.from), nb = this._node(pk.to);
+                if (!na || !nb) continue;
                 const x = na.x + (nb.x - na.x) * pk.p;
                 const y = na.y + (nb.y - na.y) * pk.p;
                 ctx.beginPath();
-                ctx.arc(x, y, dpr * 1.8, 0, Math.PI * 2);
+                ctx.arc(x, y, dpr * 1.8 * scale, 0, Math.PI * 2);
                 ctx.fillStyle = pk.color;
                 ctx.shadowColor = pk.color;
                 ctx.shadowBlur = 6 * dpr;
@@ -142,11 +156,11 @@
             for (const n of this.nodes) {
                 const col = STATE_COLORS[n.state] || STATE_COLORS.ONLINE;
                 const pulse = (Math.sin(this.t * 0.05 + n.phase) + 1) / 2;
-                const baseR = (n.core ? 10 : 7) * dpr;
+                const baseR = (n.core ? 8.5 : 6) * dpr * scale;
 
                 // outer ring pulse
                 ctx.beginPath();
-                ctx.arc(n.x, n.y, baseR + pulse * 4 * dpr, 0, Math.PI * 2);
+                ctx.arc(n.x, n.y, baseR + pulse * 3.5 * dpr * scale, 0, Math.PI * 2);
                 ctx.strokeStyle = col.replace('1)', (0.25 + pulse * 0.25) + ')');
                 ctx.lineWidth = dpr;
                 ctx.stroke();
@@ -154,20 +168,25 @@
                 // hexagon body
                 this._hex(ctx, n.x, n.y, baseR, col, n.core);
 
-                // labels
+                // labels with safety clamping
+                const fontSizeHead = Math.max(7.5 * dpr, 8.5 * dpr * scale);
+                const fontSizeSub = Math.max(6.5 * dpr, 7.5 * dpr * scale);
+
                 ctx.fillStyle = 'rgba(200, 255, 224, 0.92)';
-                ctx.font = (n.core ? 700 : 600) + ' ' + (9 * dpr) + 'px "JetBrains Mono", monospace';
+                ctx.font = (n.core ? 700 : 600) + ' ' + fontSizeHead + 'px "JetBrains Mono", monospace';
                 ctx.textAlign = 'center';
-                const labelY = n.y - baseR - 6 * dpr;
+                const labelY = Math.max(fontSizeHead, n.y - baseR - 4 * dpr * scale);
                 ctx.fillText(n.id, n.x, labelY);
 
                 ctx.fillStyle = 'rgba(80, 160, 120, 0.8)';
-                ctx.font = (7.5 * dpr) + 'px "JetBrains Mono", monospace';
-                ctx.fillText(n.ip, n.x, n.y + baseR + 11 * dpr);
+                ctx.font = fontSizeSub + 'px "JetBrains Mono", monospace';
+                const ipY = Math.min(H - fontSizeSub - 2 * dpr, n.y + baseR + 9 * dpr * scale);
+                ctx.fillText(n.ip, n.x, ipY);
 
                 ctx.fillStyle = col;
-                ctx.font = '700 ' + (7.5 * dpr) + 'px "JetBrains Mono", monospace';
-                ctx.fillText(n.state, n.x, n.y + baseR + 21 * dpr);
+                ctx.font = '700 ' + fontSizeSub + 'px "JetBrains Mono", monospace';
+                const stateY = Math.min(H - 2 * dpr, n.y + baseR + 17 * dpr * scale);
+                ctx.fillText(n.state, n.x, stateY);
             }
         },
 

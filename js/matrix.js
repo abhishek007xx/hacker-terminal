@@ -66,16 +66,16 @@
         _pushMessages() {
             const NX = window.NX;
             const lines = [
-                'WAKE UP, OPERATOR...',
-                'THE NEXUS HAS YOU.',
-                'FOLLOW THE GREEN RABBIT.',
-                '> decrypting reality stream',
+                'WAKE UP, OPERATIVE...',
+                'THE SPECTRE-GRID HAS YOU.',
+                'FOLLOW THE PHANTOM PACKET.',
+                '> decrypting quantum reality stream',
                 '> 0x' + NX.hex(8) + ' :: ' + NX.hexBytes(4),
-                '> injecting simulated construct',
+                '> injecting black-ops construct',
                 '> ' + NX.keyBlock(4),
-                'SIMULATION LAYER ACTIVE // NO REAL SYSTEM',
+                'TACTICAL SIMULATION ACTIVE // ZERO NETWORK AT RISK',
                 '> rendering ' + NX.randInt(1000, 9999) + ' virtual nodes',
-                'PRESS [ESC] TO RETURN'
+                'PRESS [ESC] TO RETURN TO SPECTRE CONSOLE'
             ];
             let i = 0;
             const step = () => {

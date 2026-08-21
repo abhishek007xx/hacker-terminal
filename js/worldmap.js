@@ -42,16 +42,21 @@
             this.cols = MAP[0].length;
             this.resize();
             window.addEventListener('resize', () => this.resize());
+            if (window.ResizeObserver && this.canvas.parentElement) {
+                const ro = new ResizeObserver(() => this.resize());
+                ro.observe(this.canvas.parentElement);
+            }
             this._makeTargets();
             this.loop = this.loop.bind(this);
             this.raf = requestAnimationFrame(this.loop);
         },
 
         resize() {
+            if (!this.canvas) return;
             const r = this.canvas.getBoundingClientRect();
             this.dpr = window.devicePixelRatio || 1;
-            this.canvas.width = Math.max(2, r.width * this.dpr);
-            this.canvas.height = Math.max(2, r.height * this.dpr);
+            this.canvas.width = Math.max(2, Math.floor(r.width * this.dpr));
+            this.canvas.height = Math.max(2, Math.floor(r.height * this.dpr));
         },
 
         _makeTargets() {
@@ -78,6 +83,7 @@
         draw() {
             const ctx = this.ctx;
             const W = this.canvas.width, H = this.canvas.height;
+            if (W <= 10 || H <= 10) return;
             ctx.clearRect(0, 0, W, H);
 
             const cw = W / this.cols;

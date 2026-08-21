@@ -7,12 +7,12 @@
     display: none;
 }
 
-/* ---------------- Large desktop: widen right column a touch ---------------- */
+/* ---------------- Large desktop: widen panels smoothly ---------------- */
 @media (min-width: 1600px) {
     :root {
-        --right-w: 400px;
-        --sidebar-w: 230px;
-        --bottom-h: 168px;
+        --right-w: 390px;
+        --sidebar-w: 220px;
+        --bottom-h: 156px;
     }
 }
 
@@ -20,7 +20,8 @@
 @media (max-width: 1280px) {
     :root {
         --right-w: 320px;
-        --sidebar-w: 190px;
+        --sidebar-w: 195px;
+        --bottom-h: 140px;
     }
 
     .brand-sub {
@@ -28,7 +29,7 @@
     }
 
     .topbar-meta {
-        gap: var(--sp-4);
+        gap: var(--sp-3);
     }
 }
 
@@ -39,7 +40,8 @@
     }
 
     :root {
-        --right-w: 290px;
+        --right-w: 280px;
+        --sidebar-w: 180px;
     }
 
     .crypto-right,

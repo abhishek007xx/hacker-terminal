@@ -1,26 +1,26 @@
 /* ============================================================
-   NEXUS // BOOT SEQUENCE
-   Cinematic loading screen. Types kernel messages, animates a
-   progress bar, then reveals the main interface. All local.
+   SPECTRE-9 // BOOT SEQUENCE
+   Cinematic loading screen. Types classified kernel messages,
+   animates progress, and reveals black-ops tactical console.
    ============================================================ */
 (function () {
     'use strict';
 
     const LOGO =
-        "  _   _ _______  ___   _ ____  \n" +
-        " | \\ | | ____\\ \\/ / | | / ___| \n" +
-        " |  \\| |  _|  \\  /| | | \\___ \\ \n" +
-        " | |\\  | |___ /  \\| |_| |___) |\n" +
-        " |_| \\_|_____/_/\\_\\\\___/|____/ \n" +
-        "        N E X U S   O S   v4.7.21";
+        "  ____  ____  _____ ____ _____ ____  _____      ___  \n" +
+        " / ___||  _ \\| ____/ ___|_   _|  _ \\| ____|    / _ \\ \n" +
+        " \\___ \\| |_) |  _|| |     | | | |_) |  _| ____| (_) |\n" +
+        "  ___) |  __/| |__| |___  | | |  _ <| |__|_____ \\__, |\n" +
+        " |____/|_|   |_____\\____| |_| |_| \\_\\_____|       /_/ \n" +
+        "  >> BLACK-OPS TACTICAL CYBER WARFARE OS v8.4.0 <<";
 
     const STEPS = [
-        'Initializing kernel...',
-        'Loading encryption module...',
-        'Loading network interface...',
-        'Mounting virtual filesystem...',
-        'Calibrating proxy chain...',
-        'Initializing secure shell...'
+        'Loading tactical microkernel core [AMD64-HARDENED]...',
+        'Mounting encrypted RAMDISK with AES-XTS-512...',
+        'Arming anti-forensic stealth drivers & memory cloak...',
+        'Calibrating 5-node distributed onion proxy mesh...',
+        'Initializing zero-day exploit payload engine...',
+        'Engaging SPECTRE-9 black-ops command environment...'
     ];
 
     const Boot = {

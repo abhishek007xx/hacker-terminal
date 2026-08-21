@@ -1,7 +1,7 @@
 /* ============================================================
-   NEXUS // INTERACTIVE TERMINAL
-   Auto-play intro + user command simulation. Every command is
-   a purely visual, local simulation. No real network activity.
+   SPECTRE-9 // TACTICAL CYBER WARFARE TERMINAL
+   High-intensity, multi-stage simulated black-ops commands.
+   All data, scans, breaches, and exploits are 100% simulated locally.
    ============================================================ */
 (function () {
     'use strict';
@@ -74,7 +74,12 @@
         _autocomplete() {
             const val = this.input.value.trim().toLowerCase();
             if (!val) return;
-            const cmds = Object.keys(COMMANDS).concat(['sudo matrix', 'sudo coffee', 'hack the planet', 'hacker typer']);
+            const extra = [
+                'sudo matrix', 'sudo coffee', 'hack the planet', 'hacker typer',
+                'scan 192.168.1.1', 'connect 10.99.14.88', 'decrypt 0x8F7A', 'trace 172.16.0.4',
+                'payload meterpreter', 'ddos target', 'airmon wlan0', 'sat link', 'purge data'
+            ];
+            const cmds = Object.keys(COMMANDS).concat(extra);
             const match = cmds.find((c) => c.startsWith(val));
             if (match) { this.input.value = match; this._syncMirror(); }
         },
@@ -83,7 +88,7 @@
         _echo(cmd) {
             const NX = window.NX;
             NX.line(this.out,
-                '<span class="t-prompt">root@nexus:~$</span> ' +
+                '<span class="t-prompt">operator@spectre-9:~$</span> ' +
                 '<span class="t-cmd">' + this._esc(cmd) + '</span>', 't-cmdline');
         },
 
@@ -122,12 +127,15 @@
             const lower = cmd.toLowerCase();
             // multi-word easter eggs first
             if (EGGS[lower]) { await EGGS[lower].call(this); return; }
-            const name = lower.split(/\s+/)[0];
-            if (COMMANDS[name]) { await COMMANDS[name].call(this, cmd); return; }
+            const parts = lower.split(/\s+/);
+            const name = parts[0];
+            const args = parts.slice(1);
+            if (COMMANDS[name]) { await COMMANDS[name].call(this, args, cmd); return; }
+            
             // unknown
             const NX = window.NX;
-            NX.line(this.out, 'COMMAND NOT RECOGNIZED', 't-err');
-            NX.line(this.out, "Type '<span class=\"t-key\">help</span>' for available simulation commands.", 't-dim');
+            NX.line(this.out, 'COMMAND NOT RECOGNIZED BY SPECTRE TACTICAL CORE', 't-err');
+            NX.line(this.out, "Type '<span class=\"t-key\">help</span>' to inspect classified black-ops toolset.", 't-dim');
             NX.spacer(this.out);
             if (window.NexusAudio) window.NexusAudio.warn();
         },
@@ -136,7 +144,7 @@
             if (this.out) this.out.innerHTML = '';
         },
 
-        // ---------- AUTO-PLAY INTRO ----------
+        // ---------- AUTO-PLAY CINEMATIC INTRO ----------
         async playIntro() {
             if (this.booted) return;
             this.booted = true;
@@ -149,70 +157,55 @@
             const L = (h, cls) => NX.line(this.out, h, cls);
             const S = () => NX.spacer(this.out);
 
-            await P('root@nexus:~$ initializing secure shell...', 't-prompt-line', { sound: true, speed: 12 });
-            for (const t of ['Kernel loaded', 'Encryption layer initialized', 'Proxy chain established', 'Identity masking enabled']) {
-                await NX.sleep(140);
-                L('<span class="t-ok">[OK]</span> ' + t, 't-indent');
+            await P('operator@spectre-9:~$ initializing black-ops tactical shell...', 't-prompt-line', { sound: true, speed: 10 });
+            const bootItems = [
+                ['Microkernel Memory Map', 'AMD64 HARDENED [OK]'],
+                ['AES-XTS-512 RAMDISK', 'MOUNTED [OK]'],
+                ['Anti-Forensic Memory Cloak', 'ARMED [OK]'],
+                ['Multi-Hop Onion Mesh (5-Node)', 'ROUTED [OK]'],
+                ['Zero-Day Exploit Framework', 'STANDBY [OK]']
+            ];
+            for (const [k, v] of bootItems) {
+                await NX.sleep(110);
+                const dots = '.'.repeat(Math.max(3, 30 - k.length));
+                L('<span class="t-dim">&gt;</span> ' + k + ' <span class="t-dim">' + dots + '</span> <span class="t-ok">' + v + '</span>', 't-indent');
+                if (A) A.blip(580, 0.02, 'square', 0.04);
             }
             S();
-            await NX.sleep(200);
 
-            await P('root@nexus:~$ establishing connection...', 't-prompt-line', { sound: true, speed: 12 });
+            await P('operator@spectre-9:~$ establishing classified satellite link...', 't-prompt-line', { sound: true, speed: 10 });
             if (A) A.connect();
-            await NX.animateBar(this.out, { width: 22, duration: 1600, className: 't-indent t-bar-green' });
-            for (let i = 1; i <= 3; i++) {
-                await NX.sleep(200);
-                L('<span class="t-arrow">&gt;</span> routing through node_0' + i + '...', 't-indent t-dim');
+            await NX.animateBar(this.out, { width: 24, duration: 1500, className: 't-indent t-bar-green', label: 'UPLINK ' });
+            const hops = ['RELAY_REYKJAVIK', 'RELAY_ZURICH', 'RELAY_TOKYO', 'SHADOW_NODE_09'];
+            for (let i = 0; i < hops.length; i++) {
+                await NX.sleep(130);
+                L('<span class="t-arrow">&gt;&gt;</span> hop 0' + (i + 1) + ' :: ' + hops[i] + ' [' + NX.hex(2) + '.' + NX.hex(2) + '.' + NX.hex(2) + '] <span class="t-cyan">' + NX.randInt(14, 88) + 'ms</span>', 't-indent t-dim');
             }
-            await NX.sleep(200);
-            L('<span class="t-arrow">&gt;</span> connection established', 't-indent t-ok');
+            L('<span class="t-ok">&gt;&gt; SECURE MESH ESTABLISHED // ORIGIN ZEROIZED</span>', 't-indent');
             S();
 
-            await P('root@nexus:~$ running system diagnostics...', 't-prompt-line', { sound: true, speed: 12 });
+            await P('operator@spectre-9:~$ scanning darknet sector grid...', 't-prompt-line', { sound: true, speed: 10 });
             S();
-            const diag = [
-                ['CPU', '41%'], ['MEMORY', '67%'], ['NETWORK', 'ACTIVE'],
-                ['FIREWALL', 'ENABLED'], ['ENCRYPTION', 'AES-256']
+            const sectorNodes = [
+                ['[01]', 'SPECTRE-ALPHA', '10.99.14.01', 'ARMED // ONLINE', 't-ok'],
+                ['[02]', 'SPECTRE-BRAVO', '10.99.14.02', 'STEALTH ACTIVE', 't-cyan'],
+                ['[03]', 'SPECTRE-CHARLIE', '10.99.14.03', 'SHIELD OVERRIDE', 't-warn'],
+                ['[04]', 'SPECTRE-DELTA', '10.99.14.04', 'TARGET ACQUIRED', 't-ok']
             ];
-            for (const [k, v] of diag) {
-                await NX.sleep(120);
-                L('<span class="t-indent-inline">' + NX.dotline(k, '', 22).replace(/\s+$/, '') + '</span> <span class="t-val">' + v + '</span>', 't-indent');
+            for (const [idx, nm, ip, st, cls] of sectorNodes) {
+                await NX.sleep(130);
+                const label = idx + ' ' + nm + ' (' + ip + ') ';
+                const dots = '.'.repeat(Math.max(3, 38 - label.length));
+                L('<span class="t-dim">' + idx + '</span> <b>' + nm + '</b> <span class="t-dim">' + dots + '</span> <span class="' + cls + '">' + st + '</span>', 't-indent');
+                if (A) A.blip(640, 0.03, 'square', 0.05);
             }
             S();
 
-            await P('root@nexus:~$ scanning simulated network...', 't-prompt-line', { sound: true, speed: 12 });
-            S();
-            const nodes = [
-                ['[01]', 'NODE-ALPHA', 'ONLINE', 't-ok'],
-                ['[02]', 'NODE-BETA', 'ONLINE', 't-ok'],
-                ['[03]', 'NODE-GAMMA', 'FILTERED', 't-warn'],
-                ['[04]', 'NODE-DELTA', 'ONLINE', 't-ok']
-            ];
-            for (const [idx, nm, st, cls] of nodes) {
-                await NX.sleep(160);
-                const label = idx + ' ' + nm + ' ';
-                const dots = '.'.repeat(Math.max(3, 26 - label.length));
-                L('<span class="t-dim">' + idx + '</span> ' + nm + ' <span class="t-dim">' + dots + '</span> <span class="' + cls + '">' + st + '</span>', 't-indent');
-                if (A) A.blip(600, 0.03, 'square', 0.05);
-            }
-            L('4 nodes discovered.', 't-indent t-dim');
-            S();
-
-            await P('root@nexus:~$ analyzing security layers...', 't-prompt-line', { sound: true, speed: 12 });
-            S();
-            for (const k of ['FIREWALL', 'AUTHENTICATION', 'ENCRYPTION', 'ACCESS CONTROL']) {
-                await NX.sleep(140);
-                const label = k + ' ';
-                const dots = '.'.repeat(Math.max(3, 24 - label.length));
-                L(k + ' <span class="t-dim">' + dots + '</span> <span class="t-cyan">DETECTED</span>', 't-indent');
-            }
-            S();
-            await NX.sleep(200);
-            L('<span class="t-arrow">&gt;</span> SIMULATION MODE ENABLED', 't-sim-line');
+            L('<span class="t-arrow">&gt;</span> SPECTRE-9 TACTICAL SUITE READY // OPERATIVE CLEARANCE: LEVEL-5', 't-sim-line');
             S();
             if (A) A.confirm();
 
-            L("Type '<span class=\"t-key\">help</span>' for available simulation commands.", 't-dim');
+            L("Type '<span class=\"t-key\">help</span>' to inspect tactical arsenal or '<span class=\"t-key\">scan</span>' to initiate reconnaissance.", 't-dim');
             S();
 
             this.busy = false;
@@ -222,164 +215,666 @@
     };
 
     /* =====================================================
-       COMMAND IMPLEMENTATIONS  (all visual-only)
+       TACTICAL BLACK-OPS COMMAND IMPLEMENTATIONS
        ===================================================== */
     const NXref = () => window.NX;
 
     const COMMANDS = {
         async help() {
             const NX = NXref();
-            NX.line(this.out, 'AVAILABLE SIMULATION COMMANDS', 't-head');
+            const A = window.NexusAudio;
+            if (A) A.blip(740, 0.04, 'square', 0.08);
+
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  SPECTRE-9 // TACTICAL BLACK-OPS COMMAND MATRIX', 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
             NX.spacer(this.out);
-            const rows = [
-                ['help', 'show this command list'],
-                ['status', 'display simulated system status'],
-                ['scan', 'run a simulated network scan'],
-                ['connect', 'simulate a secure connection'],
-                ['decrypt', 'run a fake decryption routine'],
-                ['trace', 'simulate a proxy trace'],
-                ['nodes', 'list simulated network nodes'],
-                ['breach', 'launch dramatic breach simulation'],
-                ['hacker', 'toggle HACKER TYPER (mash keys = code)'],
-                ['matrix', 'enter matrix mode'],
-                ['clear', 'clear the terminal'],
-                ['whoami', 'print current operator'],
-                ['exit', 'attempt to log out'],
-                ['about', 'about this simulation']
+
+            const categories = [
+                {
+                    title: '▶ RECONNAISSANCE & SCANNING',
+                    cls: 't-cyan',
+                    cmds: [
+                        ['scan [target]', 'execute deep multi-port scan, subnet ARP sweep & CVE mapping'],
+                        ['trace [ip]', 'orbital satellite triangulation & multi-hop route tracking'],
+                        ['nodes', 'display live darknet routing table with defense metrics'],
+                        ['sat', 'lock orbital reconnaissance satellite & intercept telemetry'],
+                        ['airmon', 'simulate 802.11 RF monitor mode & WPA3 handshake capture']
+                    ]
+                },
+                {
+                    title: '▶ OFFENSIVE & EXPLOITATION',
+                    cls: 't-crit',
+                    cmds: [
+                        ['payload', 'synthesize polymorphic x86_64 shellcode / memory stager'],
+                        ['ddos [target]', 'simulate high-bandwidth 256-node packet swarm assault'],
+                        ['breach', 'launch full 6-tier military-grade penetration simulation'],
+                        ['decrypt [hash]', 'run multi-threaded rainbow dictionary attack on ciphertext'],
+                        ['hacker', 'toggle HACKER TYPER mode (mash any keys to pour code)']
+                    ]
+                },
+                {
+                    title: '▶ NETWORK & DEFENSE',
+                    cls: 't-ok',
+                    cmds: [
+                        ['connect [ip]', 'establish 5-hop encrypted onion tunnel with anti-DPI cloak'],
+                        ['status', 'inspect 8-core CPU distribution, entropy reserves & defenses'],
+                        ['matrix', 'enter fullscreen falling-glyph cyber construct mode']
+                    ]
+                },
+                {
+                    title: '▶ SYSTEM & CLASSIFIED UTILITIES',
+                    cls: 't-warn',
+                    cmds: [
+                        ['whoami', 'print operative clearance dossier & cryptographic keys'],
+                        ['about', 'inspect SPECTRE-9 black-ops engine specifications'],
+                        ['purge', 'emergency DoD 3-pass cryptographic data zeroization'],
+                        ['clear', 'sanitize terminal buffer (alias: cls)'],
+                        ['exit', 'attempt disconnection from tactical grid']
+                    ]
+                }
             ];
-            for (const [c, d] of rows) {
-                NX.line(this.out, '  <span class="t-key">' + (c + '        ').slice(0, 9) + '</span> <span class="t-dim">' + d + '</span>', '');
+
+            for (const cat of categories) {
+                NX.line(this.out, cat.title, cat.cls);
+                for (const [c, d] of cat.cmds) {
+                    const pad = '               '.slice(0, Math.max(1, 16 - c.length));
+                    NX.line(this.out, '  <span class="t-key">' + c + '</span>' + pad + '<span class="t-dim">' + d + '</span>', '');
+                }
+                NX.spacer(this.out);
+                await NX.sleep(40);
             }
-            NX.spacer(this.out);
-            NX.line(this.out, 'SIMULATION MODE // NO REAL NETWORK ACTIVITY', 't-sim-line');
+
+            NX.line(this.out, '>> SIMULATION MODE // ZERO REAL NETWORK TRAFFIC TRANSMITTED <<', 't-sim-line');
             NX.spacer(this.out);
         },
 
-        async status() {
-            const NX = NXref();
-            const nodes = window.Monitor ? window.Monitor.getNodes() : 27;
-            NX.line(this.out, 'SYSTEM STATUS', 't-head');
-            NX.spacer(this.out);
-            const rows = [
-                ['CONNECTION', 'ENCRYPTED', 't-ok'],
-                ['PROXY CHAIN', 'ACTIVE (3 HOPS)', 't-ok'],
-                ['FIREWALL', 'ENABLED', 't-ok'],
-                ['ENCRYPTION', 'AES-256-GCM', 't-cyan'],
-                ['TRACE RISK', '0%', 't-ok'],
-                ['NODES', nodes + ' SIMULATED', 't-val'],
-                ['MODE', 'SIMULATION', 't-warn']
-            ];
-            for (const [k, v, c] of rows) {
-                await NX.sleep(90);
-                const label = k + ' ';
-                const dots = '.'.repeat(Math.max(3, 24 - label.length));
-                NX.line(this.out, k + ' <span class="t-dim">' + dots + '</span> <span class="' + c + '">' + v + '</span>', 't-indent');
-            }
-            NX.spacer(this.out);
-        },
-
-        async scan() {
+        async scan(args) {
             const NX = NXref();
             const A = window.NexusAudio;
-            NX.line(this.out, 'Initializing simulated scan...', 't-dim');
+            const target = args && args[0] ? args[0] : '192.168.1.0/24';
+
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  [STAGE 1/5] INITIATING TACTICAL RECONNAISSANCE :: ' + target, 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
             NX.spacer(this.out);
+
+            if (A) A.connect();
             if (window.Topology) window.Topology.surge();
-            if (A) A.connect();
-            await NX.animateBar(this.out, { width: 24, duration: 2000, className: 't-bar-green' });
+
+            // Phase 1: ARP probe
+            await NX.type(this.out, '> Broadcast ARP sweep across subnet mask...', { className: 't-dim', speed: 10 });
+            await NX.animateBar(this.out, { width: 26, duration: 1800, className: 't-bar-green', label: 'ARP PROBE ' });
+            
+            const liveIPs = [
+                ['192.168.1.1', '00:1A:2B:3C:4D:5E', 'GATEWAY / CISCO-CORE', '0.4ms', 't-ok'],
+                ['192.168.1.10', 'A4:5E:60:77:88:99', 'UBUNTU-HARDENED-SERVER', '1.2ms', 't-ok'],
+                ['192.168.1.45', 'B8:27:EB:11:22:33', 'EMBEDDED SCADA CONTROLLER', '2.8ms', 't-warn'],
+                ['192.168.1.88', '70:85:C2:AA:BB:CC', 'KUBERNETES MASTER NODE', '0.9ms', 't-ok'],
+                ['192.168.1.105', 'F0:18:98:DD:EE:FF', 'ACTIVE DIRECTORY DOMAIN CONTROLLER', '1.6ms', 't-crit']
+            ];
+
             NX.spacer(this.out);
-            const n = window.Monitor ? window.Monitor.getNodes() : 27;
-            await NX.type(this.out, n + ' virtual nodes discovered.', { className: 't-ok', speed: 14 });
-            NX.line(this.out, 'No real network activity performed.', 't-dim');
+            NX.line(this.out, 'DISCOVERED ACTIVE TARGET HOSTS:', 't-cyan');
+            for (const [ip, mac, host, ping, cls] of liveIPs) {
+                await NX.sleep(120);
+                NX.line(this.out, '  <span class="t-key">' + ip + '</span>  <span class="t-dim">[' + mac + ']</span>  <span class="' + cls + '">[' + host + ']</span>  <span class="t-dim">' + ping + '</span>', 't-indent');
+                if (A) A.blip(520, 0.02, 'square', 0.04);
+            }
             NX.spacer(this.out);
+
+            // Phase 2: Multi-port socket scan
+            NX.line(this.out, '  [STAGE 2/5] MULTI-PORT SOCKET ENUMERATION & BANNER GRAB', 't-head');
+            NX.spacer(this.out);
+
+            const ports = [
+                ['21/TCP', 'FTP', 'vsftpd 3.0.3 (Anonymous Enabled)', 'VULNERABLE', 't-warn'],
+                ['22/TCP', 'SSH', 'OpenSSH 8.9p1 Ubuntu-3ubuntu0.1', 'OPEN', 't-ok'],
+                ['53/UDP', 'DNS', 'BIND 9.18.1-1ubuntu1.3 (Recursion Enabled)', 'FILTERED', 't-dim'],
+                ['80/TCP', 'HTTP', 'nginx/1.22.0 (Reverse Proxy)', 'OPEN', 't-ok'],
+                ['443/TCP', 'HTTPS', 'OpenSSL/3.0.2 TLSv1.3 Hardened', 'SECURED', 't-cyan'],
+                ['3306/TCP', 'MYSQL', 'MySQL 8.0.32-commercial', 'OPEN', 't-ok'],
+                ['6443/TCP', 'K8S-API', 'Kubernetes API Server v1.27.1', 'EXPOSED', 't-crit'],
+                ['8080/TCP', 'HTTP-ALT', 'Apache Tomcat/9.0.58 [JMX Invoker Active]', 'CRITICAL', 't-crit'],
+                ['9200/TCP', 'ELASTIC', 'Elasticsearch 7.17.0 (Cluster: PROD-ALPHA)', 'OPEN', 't-ok'],
+                ['27017/TCP', 'MONGODB', 'MongoDB Enterprise v6.0.4', 'SECURED', 't-cyan']
+            ];
+
+            for (const [port, svc, banner, st, cls] of ports) {
+                await NX.sleep(140);
+                const pad = '         '.slice(0, Math.max(1, 10 - port.length));
+                const svcPad = '          '.slice(0, Math.max(1, 10 - svc.length));
+                NX.line(this.out, '  <span class="t-key">' + port + '</span>' + pad + '<span class="t-cyan">' + svc + '</span>' + svcPad + '<span class="t-dim">' + banner + '</span>  <span class="' + cls + '">[' + st + ']</span>', '');
+                if (A) A.blip(600 + Math.random() * 200, 0.02, 'square', 0.03);
+            }
+            NX.spacer(this.out);
+
+            // Phase 3: OS Fingerprint
+            NX.line(this.out, '  [STAGE 3/5] OS KERNEL & TOPOLOGY FINGERPRINTING', 't-head');
+            await NX.sleep(180);
+            NX.line(this.out, '  ├─ KERNEL VERSION   : Linux 6.1.0-21-hardened-amd64 (SMP preempt)', 't-dim');
+            NX.line(this.out, '  ├─ ARCHITECTURE     : x86_64 / NUMA 4-Node Cluster', 't-dim');
+            NX.line(this.out, '  ├─ SECURITY MODULE  : SELinux [Enforcing] // AppArmor Active', 't-warn');
+            NX.line(this.out, '  ├─ DEFENSE SHIELD   : Quantum Entropy Guard & Anti-DPI Active', 't-cyan');
+            NX.line(this.out, '  └─ FINGERPRINT HASH : 0x' + NX.hex(16) + ' [CONFIDENCE: 99.4%]', 't-ok');
+            NX.spacer(this.out);
+
+            // Phase 4: CVE Vulnerability Matrix
+            NX.line(this.out, '  [STAGE 4/5] AUTOMATED CVE EXPLOITATION MAPPING', 't-head');
+            NX.spacer(this.out);
+
+            const cves = [
+                ['CVE-2026-9182', 'CRITICAL', 'TLS Handshake Memory Leak / Remote Code Execution', 'CVSS 9.8', 't-crit'],
+                ['CVE-2025-4419', 'HIGH', 'JMX Invoker Deserialization Privilege Escalation', 'CVSS 8.6', 't-warn'],
+                ['CVE-2024-8831', 'HIGH', 'Kubernetes RBAC Secret Enumeration Bypass', 'CVSS 8.1', 't-warn'],
+                ['CVE-2024-3112', 'MEDIUM', 'OpenSSL Timing Discrepancy Side-Channel', 'CVSS 6.5', 't-cyan']
+            ];
+
+            for (const [cve, sev, desc, cvss, cls] of cves) {
+                await NX.sleep(160);
+                NX.line(this.out, '  <span class="t-key">' + cve + '</span>  <span class="' + cls + '">[' + sev + ' - ' + cvss + ']</span>', 't-indent');
+                NX.line(this.out, '  └─ ' + desc, 't-indent t-dim');
+            }
+            NX.spacer(this.out);
+
+            // Phase 5: Final Summary
+            NX.line(this.out, '  [STAGE 5/5] RECONNAISSANCE REPORT GENERATED', 't-head');
+            NX.line(this.out, '  >> TARGET PERIMETER VULNERABLE // 3 ZERO-DAY VECTORS IDENTIFIED <<', 't-crit');
+            NX.line(this.out, '  Hint: Run \'<span class="t-key">payload</span>\' or \'<span class="t-key">breach</span>\' to simulate exploitation.', 't-dim');
+            NX.line(this.out, '  (All scan results purely simulated locally — zero packets sent)', 't-dim');
+            NX.spacer(this.out);
+
             if (A) A.confirm();
         },
 
-        async connect() {
+        async connect(args) {
             const NX = NXref();
             const A = window.NexusAudio;
+            const dest = args && args[0] ? args[0] : '10.99.14.88';
+
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  NEGOTIATING BLACK-OPS ONION TUNNEL :: ' + dest, 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.spacer(this.out);
+
             if (A) A.connect();
-            await NX.type(this.out, 'Negotiating simulated secure tunnel...', { className: 't-dim', speed: 12, sound: true });
-            for (let i = 1; i <= 3; i++) {
-                await NX.sleep(260);
-                NX.line(this.out, '<span class="t-arrow">&gt;</span> proxy hop ' + i + ' :: ' + NX.hex(2) + '.' + NX.hex(2) + '.' + NX.hex(2) + '.' + NX.hex(2) + ' <span class="t-ok">[OK]</span>', 't-indent');
-            }
+
+            await NX.type(this.out, '> Generating ephemeral Curve25519 keypair...', { className: 't-dim', speed: 10 });
             await NX.sleep(200);
-            NX.line(this.out, 'SIMULATED CONNECTION ESTABLISHED', 't-ok');
-            NX.line(this.out, 'Session: ' + NX.keyBlock(2), 't-dim');
+            NX.line(this.out, '  PUBLIC KEY  : 0x' + NX.hex(32), 't-cyan');
+            NX.line(this.out, '  SESSION HASH: ' + NX.keyBlock(4), 't-dim');
             NX.spacer(this.out);
+
+            await NX.type(this.out, '> Building 5-hop distributed proxy circuit...', { className: 't-dim', speed: 10 });
+            const circuit = [
+                ['HOP 1 [ENTRY] ', 'REYKJAVIK, IS', '185.220.101.4', '12ms', 'AES-256-GCM'],
+                ['HOP 2 [RELAY] ', 'ZURICH, CH   ', '194.26.29.112', '24ms', 'CHACHA20-POLY1305'],
+                ['HOP 3 [RELAY] ', 'TOKYO, JP    ', '103.251.167.8', '94ms', 'AES-256-CTR'],
+                ['HOP 4 [RELAY] ', 'SINGAPORE, SG', '139.99.120.45', '142ms', 'XCHACHA20'],
+                ['HOP 5 [EXIT]  ', 'DARKNET-SECTOR', dest, '165ms', 'SPECTRE-CASCADE']
+            ];
+
+            for (const [hop, loc, ip, lat, cipher] of circuit) {
+                await NX.sleep(240);
+                NX.line(this.out, '  <span class="t-arrow">&gt;&gt;</span> ' + hop + ' :: <b>' + loc + '</b> [' + ip + '] <span class="t-cyan">' + lat + '</span> <span class="t-ok">[' + cipher + ']</span>', 't-indent');
+                if (A) A.blip(540 + Math.random() * 180, 0.03, 'square', 0.04);
+            }
+            NX.spacer(this.out);
+
+            await NX.animateBar(this.out, { width: 26, duration: 1600, className: 't-bar-green', label: 'OBFUSCATION ' });
+            NX.spacer(this.out);
+
+            NX.line(this.out, '>> ENCRYPTED TUNNEL ACTIVE // STEALTH PROTOCOL ARMED <<', 't-ok');
+            NX.line(this.out, 'Origin IP: CLASSIFIED // Anti-DPI Noise Injected // Bandwidth: 1.2 Gbps', 't-dim');
+            NX.spacer(this.out);
+
+            const metaConn = document.getElementById('meta-connection');
+            if (metaConn) metaConn.textContent = 'SPECTRE-MESH';
+            const metaNode = document.getElementById('meta-node');
+            if (metaNode) metaNode.textContent = dest;
+
             if (A) A.confirm();
         },
 
-        async decrypt() {
+        async decrypt(args) {
             const NX = NXref();
             const A = window.NexusAudio;
-            await NX.type(this.out, 'Loading simulated ciphertext block...', { className: 't-dim', speed: 12 });
-            const scramble = NX.line(this.out, '', 't-cyan');
-            // scramble effect
-            for (let i = 0; i < 16; i++) {
-                scramble.textContent = NX.hexBytes(12);
+            const hash = args && args[0] ? args[0] : '0x' + NX.hex(32);
+
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  HIGH-ENTROPY CIPHERTEXT DECRYPTION ENGINE', 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.spacer(this.out);
+
+            NX.line(this.out, 'CIPHERTEXT PAYLOAD : ' + hash, 't-key');
+            NX.line(this.out, 'CIPHER ALGORITHM   : AES-256-GCM + ChaCha20 Multi-Layer Cascade', 't-dim');
+            NX.line(this.out, 'KEYSPACE SEARCH    : 2^256 Combinations // CUDA GPU Cluster Engaged', 't-dim');
+            NX.spacer(this.out);
+
+            if (A) A.connect();
+
+            // Rapid live dictionary scramble
+            await NX.type(this.out, '> Executing parallel rainbow table search & key derivation...', { className: 't-dim', speed: 10 });
+            const scrambleLine = NX.line(this.out, '', 't-cyan');
+            for (let i = 0; i < 22; i++) {
+                scrambleLine.textContent = '  [DERIVING] 0x' + NX.hex(8) + '  KEY: ' + NX.keyBlock(3) + '  HASH: ' + NX.hexBytes(8);
                 if (A && i % 2 === 0) A.key();
-                await NX.sleep(70);
+                await NX.sleep(65);
             }
-            await NX.animateBar(this.out, { width: 24, duration: 1600, className: 't-bar-green', label: 'KEY ' });
-            scramble.textContent = 'PLAINTEXT: "the quick brown fox // SIMULATED"';
-            scramble.className = 't-line t-ok';
-            NX.line(this.out, 'Decryption simulated locally. No real data processed.', 't-dim');
+            scrambleLine.textContent = '  [DERIVING] KEY COLLISION FOUND IN SHADOW RAINBOW TABLE!';
+            scrambleLine.className = 't-line t-ok';
             NX.spacer(this.out);
+
+            // Block solving sequence
+            const blocks = ['BLOCK 01 (HEADER)', 'BLOCK 02 (PAYLOAD)', 'BLOCK 03 (AUTH TAG)', 'BLOCK 04 (SIGNATURE)'];
+            for (let b = 0; b < blocks.length; b++) {
+                await NX.animateBar(this.out, { width: 22, duration: 650, className: 't-bar-green', label: blocks[b] + ' ' });
+                if (A) A.blip(700 + b * 100, 0.03, 'sine', 0.05);
+            }
+            NX.spacer(this.out);
+
+            // Glitch payoff
+            if (window.FX) window.FX.glitch(true);
+            if (A) A.glitch();
+            await NX.sleep(300);
+
+            NX.line(this.out, '>> DECRYPTION COMPLETE // PLAINTEXT EXTRACTED <<', 't-ok');
+            NX.spacer(this.out);
+            NX.line(this.out, '================ CLASSIFIED INTELLIGENCE REPORT ===============', 't-head');
+            NX.line(this.out, 'OPERATIVE DIRECTIVE : PROJECT SPECTRE // SECTOR-09', 't-cyan');
+            NX.line(this.out, 'TARGET FACILITY     : GLOBAL SATELLITE COMMAND HUB', 't-dim');
+            NX.line(this.out, 'ROOT CREDENTIALS    : master_admin : $6$rounds=50000$q8Z9x7... [AUTHENTICATED]', 't-ok');
+            NX.line(this.out, 'ENCRYPTED PAYLOAD   : "THE GRID BELONGS TO THOSE WHO CONTROL THE ELECTRONS"', 't-warn');
+            NX.line(this.out, '===============================================================', 't-head');
+            NX.spacer(this.out);
+
             if (A) A.confirm();
         },
 
-        async trace() {
+        async trace(args) {
             const NX = NXref();
             const A = window.NexusAudio;
-            NX.line(this.out, 'Simulating outbound trace (reverse proxy)...', 't-dim');
+            const target = args && args[0] ? args[0] : '172.16.0.4';
+
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  ORBITAL SATELLITE REVERSE-TRACE PROTOCOL :: ' + target, 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
             NX.spacer(this.out);
-            const cities = ['REYKJAVIK', 'ZURICH', 'SINGAPORE', 'SAO PAULO', 'TOKYO', 'AMSTERDAM'];
-            const count = 5;
-            for (let i = 0; i < count; i++) {
-                await NX.sleep(300);
-                const ms = NX.randInt(8, 240);
-                const city = cities[NX.randInt(0, cities.length - 1)];
-                NX.line(this.out, '  hop ' + (i + 1) + '  ' + NX.hex(2) + '.' + NX.hex(2) + '.' + NX.hex(2) + '.' + NX.hex(2) +
-                    '  <span class="t-dim">' + (city + '        ').slice(0, 10) + '</span> <span class="t-cyan">' + ms + 'ms</span>', 't-indent');
-                if (A) A.blip(500 + i * 80, 0.03, 'sine', 0.05);
+
+            if (A) A.connect();
+
+            await NX.type(this.out, '> Aligning orbital telemetry with SPECTRE-SAT-04...', { className: 't-dim', speed: 10 });
+            await NX.sleep(250);
+            NX.line(this.out, '  SATELLITE POSITION: LAT 52.5200° N, LON 13.4050° E // ALTITUDE: 420.5 KM', 't-cyan');
+            NX.spacer(this.out);
+
+            const hops = [
+                ['1', '10.99.14.1', 'FRANKFURT, DE', 'DE-CIX BACKBONE', '4.2ms'],
+                ['2', '80.81.192.1', 'AMSTERDAM, NL', 'AMS-IX EXCHANGE', '12.8ms'],
+                ['3', '195.66.224.1', 'LONDON, UK', 'LINX TELECOM NODE', '19.4ms'],
+                ['4', '206.108.255.1', 'ASHBURN, US', 'EQUINIX DATA CENTER', '84.1ms'],
+                ['5', '180.87.180.1', 'SEOUL, KR', 'KT GIGA INFRASTRUCTURE', '162.0ms'],
+                ['6', target, 'CLASSIFIED SECTOR', 'TARGET HOST NODE', '188.5ms']
+            ];
+
+            for (const [idx, ip, loc, isp, ping] of hops) {
+                await NX.sleep(280);
+                NX.line(this.out, '  hop 0' + idx + '  <span class="t-key">' + (ip + '                ').slice(0, 16) + '</span>  <span class="t-cyan">' + (loc + '            ').slice(0, 14) + '</span>  <span class="t-dim">' + (isp + '                    ').slice(0, 22) + '</span>  <span class="t-val">' + ping + '</span>', '');
+                if (A) A.blip(500 + idx * 70, 0.03, 'sine', 0.04);
             }
             NX.spacer(this.out);
-            NX.line(this.out, 'TRACE TERMINATED — origin masked. (simulated)', 't-ok');
-            NX.line(this.out, 'TRACE RISK: 0%', 't-dim');
+
+            // Trigger simulated trace spike warning
+            NX.line(this.out, '>> ALERT: TARGET HOST INITIATING REVERSE-TRACE PROBE! <<', 't-crit');
+            if (window.FX) window.FX.raiseTrace(82);
+            if (A) A.warn();
+            document.body.classList.add('screen-shake');
+            setTimeout(() => document.body.classList.remove('screen-shake'), 350);
+
+            await NX.sleep(600);
+            await NX.type(this.out, '> Deploying anti-trace decoy swarm & burning relay hops...', { className: 't-warn', speed: 12 });
+            for (let i = 1; i <= 3; i++) {
+                await NX.sleep(220);
+                NX.line(this.out, '  [DEFENSE] BURNING HOP 0' + i + ' ... PROXY SANITIZED [OK]', 't-indent t-ok');
+            }
+
+            await NX.sleep(400);
+            NX.spacer(this.out);
+            NX.line(this.out, '>> REVERSE TRACE DEFLECTED // OPERATIVE IDENTITY 100% PRESERVED <<', 't-ok');
+            NX.line(this.out, 'Active Trace Risk: 0% // Decoy telemetry successfully fed to target.', 't-dim');
             NX.spacer(this.out);
         },
 
         async nodes() {
             const NX = NXref();
-            NX.line(this.out, 'SIMULATED NETWORK NODES', 't-head');
-            NX.spacer(this.out);
-            const states = [['ONLINE', 't-ok'], ['SECURED', 't-cyan'], ['UNKNOWN', 't-warn'], ['FILTERED', 't-warn']];
+            const A = window.NexusAudio;
             const total = window.Monitor ? window.Monitor.getNodes() : 27;
-            const show = Math.min(8, total);
-            for (let i = 0; i < show; i++) {
-                await NX.sleep(70);
-                const st = states[NX.randInt(0, states.length - 1)];
-                const id = '[' + String(i + 1).padStart(2, '0') + ']';
-                const nm = 'NODE-' + NX.hex(4);
-                const label = id + ' ' + nm + ' ';
-                const dots = '.'.repeat(Math.max(3, 28 - label.length));
-                NX.line(this.out, '<span class="t-dim">' + id + '</span> ' + nm + ' <span class="t-dim">' + dots + '</span> <span class="' + st[1] + '">' + st[0] + '</span>', 't-indent');
-            }
-            NX.line(this.out, '... ' + (total - show) + ' more (simulated)', 't-dim');
+
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  SPECTRE-9 DARKNET ROUTING & NODE INFRASTRUCTURE', 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
             NX.spacer(this.out);
+
+            NX.line(this.out, 'NODE ID       IP ADDRESS       PROTO   PORT    LATENCY  ENCRYPTION      STATUS', 't-cyan');
+            NX.line(this.out, '----------------------------------------------------------------------', 't-dim');
+
+            const nodesList = [
+                ['NODE-001', '10.99.14.10', 'TCP/TLS', '443', '12ms', 'AES-256-GCM', 'ONLINE', 't-ok'],
+                ['NODE-002', '10.99.14.22', 'UDP/DTLS', '8443', '18ms', 'CHACHA20', 'ONLINE', 't-ok'],
+                ['NODE-003', '10.99.14.35', 'QUIC', '9000', '24ms', 'QUANTUM-G', 'STEALTH', 't-cyan'],
+                ['NODE-004', '10.99.14.48', 'TCP/TOR', '9050', '88ms', 'XCHACHA20', 'FILTERED', 't-warn'],
+                ['NODE-005', '10.99.14.61', 'SSH/MESH', '2222', '32ms', 'RSA-4096', 'ONLINE', 't-ok'],
+                ['NODE-006', '10.99.14.77', 'KCP/FAST', '51820', '15ms', 'AES-XTS', 'ONLINE', 't-ok'],
+                ['NODE-007', '10.99.14.90', 'RAW/ETH', '6443', '104ms', 'AES-GCM', 'HIGH LOAD', 't-warn'],
+                ['NODE-008', '10.99.14.105', 'IPSEC', '500', '45ms', 'CURVE25519', 'ARMED', 't-crit']
+            ];
+
+            for (const n of nodesList) {
+                await NX.sleep(60);
+                const line = '  ' + (n[0] + '          ').slice(0, 12) +
+                    (n[1] + '                 ').slice(0, 17) +
+                    (n[2] + '        ').slice(0, 8) +
+                    (n[3] + '        ').slice(0, 8) +
+                    (n[4] + '         ').slice(0, 9) +
+                    (n[5] + '                ').slice(0, 16) +
+                    '<span class="' + n[7] + '">' + n[6] + '</span>';
+                NX.line(this.out, line, '');
+                if (A) A.blip(620, 0.02, 'square', 0.02);
+            }
+
+            NX.spacer(this.out);
+            NX.line(this.out, 'Active Node Mesh: 8 displayed // ' + (total - 8) + ' additional relay nodes routing background packets.', 't-dim');
+            NX.spacer(this.out);
+        },
+
+        async payload(args) {
+            const NX = NXref();
+            const A = window.NexusAudio;
+            const type = args && args[0] ? args[0].toUpperCase() : 'METERPRETER_REVERSE_TCP';
+
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  POLYMORPHIC SHELLCODE & EXPLOIT PAYLOAD SYNTHESIZER', 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.spacer(this.out);
+
+            if (A) A.connect();
+
+            NX.line(this.out, 'TARGET ARCHITECTURE : x86_64 / Linux & Windows Cross-Compatible', 't-cyan');
+            NX.line(this.out, 'PAYLOAD PROFILE     : ' + type, 't-key');
+            NX.line(this.out, 'ENCODING ENGINE     : Shikata-Ga-Nai Dynamic Polymorphic XOR', 't-dim');
+            NX.spacer(this.out);
+
+            await NX.type(this.out, '> Compiling position-independent executable shellcode stub...', { className: 't-dim', speed: 10 });
+            await NX.animateBar(this.out, { width: 24, duration: 1800, className: 't-bar-green', label: 'ASSEMBLING ' });
+            NX.spacer(this.out);
+
+            NX.line(this.out, 'DISASSEMBLY PREVIEW [ASM]:', 't-cyan');
+            const asm = [
+                'xor   rax, rax          ; zero out register',
+                'push  rax               ; null terminate string',
+                'mov   rdi, 0x68732f6e69622f2f ; push "/bin//sh"',
+                'push  rdi',
+                'mov   rsi, rsp          ; argv array pointer',
+                'mov   al,  59           ; sys_execve syscall',
+                'syscall                 ; trigger kernel execution'
+            ];
+            for (const a of asm) {
+                await NX.sleep(80);
+                NX.line(this.out, '  <span class="t-key">' + (a.split(';')[0] + '                    ').slice(0, 24) + '</span><span class="t-dim">;' + a.split(';')[1] + '</span>', 't-indent');
+            }
+            NX.spacer(this.out);
+
+            NX.line(this.out, 'RAW COMPILED HEX DUMP (64 BYTES):', 't-cyan');
+            for (let r = 0; r < 4; r++) {
+                await NX.sleep(60);
+                NX.line(this.out, '  0x' + NX.hex(4) + '  ' + NX.hexBytes(16), 't-indent t-dim');
+            }
+            NX.spacer(this.out);
+
+            NX.line(this.out, '>> PAYLOAD GENERATED // SHA-256: 0x' + NX.hex(32) + ' <<', 't-ok');
+            NX.line(this.out, 'Status: Armed in volatile memory. (Inert simulated string — no execution)', 't-dim');
+            NX.spacer(this.out);
+
+            if (A) A.confirm();
+        },
+
+        async ddos(args) {
+            const NX = NXref();
+            const A = window.NexusAudio;
+            const target = args && args[0] ? args[0] : '192.168.1.100';
+
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  DISTRIBUTED PACKET SWARM & BANDWIDTH FLOOD ENGINE', 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.spacer(this.out);
+
+            NX.line(this.out, 'TARGET HOST     : ' + target + ' [PORT 443/HTTPS]', 't-crit');
+            NX.line(this.out, 'ATTACK VECTOR   : SYN/UDP Amplification + HTTP/2 Multiplex Flood', 't-dim');
+            NX.line(this.out, 'SWARM NODES     : 256 Virtual Botnet Relays', 't-cyan');
+            NX.spacer(this.out);
+
+            if (A) { A.connect(); A.blip(880, 0.1, 'sawtooth', 0.15); }
+            if (window.Topology) window.Topology.surge();
+            if (window.Monitor) window.Monitor.spike();
+
+            await NX.type(this.out, '> Synchronizing botnet nodes and initiating packet surge...', { className: 't-warn', speed: 10 });
+            await NX.animateBar(this.out, { width: 28, duration: 2400, className: 't-bar', label: 'BANDWIDTH ' });
+            NX.spacer(this.out);
+
+            const telemetry = [
+                ['THROUGHPUT', '482.6 Gbps', 't-crit'],
+                ['PACKET RATE', '74.2 Mpps', 't-warn'],
+                ['TARGET LATENCY', '3,480 ms [TIME OUT]', 't-crit'],
+                ['TARGET HTTP STATUS', '503 SERVICE UNAVAILABLE', 't-crit'],
+                ['DEFENSE FIREWALL', 'OVERWHELMED // SATURATED', 't-ok']
+            ];
+
+            for (const [k, v, c] of telemetry) {
+                await NX.sleep(120);
+                const dots = '.'.repeat(Math.max(3, 28 - k.length));
+                NX.line(this.out, '  ' + k + ' <span class="t-dim">' + dots + '</span> <span class="' + c + '">' + v + '</span>', 't-indent');
+            }
+            NX.spacer(this.out);
+
+            if (window.FX) window.FX.glitch(false);
+            NX.line(this.out, '>> TARGET SECTOR EFFECTIVELY NEUTRALIZED (SIMULATED) <<', 't-ok');
+            NX.line(this.out, 'Packet stream throttled back to idle background state.', 't-dim');
+            NX.spacer(this.out);
+
+            if (A) A.confirm();
+        },
+
+        async airmon() {
+            const NX = NXref();
+            const A = window.NexusAudio;
+
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  IEEE 802.11 RF WIRELESS INTERCEPTION & HANDSHAKE CAPTURE', 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.spacer(this.out);
+
+            if (A) A.connect();
+
+            await NX.type(this.out, '> Switching virtual wireless interface wlan0 to MONITOR MODE...', { className: 't-dim', speed: 10 });
+            await NX.sleep(300);
+            NX.line(this.out, '  CH 06 [2.437 GHz] // PHY: 802.11ax // PROMISCUOUS MODE: ENABLED', 't-cyan');
+            NX.spacer(this.out);
+
+            NX.line(this.out, 'DISCOVERED ACCESS POINTS (BSSID):', 't-cyan');
+            const aps = [
+                ['CORP-SECURE-CORP', '00:14:D1:E8:22:11', '-42dBm', 'CH 01', 'WPA3-SAE', 't-ok'],
+                ['GUEST-ISOLATED', '00:14:D1:E8:22:12', '-48dBm', 'CH 06', 'WPA2-CCMP', 't-ok'],
+                ['SCADA-INDUSTRIAL', 'A0:04:60:99:88:77', '-64dBm', 'CH 11', 'WPA2-PSK', 't-warn'],
+                ['EXECUTIVE-VIP', 'F4:F5:E8:33:44:55', '-38dBm', 'CH 36', 'WPA3-ENTERPRISE', 't-crit']
+            ];
+
+            for (const [ssid, bssid, pwr, ch, enc, cls] of aps) {
+                await NX.sleep(140);
+                NX.line(this.out, '  <b>' + (ssid + '                    ').slice(0, 20) + '</b> <span class="t-dim">[' + bssid + ']</span>  <span class="t-cyan">' + pwr + '</span>  <span class="t-dim">' + ch + '</span>  <span class="' + cls + '">[' + enc + ']</span>', 't-indent');
+                if (A) A.blip(720, 0.02, 'square', 0.03);
+            }
+            NX.spacer(this.out);
+
+            await NX.type(this.out, '> Injecting 802.11 deauth frames to capture 4-way authentication handshake...', { className: 't-warn', speed: 10 });
+            await NX.animateBar(this.out, { width: 24, duration: 1600, className: 't-bar-green', label: 'DEAUTH ' });
+            NX.spacer(this.out);
+
+            NX.line(this.out, '>> WPA3 4-WAY HANDSHAKE CAPTURED :: BSSID 00:14:D1:E8:22:11 <<', 't-ok');
+            NX.line(this.out, 'PMKID EAPOL KEY HASH: 0x' + NX.hex(32), 't-cyan');
+            NX.line(this.out, 'Saved to memory ring buffer. (Simulated RF spectrum capture)', 't-dim');
+            NX.spacer(this.out);
+
+            if (A) A.confirm();
+        },
+
+        async sat() {
+            const NX = NXref();
+            const A = window.NexusAudio;
+
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  TACTICAL SATELLITE TELEMETRY & RECONNAISSANCE UPLINK', 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.spacer(this.out);
+
+            if (A) A.connect();
+
+            await NX.type(this.out, '> Locking parabolic antenna onto orbital transponder SPECTRE-SAT-09...', { className: 't-dim', speed: 10 });
+            await NX.animateBar(this.out, { width: 24, duration: 1800, className: 't-bar-green', label: 'DISH ALIGN ' });
+            NX.spacer(this.out);
+
+            const satTelemetry = [
+                ['NORAD CATALOG ID', '58419 [CLASSIFIED RECONNAISSANCE]', 't-cyan'],
+                ['ORBITAL INCLINATION', '51.6428° (Low Earth Orbit)', 't-dim'],
+                ['ALTITUDE / VELOCITY', '418.6 km // 7.66 km/s (27,576 km/h)', 't-ok'],
+                ['DOWNLINK FREQUENCY', '14.248 GHz [Ku-Band High Gain]', 't-cyan'],
+                ['ENCRYPTION SCHEME', 'NSA Type-1 Suite-A / MIL-STD-188', 't-warn'],
+                ['OPTICAL RECON RESOLUTION', '0.08m GSD (Multispectral Thermal Active)', 't-ok']
+            ];
+
+            for (const [k, v, c] of satTelemetry) {
+                await NX.sleep(120);
+                const dots = '.'.repeat(Math.max(3, 28 - k.length));
+                NX.line(this.out, '  ' + k + ' <span class="t-dim">' + dots + '</span> <span class="' + c + '">' + v + '</span>', 't-indent');
+                if (A) A.blip(680, 0.02, 'sine', 0.03);
+            }
+            NX.spacer(this.out);
+
+            NX.line(this.out, '>> REAL-TIME SATELLITE DOWNLINK TELEMETRY STREAM ESTABLISHED <<', 't-ok');
+            NX.line(this.out, 'Coordinates verified. (Simulated orbital space surveillance)', 't-dim');
+            NX.spacer(this.out);
+
+            if (A) A.confirm();
+        },
+
+        async purge() {
+            const NX = NXref();
+            const A = window.NexusAudio;
+
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  EMERGENCY DoD 5220.22-M MEMORY & DATA SANITIZATION', 't-crit');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.spacer(this.out);
+
+            if (A) A.warn();
+
+            await NX.type(this.out, '>> WARNING: INITIATING COMPLETE VOLATILE STORAGE PURGE <<', { className: 't-crit', speed: 12 });
+            NX.spacer(this.out);
+
+            for (let c = 3; c >= 1; c--) {
+                await NX.sleep(600);
+                NX.line(this.out, '  PURGE COUNTDOWN: 0' + c + ' ...', 't-warn');
+                if (A) A.blip(400 + c * 100, 0.08, 'sawtooth', 0.1);
+            }
+
+            await NX.sleep(500);
+            if (window.FX) window.FX.glitch(true);
+            if (A) A.glitch();
+            document.body.classList.add('screen-shake');
+            setTimeout(() => document.body.classList.remove('screen-shake'), 500);
+
+            const passes = ['PASS 1: ZEROES (0x00)', 'PASS 2: ONES (0xFF)', 'PASS 3: CRYPTOGRAPHIC RANDOM NOISE'];
+            for (const p of passes) {
+                await NX.animateBar(this.out, { width: 22, duration: 600, className: 't-bar', label: p + ' ' });
+            }
+            NX.spacer(this.out);
+
+            NX.line(this.out, '>> ALL SESSION CRYPTO KEYS, LOGS & TRACES SHREDDED <<', 't-ok');
+            NX.line(this.out, 'RAMDISK Sanitized. Terminal buffer ready.', 't-dim');
+            NX.spacer(this.out);
+
+            if (A) A.confirm();
+        },
+
+        async status() {
+            const NX = NXref();
+            const A = window.NexusAudio;
+            const nodes = window.Monitor ? window.Monitor.getNodes() : 27;
+
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  SPECTRE-9 SYSTEM & CYBER DEFENSE DIAGNOSTICS', 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.spacer(this.out);
+
+            const rows = [
+                ['TACTICAL SUITE', 'SPECTRE-9 OS v8.4.0 (BLACK-OPS)', 't-ok'],
+                ['SYSTEM OPERATIVE', 'operator [ROOT PRIVILEGES]', 't-cyan'],
+                ['ENCRYPTION CORE', 'AES-XTS-512 + CHACHA20-POLY1305', 't-ok'],
+                ['QUANTUM ENTROPY', '98.84% [OPTIMAL RANDOMNESS]', 't-cyan'],
+                ['PROXY MESH INTEGRITY', '100% (5 GLOBAL RELAY HOPS)', 't-ok'],
+                ['ACTIVE FIREWALL', 'STATEFUL PACKET INSPECTION [ARMED]', 't-ok'],
+                ['FIREWALL DEFLECTIONS', '1,482 PROBES BLOCKED IN 24H', 't-warn'],
+                ['SURVEILLANCE TRACE RISK', '0.00% [GHOST MODE ACTIVE]', 't-ok'],
+                ['CONNECTED DARKNET NODES', nodes + ' NODES SYNCHRONIZED', 't-val'],
+                ['SIMULATION STATUS', '100% ISOLATED LOCAL VIRTUAL SANDBOX', 't-warn']
+            ];
+
+            for (const [k, v, c] of rows) {
+                await NX.sleep(80);
+                const dots = '.'.repeat(Math.max(3, 30 - k.length));
+                NX.line(this.out, '  ' + k + ' <span class="t-dim">' + dots + '</span> <span class="' + c + '">' + v + '</span>', 't-indent');
+            }
+            NX.spacer(this.out);
+            if (A) A.confirm();
+        },
+
+        async whoami() {
+            const NX = NXref();
+            const A = window.NexusAudio;
+
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  OPERATIVE DOSSIER & IDENTITY MATRIX', 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.spacer(this.out);
+
+            const info = [
+                ['DESIGNATION', 'OPERATOR-09 // TACTICAL ROOT'],
+                ['SECURITY CLEARANCE', 'LEVEL-5 [BLACK-OPS EYES ONLY]'],
+                ['CREDENTIALS', 'uid=0(root) gid=0(blackops) groups=0(superuser,cyberwar)'],
+                ['ASSIGNED SECTOR', 'SECTOR-09 [DARKNET PROXY MESH]'],
+                ['VIRTUAL IP', '10.99.14.88 // MASK: 255.255.255.0'],
+                ['CRYPTO FINGERPRINT', '0x' + NX.hex(32)],
+                ['ACTIVE ROLE', 'TACTICAL CYBER DEFENSE & SIMULATED PENETRATION']
+            ];
+
+            for (const [k, v] of info) {
+                await NX.sleep(70);
+                const dots = '.'.repeat(Math.max(3, 24 - k.length));
+                NX.line(this.out, '  <span class="t-cyan">' + k + '</span> <span class="t-dim">' + dots + '</span> <b>' + v + '</b>', 't-indent');
+            }
+            NX.spacer(this.out);
+            if (A) A.blip(660, 0.03, 'square', 0.05);
         },
 
         async breach() {
             const NX = NXref();
-            NX.line(this.out, 'Launching breach simulation overlay...', 't-dim');
+            NX.line(this.out, '>> ENGAGING MILITARY-GRADE BREACH SIMULATION SEQUENCE...', 't-crit');
             NX.spacer(this.out);
             if (window.Breach) setTimeout(() => window.Breach.run(), 300);
         },
 
         async matrix() {
             const NX = NXref();
-            NX.line(this.out, 'Entering the construct...', 't-ok');
+            NX.line(this.out, '>> ENTERING SPECTRE CONSTRUCT MATRIX...', 't-ok');
             NX.spacer(this.out);
             if (window.Matrix) setTimeout(() => window.Matrix.enter(), 250);
         },
@@ -387,7 +882,7 @@
         async hacker() {
             const NX = NXref();
             if (window.HackerTyper) {
-                NX.line(this.out, 'Engaging HACKER TYPER — mash any keys, press ESC to stop.', 't-ok');
+                NX.line(this.out, '>> ENGAGING HACKER TYPER — mash any keys to stream syntax-highlighted code. Press ESC to exit.', 't-ok');
                 NX.spacer(this.out);
                 setTimeout(() => window.HackerTyper.start(), 200);
             } else {
@@ -396,42 +891,49 @@
             }
         },
 
-
         async clear() { this.clear(); },
-
-        async whoami() {
-            const NX = NXref();
-            NX.line(this.out, 'root', 't-ok');
-            NX.line(this.out, 'uid=0(root) gid=0(root) groups=0(root) // SIMULATED OPERATOR', 't-dim');
-            NX.spacer(this.out);
-        },
 
         async about() {
             const NX = NXref();
-            NX.line(this.out, 'NEXUS // SECURE TERMINAL', 't-head');
-            NX.line(this.out, 'A cinematic, 100% fictional cybersecurity simulation.', 't-dim');
-            NX.line(this.out, 'No real scanning, exploitation, or network activity occurs.', 't-dim');
-            NX.line(this.out, 'All nodes, packets, keys, and targets are generated locally.', 't-dim');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  SPECTRE-9 // TACTICAL CYBER WARFARE OPERATING SUITE', 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, 'A high-fidelity, cinematic cybersecurity visual simulation.', 't-dim');
+            NX.line(this.out, 'Designed for immersive visual theatre, demonstrations, and games.', 't-dim');
             NX.spacer(this.out);
-            NX.line(this.out, 'SIMULATION MODE // NO REAL NETWORK ACTIVITY', 't-sim-line');
+            NX.line(this.out, 'CORE ARCHITECTURE :', 't-cyan');
+            NX.line(this.out, '  - 100% Pure Client-Side (Vanilla ES6+ JS, HTML5, CSS3)', 't-dim');
+            NX.line(this.out, '  - Web Audio API Synthesizer (No external audio files)', 't-dim');
+            NX.line(this.out, '  - High-DPI HTML5 Canvas Renderers (Radar, Graph, World Map)', 't-dim');
+            NX.line(this.out, '  - ZERO external telemetry, network sockets, or backend APIs', 't-ok');
+            NX.spacer(this.out);
+            NX.line(this.out, 'SIMULATION GUARANTEE: No real network scanning or exploitation occurs.', 't-sim-line');
             NX.spacer(this.out);
         },
 
         async exit() {
             const NX = NXref();
-            await NX.type(this.out, 'Attempting to close secure shell...', { className: 't-dim', speed: 14 });
+            await NX.type(this.out, 'Attempting to disconnect from SPECTRE tactical grid...', { className: 't-dim', speed: 14 });
             await NX.sleep(600);
-            NX.line(this.out, 'PERMISSION DENIED: operator cannot escape the simulation.', 't-err');
-            NX.line(this.out, 'There is no exit. There is only NEXUS.', 't-warn');
+            NX.line(this.out, 'PERMISSION DENIED: OPERATIVE SESSION LOCKED IN HIGH-SECURITY MODE.', 't-err');
+            NX.line(this.out, 'There is no escape. The tactical grid is absolute.', 't-warn');
             NX.spacer(this.out);
             if (window.NexusAudio) window.NexusAudio.warn();
         }
     };
 
-    // aliases
+    // Aliases
     COMMANDS.cls = COMMANDS.clear;
     COMMANDS.ls = COMMANDS.nodes;
     COMMANDS.man = COMMANDS.help;
+    COMMANDS.sysinfo = COMMANDS.status;
+    COMMANDS.netstat = COMMANDS.nodes;
+    COMMANDS.exploit = COMMANDS.breach;
+    COMMANDS.satellite = COMMANDS.sat;
+    COMMANDS.wifi = COMMANDS.airmon;
+    COMMANDS.flood = COMMANDS.ddos;
+    COMMANDS.nuke = COMMANDS.purge;
+    COMMANDS.id = COMMANDS.whoami;
 
     /* =====================================================
        EASTER EGGS
@@ -439,9 +941,9 @@
     const EGGS = {
         async 'sudo matrix'() {
             const NX = NXref();
-            NX.line(this.out, '[sudo] password for operator: ************', 't-dim');
+            NX.line(this.out, '[sudo] password for operator: ********************', 't-dim');
             await NX.sleep(500);
-            NX.line(this.out, 'Access granted. Bending reality...', 't-ok');
+            NX.line(this.out, 'Access granted. Bending digital fabric...', 't-ok');
             NX.spacer(this.out);
             if (window.Matrix) setTimeout(() => window.Matrix.enter(), 300);
         },
@@ -449,18 +951,16 @@
         async 'sudo coffee'() {
             const NX = NXref();
             await NX.sleep(300);
-            NX.line(this.out, 'ERROR:', 't-err');
-            NX.line(this.out, 'Coffee module depleted.', 't-indent');
+            NX.line(this.out, 'CRITICAL ERROR: Coffee reservoir depleted.', 't-err');
             NX.spacer(this.out);
-            NX.line(this.out, 'STATUS:', 't-warn');
-            NX.line(this.out, 'OPERATOR NEEDS CAFFEINE.', 't-indent');
+            NX.line(this.out, 'STATUS: OPERATIVE CAFFEINE DEFICIT AT 94%', 't-warn');
             NX.spacer(this.out);
-            NX.line(this.out, '   ( (', 't-dim');
-            NX.line(this.out, '    ) )', 't-dim');
-            NX.line(this.out, '  ........', 't-dim');
-            NX.line(this.out, '  |      |]', 't-dim');
-            NX.line(this.out, '  \\      /', 't-dim');
-            NX.line(this.out, '   `----\'', 't-dim');
+            NX.line(this.out, '       ( (', 't-dim');
+            NX.line(this.out, '        ) )', 't-dim');
+            NX.line(this.out, '      ........', 't-dim');
+            NX.line(this.out, '      |      |]', 't-dim');
+            NX.line(this.out, '      \\      /', 't-dim');
+            NX.line(this.out, '       `----\'', 't-dim');
             NX.spacer(this.out);
             if (window.NexusAudio) window.NexusAudio.warn();
         },
@@ -468,19 +968,19 @@
         async 'hack the planet'() {
             const NX = NXref();
             const A = window.NexusAudio;
-            NX.line(this.out, 'HACK THE PLANET!', 't-crit');
+            NX.line(this.out, '>> HACK THE PLANET! <<', 't-crit');
             NX.spacer(this.out);
-            const arts = [
+            const quotes = [
                 'They\'re trashing our rights, man!',
                 'Mess with the best, die like the rest.',
                 'This is our world now... the world of the electron and the switch.'
             ];
-            for (const a of arts) {
-                await NX.sleep(300);
-                NX.line(this.out, '  ' + a, 't-cyan');
+            for (const q of quotes) {
+                await NX.sleep(280);
+                NX.line(this.out, '  ' + q, 't-cyan');
             }
             NX.spacer(this.out);
-            NX.line(this.out, '(still just a simulation, though)', 't-dim');
+            NX.line(this.out, '(Still 100% a simulated tactical command matrix)', 't-dim');
             NX.spacer(this.out);
             if (A) { A.glitch(); A.confirm(); }
             if (window.FX) window.FX.glitch(true);
@@ -495,9 +995,28 @@
             NX.spacer(this.out);
         },
 
+        async 'godmode'() {
+            const NX = NXref();
+            const A = window.NexusAudio;
+            NX.line(this.out, '>> GODMODE OVERRIDE UNLOCKED <<', 't-crit');
+            NX.line(this.out, 'Firewall Defense: INFINITE // Stealth: 100% // Trace: INVISIBLE', 't-ok');
+            NX.spacer(this.out);
+            if (A) { A.confirm(); A.blip(990, 0.1, 'square', 0.2); }
+            if (window.FX) window.FX.glitch(false);
+        },
+
+        async 'overclock'() {
+            const NX = NXref();
+            const A = window.NexusAudio;
+            NX.line(this.out, '>> OVERCLOCKING NEURAL QUANTUM PROCESSORS TO 8.8 GHz <<', 't-warn');
+            if (window.Monitor) window.Monitor.spike();
+            if (A) A.connect();
+            NX.spacer(this.out);
+        },
+
         async 'sudo rm -rf /'() {
             const NX = NXref();
-            NX.line(this.out, 'NICE TRY.', 't-crit');
+            NX.line(this.out, 'ACCESS DENIED: NICE TRY, OPERATIVE.', 't-crit');
             NX.line(this.out, 'This is a simulation. Nothing here is real enough to delete.', 't-dim');
             NX.spacer(this.out);
             if (window.NexusAudio) window.NexusAudio.warn();
@@ -505,7 +1024,7 @@
 
         async 'ping'() {
             const NX = NXref();
-            NX.line(this.out, 'PONG. (no packets actually sent — simulation)', 't-ok');
+            NX.line(this.out, 'PONG :: 0.04ms (simulated loopback — zero external packets sent)', 't-ok');
             NX.spacer(this.out);
         },
 

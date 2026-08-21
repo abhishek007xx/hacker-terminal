@@ -73,15 +73,20 @@
 .topbar-meta {
     display: flex;
     align-items: center;
-    gap: var(--sp-6);
+    gap: var(--sp-4);
     flex: 1;
     justify-content: center;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .meta-item {
     font-size: var(--fs-sm);
     letter-spacing: 1px;
     white-space: nowrap;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .meta-key {
@@ -99,6 +104,7 @@
     align-items: center;
     gap: var(--sp-3);
     margin-left: auto;
+    flex-shrink: 0;
 }
 
 .topbar-clock {
@@ -160,12 +166,17 @@ body.muted #btn-mute {
     border-bottom: 1px solid var(--emerald-line-soft);
     position: relative;
     z-index: 19;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .status-leds {
     display: flex;
     align-items: center;
-    gap: var(--sp-6);
+    gap: var(--sp-4);
+    min-width: 0;
+    overflow: hidden;
+    flex-shrink: 1;
 }
 
 .led {
@@ -253,11 +264,11 @@ body.muted #btn-mute {
 /* ============================ MAIN GRID ============================ */
 .main-grid {
     display: grid;
-    grid-template-columns: var(--sidebar-w) 1fr var(--right-w);
-    grid-template-rows: 1fr var(--bottom-h);
+    grid-template-columns: var(--sidebar-w) minmax(0, 1fr) minmax(0, 1fr) var(--right-w);
+    grid-template-rows: minmax(0, 1fr) var(--bottom-h);
     grid-template-areas:
-        "sidebar terminal right"
-        "sidebar bottom  bottom";
+        "sidebar terminal terminal right"
+        "sidebar log      stream   right";
     gap: var(--sp-3);
     padding: var(--sp-3);
     min-height: 0;
@@ -266,62 +277,50 @@ body.muted #btn-mute {
 
 .sidebar {
     grid-area: sidebar;
-}
-
-.terminal-region {
-    grid-area: terminal;
-}
-
-.right-column {
-    grid-area: right;
-}
-
-.eventlog-panel {
-    grid-column: 1 / 2;
-}
-
-.datastream-panel {
-    grid-column: 2 / 3;
-}
-
-/* Bottom row: event log + data stream span the bottom area */
-.eventlog-panel,
-.datastream-panel {
-    grid-row: 2;
-}
-
-.main-grid {
-    grid-template-areas:
-        "sidebar terminal right"
-        "log      stream   right";
-}
-
-.sidebar {
-    grid-area: sidebar;
-}
-
-.terminal-region {
-    grid-area: terminal;
-}
-
-.right-column {
-    grid-area: right;
-}
-
-.eventlog-panel {
-    grid-area: log;
-}
-
-.datastream-panel {
-    grid-area: stream;
-}
-
-/* ============================ SIDEBAR ============================ */
-.sidebar {
     display: flex;
     flex-direction: column;
     gap: var(--sp-3);
     min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: var(--green-dim) transparent;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: var(--green-dim);
+    border-radius: 2px;
+}
+
+.terminal-region {
+    grid-area: terminal;
+    min-height: 0;
+    min-width: 0;
+}
+
+.eventlog-panel {
+    grid-area: log;
+    min-height: 0;
+    min-width: 0;
+}
+
+.datastream-panel {
+    grid-area: stream;
+    min-height: 0;
+    min-width: 0;
+}
+
+.right-column {
+    grid-area: right;
+    display: grid;
+    grid-template-rows: auto minmax(130px, 1fr) auto;
+    gap: var(--sp-3);
+    min-height: 0;
+    min-width: 0;
     overflow: hidden;
 }
 

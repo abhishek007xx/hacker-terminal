@@ -21,6 +21,10 @@
                 this.ctx = this.canvas.getContext('2d');
                 this.resize();
                 window.addEventListener('resize', () => this.resize());
+                if (window.ResizeObserver && this.canvas.parentElement) {
+                    const ro = new ResizeObserver(() => this.resize());
+                    ro.observe(this.canvas.parentElement);
+                }
                 this._seedBars();
                 this.loop = this.loop.bind(this);
                 this.raf = requestAnimationFrame(this.loop);
@@ -36,10 +40,11 @@
         },
 
         resize() {
+            if (!this.canvas) return;
             const r = this.canvas.getBoundingClientRect();
             this.dpr = window.devicePixelRatio || 1;
-            this.canvas.width = Math.max(2, r.width * this.dpr);
-            this.canvas.height = Math.max(2, r.height * this.dpr);
+            this.canvas.width = Math.max(2, Math.floor(r.width * this.dpr));
+            this.canvas.height = Math.max(2, Math.floor(r.height * this.dpr));
         },
 
         _hexLine() {

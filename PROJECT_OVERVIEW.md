@@ -1,7 +1,7 @@
-# NEXUS // SECURE TERMINAL — Project Overview
+# SPECTRE-9 // BLACK-OPS CYBER WARFARE — Project Overview
 
-A cinematic, **100% simulated** "hacker terminal" web experience. It looks like a
-scene from a cyber-thriller movie, but nothing it displays is real: there is **no
+A cinematic, **100% simulated** black-ops "hacker terminal" web experience. It looks like a
+classified military-grade cyber command center from a movie, but nothing it displays is real: there is **no
 network activity, no scanning, no exploitation** — every node, packet, key, hash,
 target, and result is generated locally in the browser as pure visual theatre.
 
@@ -9,8 +9,8 @@ target, and result is generated locally in the browser as pure visual theatre.
 
 ## 1. What it is (in one line)
 
-> A single-page, dependency-free web app that renders a fake "underground cyber
-> command center" — boot sequence, live terminal, system dashboards, network
+> A single-page, dependency-free web app that renders a classified "SPECTRE-9 black-ops cyber warfare
+> command center" — tactical boot sequence, live terminal, system dashboards, network
 > topology, encryption engine, event log, Matrix mode, breach simulation, and a
 > "Hacker Typer" — all synthesized client-side.
 
@@ -26,7 +26,7 @@ target, and result is generated locally in the browser as pure visual theatre.
 - **Google Fonts**: JetBrains Mono, Share Tech Mono, Space Mono (the only external
   resource).
 - Runs by simply opening `index.html` (served locally during dev via
-  `python -m http.server 5173`).
+  `python -m http.server 5173` or direct file open).
 
 **Why this matters:** it's portable, lightweight, and every "hacking" behaviour is
 provably fake because there is no backend and no network code at all.
@@ -48,9 +48,9 @@ hacker terminal/
 └── js/
     ├── typewriter.js     # window.NX — shared helpers (typing, random hex, bars, sleep)
     ├── audio.js          # window.NexusAudio — synthesized SFX + ambient hum + mute
-    ├── boot.js           # window.Boot — cinematic loading sequence
+    ├── boot.js           # window.Boot — tactical military loading sequence
     ├── main.js           # window.NexusApp — orchestrator: boot→reveal, wires all UI
-    ├── terminal.js       # window.Terminal — auto-intro + interactive command engine
+    ├── terminal.js       # window.Terminal — auto-intro + extended multi-stage command engine
     ├── commands.js       # window.FX — glitch/shake/TRACE meter (cosmetic FX controller)
     ├── monitor.js        # window.Monitor — animated CPU/MEM/NET/uptime/threads/nodes
     ├── radar.js          # window.Radar — rotating radar sweep w/ blips
@@ -78,98 +78,49 @@ the bottom of `index.html`.
 2. It randomizes the session ID, arms audio on first user gesture (autoplay-safe),
    initializes `FX`, wires the topbar/nav/action buttons/mobile tabs, and starts
    the clock.
-3. It kicks off `Boot.run()` — the fullscreen boot screen types kernel messages,
+3. It kicks off `Boot.run()` — the fullscreen boot screen types classified kernel messages,
    fills a progress bar to 100%, then shows "SYSTEM READY".
-4. When the user clicks **[ ENTER TERMINAL ]** (or presses Enter), `Boot.enter()`
+4. When the user clicks **[ ENGAGE SPECTRE TERMINAL ]** (or presses Enter), `Boot.enter()`
    fades the boot screen and calls back into `main.js._enterInterface()`.
 5. `_enterInterface()` reveals the app shell and **initializes every simulation
    module** (`Monitor`, `Radar`, `Topology`, `Encryption`, `WorldMap`, `EventLog`,
    `DataStream`, `Matrix`, `Breach`, `Terminal`, `HackerTyper`) inside a `_safe()`
    wrapper so one failure never breaks the rest.
-6. `Terminal.playIntro()` auto-types the cinematic command sequence.
-
-### Shared foundation: `window.NX` (typewriter.js)
-This is the utility layer every other module leans on:
-- `type()` — progressive typewriter rendering into the terminal (with optional
-  keystroke sounds).
-- `line()` / `spacer()` — append pre-built HTML lines.
-- `animateBar()` — animated `[████░░]` progress bars.
-- `hex()`, `hexBytes()`, `keyBlock()`, `binary()` — harmless random string
-  generators used for all the fake hashes/keys/packets.
-- `rand`, `randInt`, `pick`, `sleep`, `dotline`, `progressBar`.
+6. `Terminal.playIntro()` auto-types the black-ops diagnostic sequence.
 
 ---
 
-## 5. Module-by-module summary
+## 5. Extended Interactive Terminal Commands
 
-| Module | Responsibility |
+Typed into the center terminal (all visual-only, multi-stage simulations):
+
+| Command | Multi-Stage Flow |
 |---|---|
-| **Boot** | Cinematic loading screen: ASCII NEXUS logo, typed kernel steps, progress bar, "SYSTEM READY" gate. |
-| **Terminal** | The centerpiece. Auto-plays the intro, then accepts typed commands. Renders a fake input line (hidden real `<input>` + mirror span + blinking caret), supports command history (↑/↓), Tab autocomplete, and Ctrl+L clear. |
-| **FX** (commands.js) | Cosmetic effects controller: glitch flash, screen shake, and the **TRACE meter** that hovers near 0% and spikes during dramatic events, then decays. |
-| **Monitor** | Animated CPU / MEMORY / NETWORK bars (drift within bounds), live uptime clock, threads & node counts. Bars turn amber/red at high load. Exposes `spike()` and `getNodes()`. |
-| **Radar** | Canvas radar: concentric rings, rotating gradient sweep, blips that light up as the sweep passes. |
-| **Topology** | Canvas node graph — a CORE hub + 4 satellite nodes drawn as glowing hexagons with pulsing rings. Packets travel along links; node states randomly cycle ONLINE / SECURED / UNKNOWN / SIM ACCESS. `surge()` bursts packets during scans/breaches. |
-| **Encryption** | "Encryption Engine" panel: fast-scrambling hash, rolling session key, and a canvas padlock rendered as a shimmering dot-matrix. |
-| **EventLog** | Continuously appends timestamped, color-coded `[INFO]/[OK]/[WARN]/[ERR]` log lines from a message pool; seeds with backdated entries; caps at 60 rows. |
-| **DataStream** | Subtle scrolling hex/binary/key columns + an ELF-header-ish ASCII garble column + a small animated "audio bars" canvas. |
-| **WorldMap** | Tiny dot-matrix world silhouette in the identity panel with a few pulsing cyan "target" pings. |
-| **Matrix** | Fullscreen falling-glyph rain (canvas) + a semi-transparent HUD that types fake system messages; intensified scanlines; **ESC to exit**. |
-| **Breach** | Dramatic overlay: types "INITIALIZING → TARGET IDENTIFIED", walks through 5 security layers (BYPASSED/ANALYZED/etc.), spikes monitor+topology, ends with a glitch payoff and **"NO REAL SYSTEM WAS ACCESSED"**. |
-| **HackerTyper** | The classic movie gag: engage it, then **mash any keys** and pre-written, **syntax-highlighted** C-style "kernel" code pours out (2–6 chars per keystroke). Floating badge + ESC to stop. The code is inert set-dressing — never executed. |
-| **Audio** | All sound is synthesized (oscillators/noise buffers): keystrokes, confirm/warn beeps, connection sweep, glitch burst, boot rumble, and a continuous low hum bed. Mute toggle persists via `localStorage`; only arms after a user gesture. |
+| `help` | Categorized tactical matrix: Reconnaissance, Offensive, Network, and System utilities. |
+| `scan [target]` | 5-stage deep reconnaissance: ARP sweep $\to$ 10-port enumeration $\to$ OS fingerprinting $\to$ automated CVE zero-day vulnerability mapping $\to$ intelligence summary. |
+| `connect [ip]` | 5-hop distributed onion circuit negotiation (Reykjavik $\to$ Zurich $\to$ Tokyo $\to$ Singapore $\to$ Dark Node), Curve25519 key exchange, and anti-DPI cloak. |
+| `decrypt [hash]` | 3-second rapid rainbow-table / GPU brute-force dictionary attack with scrambling live hex lines, block-by-block solving, and classified report reveal. |
+| `trace [ip]` | Orbital satellite lock $\to$ 6-hop worldwide traceroute $\to$ reverse-trace probe alert with warning sirens and `FX.raiseTrace(82)` $\to$ automated proxy burning and trace deflection. |
+| `payload [type]` | Polymorphic shellcode synthesizer: NOP sled creation $\to$ x86_64 assembly instructions $\to$ 64-byte formatted hex dump $\to$ SHA-256 checksum. |
+| `ddos [target]` | 256-node virtual botnet packet surge $\to$ monitor CPU/NET spike to 99% $\to$ topology packet flood $\to$ bandwidth saturation report (482.6 Gbps). |
+| `airmon` | IEEE 802.11 monitor mode $\to$ wireless access point spectrum discovery $\to$ deauth packet injection $\to$ WPA3 4-way handshake capture. |
+| `sat` | Antenna alignment to SPECTRE-SAT-09 reconnaissance satellite $\to$ NORAD telemetry $\to$ Ku-band downlink frequency lock. |
+| `purge` | Emergency DoD 3-pass data wipe simulation $\to$ 3-2-1 countdown sirens $\to$ screen shake $\to$ RAMDISK sanitized. |
+| `nodes` / `netstat` | Tabulated darknet node routing table with Node IDs, IP, Protocol, Port, Latency, Cryptographic Shield status, and Threat Index. |
+| `status` / `sysinfo` | Detailed tactical status: 8 virtual core threads, quantum entropy pool reserves (98.8%), proxy chain integrity, and firewall deflection statistics. |
+| `whoami` | Classified operative dossier: Level-5 Black-Ops clearance, quantum security key, PGP fingerprint, proxy masking profile. |
+| `breach` | 6-tier assault: Firewall Bypass $\to$ Memory Heap Corruption $\to$ Kernel Privilege Escalation $\to$ Cryptographic Override $\to$ Root Shell Extraction with screen shakes and glitch payoff. |
+| `matrix` | Enter fullscreen falling-glyph cyber construct mode. ESC to exit. |
+| `hacker` | Toggle Hacker Typer mode (mash keys to pour syntax-highlighted kernel code). |
+| `clear` / `cls` | Sanitize the terminal output buffer. |
+| `about` | Inspect SPECTRE-9 black-ops engine specifications. |
+| `exit` | "PERMISSION DENIED: OPERATIVE CANNOT DISCONNECT FROM THE GRID." |
+
+**Easter eggs:** `sudo matrix`, `sudo coffee`, `hack the planet`, `42`, `godmode`, `overclock`, `sudo rm -rf /`, `ping`, `hacker typer`.
 
 ---
 
-## 6. UI layout
-
-**Desktop** is a CSS grid:
-- **Top bar** — brand, connection/node/session meta, clock, mute + fullscreen buttons.
-- **Status bar** — pulsing LEDs (SYSTEM ONLINE / ENCRYPTED / PROXY ACTIVE / TRACE %)
-  and the persistent red **`SIMULATION MODE // NO REAL NETWORK ACTIVITY`** banner.
-- **Left sidebar** — cosmetic nav, IDENTITY panel with dot-matrix world map, and the
-  three action buttons: **[ HACKER TYPER ]**, **[ ENTER MATRIX MODE ]**,
-  **RUN BREACH SIMULATION**.
-- **Center** — the terminal window (tabbed titlebar + output + input line).
-- **Right column** — System Monitor (with radar), Network Topology, Encryption Engine.
-- **Bottom row** — Event Log + Data Stream.
-
-**Mobile/tablet** (`responsive.css`): the grid collapses into a single column with a
-bottom **tab bar** (TERMINAL / MONITOR / NET / LOG) that toggles which pane is visible
-via `body[data-mtab="..."]`.
-
----
-
-## 7. Interactive terminal commands
-
-Typed into the center terminal (all visual-only):
-
-`help`, `status`, `scan`, `connect`, `decrypt`, `trace`, `nodes`, `breach`,
-`hacker`, `matrix`, `clear`, `whoami`, `about`, `exit`
-(plus aliases `cls`, `ls`, `man`).
-
-**Easter eggs:** `sudo matrix`, `sudo coffee`, `hack the planet` (+ `the planet`),
-`42`, `sudo rm -rf /`, `ping`, `hacker typer` (+ `sudo hacker`). Unknown commands
-return a "COMMAND NOT RECOGNIZED" message.
-
----
-
-## 8. Design system (variables.css)
-
-- **Palette:** near-black layered backgrounds, phosphor green (`#37ff8b`) primary
-  text, dark emerald accents, cyan/blue highlights, amber alerts, red warnings.
-- **Controlled glow** tokens (small/medium/large) rather than everything neon.
-- **Layered background:** radial glows + a faint grid masked toward the center.
-- **Typography:** monospace hierarchy via JetBrains Mono / Share Tech Mono / Space Mono.
-- **Effects (effects.css):** CRT scanlines + slow rolling scan bar, SVG film noise,
-  vignette, occasional flicker, glitch flash, screen shake, RGB-split glitch text.
-- **Accessibility:** honors `prefers-reduced-motion` (disables heavy animations).
-
----
-
-## 9. Safety / simulation guarantees
-
-This is the single most important design constraint, and it's enforced structurally:
+## 6. Safety / simulation guarantees
 
 - **No networking code exists** — no `fetch`, no WebSocket, no XHR to any target.
 - Every "scan / node / packet / hash / key / trace / breach" value comes from local
@@ -178,33 +129,3 @@ This is the single most important design constraint, and it's enforced structura
   never `eval`'d or executed.
 - A permanent on-screen banner and repeated in-terminal notices state
   **"SIMULATION MODE // NO REAL NETWORK ACTIVITY"** and **"NO REAL SYSTEM WAS ACCESSED"**.
-
----
-
-## 10. How to run
-
-```bash
-# From the project folder:
-python -m http.server 5173
-# then open:
-http://localhost:5173
-```
-
-Or simply open `index.html` directly in a browser. First click/keypress arms audio
-(browser autoplay policy). Use the mute button anytime.
-
----
-
-## 11. Quick talking points (for explaining it)
-
-- "It's a **cinematic fake-hacker terminal** — pure front-end, no backend, nothing
-  real happens."
-- "**Modular vanilla JS**: ~16 self-contained modules, each attaching one object to
-  `window`, loaded in order — no framework, no build."
-- "**Canvas + Web Audio** drive the visuals and synthesized sound; a shared `NX`
-  helper handles typing and random string generation."
-- "It boots like an OS, auto-plays a hacking intro, then lets you **type commands**,
-  trigger a **breach sequence**, drop into **Matrix mode**, or use **Hacker Typer**."
-- "Safety is structural: **there's literally no network code**, and it constantly
-  labels itself as a simulation."
-```
