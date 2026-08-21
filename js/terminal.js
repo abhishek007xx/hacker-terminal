@@ -16,23 +16,45 @@
             'mission_brief.sp9': '[CLASSIFIED] OPERATION BLACKOUT :: INITIATE MESH TAKEDOWN\nAUTHORIZATION: LEVEL-5 ROOT\n'
         },
 
+        activeTab: 'tab-1',
+        sessions: {
+            'tab-1': { title: '01 // ROOT_SHELL', prompt: 'operator@spectre-9:~$', html: '', history: [] },
+            'tab-2': { title: '02 // SNIFFER', prompt: 'sniffer@spectre-02:~$', html: '<span class="t-line t-cyan">[PACKET SNIFFER DAEMON ACTIVE // LISTENING ON ETH0 PROMISC]</span><span class="t-line t-spacer"></span>', history: [] },
+            'tab-3': { title: '03 // BOTNET_C2', prompt: 'c2@darknet-grid:~$', html: '<span class="t-line t-warn">[SPECTRE BOTNET C2 CONTROLLER // 256 VIRTUAL BOT NODES ONLINE]</span><span class="t-line t-spacer"></span>', history: [] },
+            'tab-4': { title: '04 // CRYPTO', prompt: 'crypto@quantum-lab:~$', html: '<span class="t-line t-ok">[QUANTUM CRYPTO LAB // 4096-BIT CURVE25519 CORE ARMED]</span><span class="t-line t-spacer"></span>', history: [] }
+        },
+
         init() {
             this.out = document.getElementById('terminal-output');
             this.input = document.getElementById('terminal-input');
             this.mirror = document.getElementById('terminal-input-mirror');
             this.inputline = document.getElementById('terminal-inputline');
             this.body = document.getElementById('terminal-body');
+            this.promptEl = document.getElementById('terminal-prompt');
 
             // Wire terminal tabs
-            const tabs = document.querySelectorAll('.term-tab');
-            tabs.forEach((t) => {
-                t.addEventListener('click', () => {
-                    tabs.forEach(x => x.classList.remove('active'));
-                    t.classList.add('active');
-                    if (window.NexusAudio) window.NexusAudio.blip(720, 0.03, 'square', 0.05);
-                    this.focus();
+            this._wireTabs();
+
+            const btnAdd = document.querySelector('.term-tab-add');
+            if (btnAdd) {
+                btnAdd.addEventListener('click', () => {
+                    const count = Object.keys(this.sessions).length + 1;
+                    const tabId = 'tab-' + count;
+                    this.sessions[tabId] = {
+                        title: '0' + count + ' // SHELL_' + count,
+                        prompt: 'shell_' + count + '@spectre:~$',
+                        html: '<span class="t-line t-dim">[NEW CLASSIFIED SHELL INSTANCE #0' + count + ']</span><span class="t-line t-spacer"></span>',
+                        history: []
+                    };
+                    const tabDiv = document.createElement('div');
+                    tabDiv.className = 'term-tab';
+                    tabDiv.setAttribute('data-tab-id', tabId);
+                    tabDiv.innerHTML = '<span class="tab-title">0' + count + ' // SHELL_' + count + '</span><span class="tab-x">✕</span>';
+                    btnAdd.parentElement.insertBefore(tabDiv, btnAdd);
+                    this._wireTabs();
+                    this.switchTab(tabId);
                 });
-            });
+            }
 
             if (this.input) {
                 this.input.addEventListener('keydown', (e) => {
@@ -56,6 +78,47 @@
                 });
             }
             this._syncMirror();
+        },
+
+        _wireTabs() {
+            const tabs = document.querySelectorAll('.term-tab');
+            tabs.forEach((t, idx) => {
+                const tabId = t.getAttribute('data-tab-id') || ('tab-' + (idx + 1));
+                t.setAttribute('data-tab-id', tabId);
+
+                t.onclick = (e) => {
+                    if (e.target.classList.contains('tab-x')) {
+                        e.stopPropagation();
+                        if (tabs.length > 1) {
+                            delete this.sessions[tabId];
+                            t.remove();
+                            this.switchTab('tab-1');
+                        }
+                        return;
+                    }
+                    this.switchTab(tabId);
+                };
+            });
+        },
+
+        switchTab(tabId) {
+            if (!this.sessions[tabId]) return;
+            // Save active session html
+            if (this.sessions[this.activeTab]) {
+                this.sessions[this.activeTab].html = this.out.innerHTML;
+            }
+            this.activeTab = tabId;
+
+            // Update UI tabs
+            document.querySelectorAll('.term-tab').forEach(x => {
+                x.classList.toggle('active', x.getAttribute('data-tab-id') === tabId);
+            });
+
+            // Restore HTML
+            this.out.innerHTML = this.sessions[tabId].html || '';
+            if (this.promptEl) this.promptEl.textContent = this.sessions[tabId].prompt;
+            if (window.NexusAudio) window.NexusAudio.blip(740, 0.03, 'square', 0.05);
+            this.focus();
         },
 
         focus() { if (this.input && !this.busy) this.input.focus(); },
@@ -105,8 +168,9 @@
         // Echo the command as a prompt line
         _echo(cmd) {
             const NX = window.NX;
+            const p = (this.sessions && this.sessions[this.activeTab]) ? this.sessions[this.activeTab].prompt : 'operator@spectre-9:~$';
             NX.line(this.out,
-                '<span class="t-prompt">operator@spectre-9:~$</span> ' +
+                '<span class="t-prompt">' + this._esc(p) + '</span> ' +
                 '<span class="t-cmd">' + this._esc(cmd) + '</span>', 't-cmdline');
         },
 

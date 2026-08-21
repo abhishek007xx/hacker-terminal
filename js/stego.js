@@ -28,6 +28,15 @@
 
             const btnClose = document.getElementById('btn-cipher-close');
             if (btnClose) btnClose.addEventListener('click', () => this.close());
+
+            if (this.modal) {
+                this.modal.addEventListener('click', (e) => {
+                    if (e.target === this.modal) this.close();
+                });
+            }
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && this.active) this.close();
+            });
         },
 
         open() {

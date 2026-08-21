@@ -41,6 +41,15 @@
             const btnMode = document.getElementById('btn-surv-mode');
             if (btnMode) btnMode.addEventListener('click', () => this.cycleMode());
 
+            if (this.modal) {
+                this.modal.addEventListener('click', (e) => {
+                    if (e.target === this.modal) this.close();
+                });
+            }
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && this.active) this.close();
+            });
+
             // Seed initial targets
             this._seedTargets();
         },

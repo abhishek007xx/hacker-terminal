@@ -207,9 +207,32 @@
                 it.addEventListener('click', () => {
                     items.forEach((x) => x.classList.remove('active'));
                     it.classList.add('active');
+                    const nav = it.getAttribute('data-nav');
                     if (window.NexusAudio) window.NexusAudio.blip(700, 0.03, 'square', 0.05);
-                    // Nav is a cosmetic view switch; keep focus on the terminal.
-                    if (window.Terminal) window.Terminal.focus();
+
+                    if (nav === 'terminal') {
+                        if (window.Terminal) window.Terminal.focus();
+                    } else if (nav === 'network') {
+                        if (window.Topology) window.Topology.surge();
+                        if (window.Terminal) window.Terminal.submit('nodes');
+                    } else if (nav === 'system') {
+                        if (window.Monitor) window.Monitor.spike();
+                        if (window.Terminal) window.Terminal.submit('status');
+                    } else if (nav === 'exploits') {
+                        if (window.ExploitBuilder) window.ExploitBuilder.open();
+                    } else if (nav === 'payloads') {
+                        if (window.StegoLab) window.StegoLab.open();
+                    } else if (nav === 'logs') {
+                        const logEl = document.getElementById('region-logs');
+                        if (logEl) {
+                            logEl.style.boxShadow = '0 0 25px rgba(55, 255, 139, 0.4)';
+                            setTimeout(() => { logEl.style.boxShadow = ''; }, 1200);
+                        }
+                        if (window.EventLog) window.EventLog.push('INFO', 'Operative inspected classified tactical event log.');
+                    } else if (nav === 'settings') {
+                        const btnTheme = document.getElementById('btn-theme');
+                        if (btnTheme) btnTheme.click();
+                    }
                 });
             });
         },

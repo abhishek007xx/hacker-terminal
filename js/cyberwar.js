@@ -81,6 +81,9 @@
                 });
             }
 
+            const btnClose = document.getElementById('btn-cw-close');
+            if (btnClose) btnClose.addEventListener('click', () => this.exit());
+
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && this.active) this.exit();
             });
