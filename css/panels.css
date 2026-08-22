@@ -103,7 +103,7 @@
 
 .term-tabs {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     gap: var(--sp-1);
     height: 100%;
 }
@@ -112,7 +112,9 @@
     display: flex;
     align-items: center;
     gap: var(--sp-3);
-    padding: var(--sp-1) var(--sp-3);
+    padding: 0 var(--sp-3);
+    height: 25px;
+    margin-bottom: -1px;
     font-size: var(--fs-sm);
     color: var(--text-mid);
     border: 1px solid transparent;
@@ -144,6 +146,9 @@
     font-size: var(--fs-md);
     cursor: pointer;
     padding: 0 var(--sp-2);
+    height: 25px;
+    display: inline-flex;
+    align-items: center;
 }
 
 .term-tab-add:hover {
@@ -310,12 +315,13 @@
 
 .terminal-inputline {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 0;
     padding-top: var(--sp-1);
     position: relative;
     flex-wrap: nowrap;
     min-width: 0;
+    line-height: 1.5;
 }
 
 .prompt-user {
@@ -349,7 +355,7 @@
 .terminal-input-wrap {
     position: relative;
     display: inline-flex;
-    align-items: baseline;
+    align-items: center;
     flex: 1;
     min-width: 0;
     overflow: hidden;
@@ -486,6 +492,7 @@
 .metric-row {
     display: grid;
     grid-template-columns: 52px 1fr;
+    align-items: center;
     gap: var(--sp-1);
     font-size: var(--fs-xs);
     margin-top: 1px;
@@ -496,6 +503,7 @@
     color: var(--text-bright);
     font-weight: 700;
     font-variant-numeric: tabular-nums;
+    text-align: right;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -511,6 +519,7 @@
 .radar-canvas,
 .topo-canvas,
 .crypto-canvas,
+.sat-canvas,
 .worldmap-canvas,
 .ds-canvas {
     width: 100%;

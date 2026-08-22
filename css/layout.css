@@ -24,8 +24,8 @@
 .topbar {
     display: flex;
     align-items: center;
-    gap: var(--sp-6);
-    padding: 0 var(--sp-5);
+    gap: var(--sp-4);
+    padding: 0 var(--sp-4);
     height: var(--topbar-h);
     background: linear-gradient(180deg, rgba(10, 24, 22, 0.9), rgba(6, 14, 14, 0.82));
     border-bottom: 1px solid var(--emerald-line);
@@ -36,9 +36,10 @@
 
 .topbar-brand {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: var(--sp-2);
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .brand-glyph {
@@ -102,7 +103,7 @@
 .topbar-right {
     display: flex;
     align-items: center;
-    gap: var(--sp-3);
+    gap: var(--sp-2);
     margin-left: auto;
     flex-shrink: 0;
 }
@@ -113,22 +114,28 @@
     font-weight: 500;
     letter-spacing: 1px;
     font-variant-numeric: tabular-nums;
-    min-width: 74px;
+    min-width: 70px;
     text-align: right;
+    margin-right: var(--sp-1);
 }
 
 .icon-btn {
     width: 28px;
     height: 28px;
-    display: grid;
-    place-items: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: rgba(45, 220, 130, 0.06);
     border: var(--border-soft);
     color: var(--text-mid);
     font-size: var(--fs-md);
+    line-height: 1;
     border-radius: var(--radius);
     cursor: pointer;
     transition: all 0.2s var(--ease);
+    flex-shrink: 0;
+    padding: 0;
+    vertical-align: middle;
 }
 
 .icon-btn:hover {
@@ -448,15 +455,6 @@ body.muted #btn-mute {
     background: rgba(255, 65, 85, 0.2);
     box-shadow: var(--glow-red);
     text-shadow: var(--glow-red);
-}
-
-/* ============================ RIGHT COLUMN ============================ */
-.right-column {
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    gap: var(--sp-3);
-    min-height: 0;
-    overflow: hidden;
 }
 
 /* ============================ HACKER TYPER BADGE ============================ */
