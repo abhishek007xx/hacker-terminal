@@ -1,0 +1,246 @@
+/* ============================================================
+   SPECTRE-9 // SECURE TERMINAL — Utilities
+   Accessibility helpers, Mission Brief content, no-JS fallback.
+   Imported last so it always wins over component styles.
+   ============================================================ */
+
+/* ============================ SCREEN-READER HELPERS ============================ */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ============================ COPY-FRIENDLY TEXT ============================
+   body is user-select:none; these regions are read-only output people want to
+   highlight and copy (screenshot / flex on friends). */
+.terminal-output,
+.eventlog-content,
+.ds-hex,
+.mem-disasm,
+.boot-log,
+.brief-body,
+.noscript-fallback {
+    user-select: text;
+    -webkit-user-select: text;
+    cursor: text;
+}
+
+/* ============================ HIGH CONTRAST ============================ */
+@media (prefers-contrast: more) {
+
+    .fx-scanlines,
+    .fx-noise,
+    .fx-flicker {
+        display: none !important;
+    }
+
+    :root {
+        --text: #a8f5c9;
+        --text-mid: #74dca5;
+        --text-dim: #56b98a;
+        --text-muted: #4a9e76;
+        --emerald-line: rgba(55, 255, 139, 0.5);
+        --emerald-line-soft: rgba(55, 255, 139, 0.32);
+    }
+}
+
+/* ============================ KEYBOARD FOCUS ============================ */
+:where(a, button, [role='button'], input, select, textarea, summary, .nav-item, .mtab, .term-tab):focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 2px;
+}
+
+:where(button, [role='button']):focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ============================ MISSION BRIEF CONTENT ============================ */
+.cipher-box .brief-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-5);
+    max-height: min(66vh, 620px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-top: var(--sp-3);
+    font-size: var(--fs-base);
+    line-height: 1.75;
+    color: var(--text);
+    scrollbar-gutter: stable;
+}
+
+.brief-section h3 {
+    font-size: var(--fs-md);
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-bright);
+    margin-bottom: var(--sp-2);
+}
+
+.brief-section h3::before {
+    content: '// ';
+    color: var(--green-dim);
+}
+
+.brief-section p {
+    color: var(--text);
+    text-align: left;
+    text-wrap: pretty;
+}
+
+.brief-section strong,
+.brief-section b {
+    color: var(--text-bright);
+    font-weight: 700;
+}
+
+.brief-section code {
+    font-family: var(--font-mono);
+    font-size: 0.95em;
+    color: var(--cyan);
+    background: rgba(63, 224, 255, 0.08);
+    border: 1px solid rgba(63, 224, 255, 0.22);
+    border-radius: 3px;
+    padding: 1px 5px;
+    white-space: nowrap;
+}
+
+.brief-list,
+.brief-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-left: 1.4em;
+}
+
+.brief-list {
+    list-style: square;
+}
+
+.brief-steps {
+    list-style: decimal;
+}
+
+.brief-list li,
+.brief-steps li {
+    color: var(--text);
+    padding-left: 4px;
+}
+
+.brief-list li::marker,
+.brief-steps li::marker {
+    color: var(--green-core);
+    font-weight: 700;
+}
+
+.brief-list li b,
+.brief-steps li b {
+    color: var(--green-core);
+}
+
+.brief-faq dt {
+    font-weight: 800;
+    color: var(--green-core);
+    letter-spacing: 0.5px;
+    margin-top: var(--sp-3);
+}
+
+.brief-faq dt::before {
+    content: '> ';
+    color: var(--text-dim);
+}
+
+.brief-faq dt:first-child {
+    margin-top: 0;
+}
+
+.brief-faq dd {
+    margin: 2px 0 0;
+    color: var(--text-mid);
+    padding-left: 1.2em;
+}
+
+.brief-legal-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin-top: var(--sp-2);
+}
+
+.brief-legal-links a {
+    color: var(--cyan);
+    text-decoration: none;
+    font-size: var(--fs-xs);
+    padding: 4px 8px;
+    background: rgba(30, 160, 255, 0.08);
+    border: 1px solid rgba(30, 160, 255, 0.25);
+    border-radius: var(--radius);
+    transition: all 0.2s ease;
+}
+
+.brief-legal-links a:hover {
+    color: var(--text-bright);
+    background: rgba(30, 160, 255, 0.2);
+    border-color: var(--cyan);
+}
+
+.brief-disclaimer {
+    margin-top: var(--sp-1);
+    padding: var(--sp-3);
+    text-align: center;
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--red);
+    background: rgba(255, 65, 85, 0.07);
+    border: 1px dashed rgba(255, 65, 85, 0.45);
+    border-radius: var(--radius);
+}
+
+/* ============================ NO-JS FALLBACK ============================ */
+.noscript-fallback {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    overflow-y: auto;
+    padding: clamp(24px, 6vw, 72px);
+    background: var(--bg-void);
+    color: var(--text);
+    font-size: var(--fs-base);
+    line-height: 1.7;
+    text-align: left;
+}
+
+.noscript-fallback h2 {
+    color: var(--green-core);
+    font-size: var(--fs-xl);
+    letter-spacing: 2px;
+    margin-bottom: var(--sp-4);
+}
+
+.noscript-fallback p,
+.noscript-fallback li {
+    max-width: 72ch;
+    margin-bottom: var(--sp-3);
+}
+
+.noscript-fallback ul {
+    padding-left: 1.4em;
+    list-style: square;
+}
+
+.noscript-fallback code {
+    color: var(--cyan);
+    border: 1px solid rgba(63, 224, 255, 0.25);
+    border-radius: 3px;
+    padding: 1px 5px;
+}

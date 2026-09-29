@@ -50,11 +50,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: var(--sp-2);
     height: 30px;
     padding: 0 var(--sp-3);
     background: var(--bg-titlebar);
     border-bottom: 1px solid var(--emerald-line-soft);
     flex-shrink: 0;
+    min-width: 0;
 }
 
 .panel-title {
@@ -63,12 +65,19 @@
     letter-spacing: 2px;
     color: var(--green-core);
     text-shadow: var(--text-glow-soft);
+    /* long titles stay on the 30px titlebar line instead of wrapping over the
+       panel content below */
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .panel-controls {
     display: flex;
     align-items: center;
     gap: var(--sp-2);
+    flex-shrink: 0;
 }
 
 .pc {
@@ -106,53 +115,126 @@
     align-items: flex-end;
     gap: var(--sp-1);
     height: 100%;
+    /* tabs scroll horizontally inside the titlebar instead of pushing the
+       bar wider than the panel on narrow viewports */
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.term-tabs::-webkit-scrollbar {
+    display: none;
 }
 
 .term-tab {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: var(--sp-3);
+    gap: 8px;
     padding: 0 var(--sp-3);
-    height: 25px;
+    height: 26px;
     margin-bottom: -1px;
     font-size: var(--fs-sm);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    letter-spacing: 0.8px;
     color: var(--text-mid);
+    background: transparent;
     border: 1px solid transparent;
     border-radius: 3px 3px 0 0;
     cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s var(--ease);
+}
+
+.term-tab:hover {
+    color: var(--text-bright);
+    background: rgba(45, 220, 130, 0.05);
 }
 
 .term-tab.active {
     color: var(--green-core);
-    background: rgba(45, 220, 130, 0.08);
+    background: rgba(45, 220, 130, 0.12);
     border-color: var(--emerald-line);
-    border-bottom-color: transparent;
+    border-bottom-color: var(--bg-panel, #081014);
+    box-shadow: 0 -2px 10px rgba(45, 220, 130, 0.15);
     text-shadow: var(--text-glow-soft);
 }
 
-.term-tab .tab-x {
+.term-tab .tab-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    transition: all 0.2s ease;
+}
+
+.term-tab.active .tab-status-dot {
+    background: var(--green-core);
+    box-shadow: 0 0 8px var(--green-core);
+    animation: led-pulse 1.2s infinite ease-in-out;
+}
+
+.tab-mode-tag {
     font-size: 9px;
-    color: var(--text-muted);
-}
-
-.term-tab .tab-x:hover {
-    color: var(--red);
-}
-
-.term-tab-add {
-    background: transparent;
-    border: none;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 1px 5px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.06);
     color: var(--text-dim);
-    font-size: var(--fs-md);
-    cursor: pointer;
-    padding: 0 var(--sp-2);
-    height: 25px;
+}
+
+.term-tab.active .tab-mode-tag {
+    background: rgba(45, 220, 130, 0.2);
+    color: var(--green-core);
+    border: 1px solid rgba(45, 220, 130, 0.4);
+}
+
+/* Distinctive styling for Command tab when active */
+.term-tab[data-mode="command"].active {
+    color: var(--cyan);
+    border-color: rgba(0, 229, 255, 0.5);
+    background: rgba(0, 229, 255, 0.1);
+    box-shadow: 0 -2px 10px rgba(0, 229, 255, 0.15);
+}
+
+.term-tab[data-mode="command"].active .tab-status-dot {
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan);
+}
+
+.term-tab[data-mode="command"].active .tab-mode-tag {
+    background: rgba(0, 229, 255, 0.2);
+    color: var(--cyan);
+    border-color: rgba(0, 229, 255, 0.4);
+}
+
+.term-active-pill {
     display: inline-flex;
     align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    margin-right: var(--sp-2);
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-soft);
+    border-radius: 2px;
+    color: var(--green-core);
+    white-space: nowrap;
 }
 
-.term-tab-add:hover {
-    color: var(--green);
+.term-active-pill.mode-command {
+    color: var(--cyan);
+    border-color: rgba(0, 229, 255, 0.35);
+}
+
+.term-active-pill .pill-dot {
+    font-size: 8px;
+    animation: led-pulse 1.2s infinite ease-in-out;
 }
 
 .terminal-body {
@@ -565,7 +647,9 @@
 .crypto-field {
     font-size: var(--fs-xs);
     min-width: 0;
-    display: flex;
+    display: grid;
+    /* fixed key column so every value starts on the same vertical line */
+    grid-template-columns: 92px minmax(0, 1fr);
     align-items: baseline;
     gap: var(--sp-1);
     white-space: nowrap;
@@ -920,7 +1004,9 @@ body.hacker-typing .terminal-inputline {
     font-size: var(--fs-xs);
     letter-spacing: 1px;
     font-weight: 700;
-    padding: 3px 8px;
+    /* must match .icon-btn so the topbar reads as one even row */
+    height: 30px;
+    padding: 0 10px;
     border-radius: var(--radius);
     background: var(--green-ghost);
     border: 1px solid var(--emerald-line);

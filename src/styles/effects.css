@@ -282,6 +282,7 @@ body.screen-shake .app {
     text-shadow: var(--glow-green-md);
     white-space: pre;
     margin-bottom: var(--sp-2);
+    align-self: center;
     filter: drop-shadow(0 0 8px rgba(55, 255, 139, 0.3));
 }
 
@@ -415,6 +416,9 @@ body.screen-shake .app {
 .boot-footer {
     position: absolute;
     bottom: var(--sp-5);
+    left: 0;
+    right: 0;
+    text-align: center;
     font-size: var(--fs-xs);
     letter-spacing: 2px;
     color: var(--red);
@@ -464,8 +468,11 @@ body.screen-shake .app {
 
 .id-row span {
     color: var(--text-dim);
-    min-width: 58px;
+    /* fixed label column keeps every value on one vertical line */
+    width: 64px;
+    min-width: 64px;
     flex-shrink: 0;
+    letter-spacing: 0.5px;
 }
 
 .id-row b {

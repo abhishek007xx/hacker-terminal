@@ -16,13 +16,7 @@
             'mission_brief.sp9': '[CLASSIFIED] OPERATION BLACKOUT :: INITIATE MESH TAKEDOWN\nAUTHORIZATION: LEVEL-5 ROOT\n'
         },
 
-        activeTab: 'tab-1',
-        sessions: {
-            'tab-1': { title: '01 // ROOT_SHELL', prompt: 'operator@spectre-9:~$', html: '', history: [] },
-            'tab-2': { title: '02 // SNIFFER', prompt: 'sniffer@spectre-02:~$', html: '<span class="t-line t-cyan">[PACKET SNIFFER DAEMON ACTIVE // LISTENING ON ETH0 PROMISC]</span><span class="t-line t-spacer"></span>', history: [] },
-            'tab-3': { title: '03 // BOTNET_C2', prompt: 'c2@darknet-grid:~$', html: '<span class="t-line t-warn">[SPECTRE BOTNET C2 CONTROLLER // 256 VIRTUAL BOT NODES ONLINE]</span><span class="t-line t-spacer"></span>', history: [] },
-            'tab-4': { title: '04 // CRYPTO', prompt: 'crypto@quantum-lab:~$', html: '<span class="t-line t-ok">[QUANTUM CRYPTO LAB // 4096-BIT CURVE25519 CORE ARMED]</span><span class="t-line t-spacer"></span>', history: [] }
-        },
+        mode: 'typer', // 'typer' (Option 1: Hacker Typer) or 'command' (Option 2: Command Run CLI)
 
         init() {
             this.out = document.getElementById('terminal-output');
@@ -32,32 +26,35 @@
             this.body = document.getElementById('terminal-body');
             this.promptEl = document.getElementById('terminal-prompt');
 
-            // Wire terminal tabs
+            // Wire the 2 mode options (Option 1: Hacker Typer | Option 2: Command Run)
             this._wireTabs();
-
-            const btnAdd = document.querySelector('.term-tab-add');
-            if (btnAdd) {
-                btnAdd.addEventListener('click', () => {
-                    const count = Object.keys(this.sessions).length + 1;
-                    const tabId = 'tab-' + count;
-                    this.sessions[tabId] = {
-                        title: '0' + count + ' // SHELL_' + count,
-                        prompt: 'shell_' + count + '@spectre:~$',
-                        html: '<span class="t-line t-dim">[NEW CLASSIFIED SHELL INSTANCE #0' + count + ']</span><span class="t-line t-spacer"></span>',
-                        history: []
-                    };
-                    const tabDiv = document.createElement('div');
-                    tabDiv.className = 'term-tab';
-                    tabDiv.setAttribute('data-tab-id', tabId);
-                    tabDiv.innerHTML = '<span class="tab-title">0' + count + ' // SHELL_' + count + '</span><span class="tab-x">✕</span>';
-                    btnAdd.parentElement.insertBefore(tabDiv, btnAdd);
-                    this._wireTabs();
-                    this.switchTab(tabId);
-                });
-            }
 
             if (this.input) {
                 this.input.addEventListener('keydown', (e) => {
+                    // Option 1: Hacker Typer Mode — any keypress streams code
+                    if (this.mode === 'typer' && window.HackerTyper) {
+                        if (e.ctrlKey || e.metaKey || e.altKey) return;
+                        const k = e.key;
+                        if (k === 'Escape' || k === 'Tab' || k === 'CapsLock' ||
+                            k === 'Shift' || k === 'Control' || k === 'Alt' ||
+                            k === 'Meta' || k === 'ContextMenu' ||
+                            (k && k.startsWith('Arrow')) ||
+                            (k && k.startsWith('F') && k.length > 1 && !isNaN(k.slice(1)))) {
+                            return;
+                        }
+                        if (k === '?') return;
+
+                        e.preventDefault();
+                        e.stopPropagation();
+                        this.input.value = '';
+                        this._syncMirror();
+                        this.input.blur();
+                        if (!window.HackerTyper.active) window.HackerTyper.start();
+                        window.HackerTyper._emit();
+                        return;
+                    }
+
+                    // Option 2: Command Run Mode — standard interactive CLI execution!
                     if (e.key === 'Enter') {
                         e.preventDefault();
                         const val = this.input.value;
@@ -69,79 +66,92 @@
                     this._histKeys(e);
                     if (window.NexusAudio && e.key.length === 1) window.NexusAudio.key();
                 });
-                this.input.addEventListener('input', () => this._syncMirror());
+
+                this.input.addEventListener('input', () => {
+                    if (this.mode === 'typer' && window.HackerTyper && this.input.value.length > 0) {
+                        this.input.value = '';
+                        this._syncMirror();
+                        this.input.blur();
+                        if (!window.HackerTyper.active) window.HackerTyper.start();
+                        window.HackerTyper._emit();
+                        return;
+                    }
+                    this._syncMirror();
+                });
             }
-            // click terminal focuses input
+
+            // Click terminal focuses input if in command mode
             if (this.body) {
                 this.body.addEventListener('click', () => {
+                    if (this.mode === 'typer' && document.body.classList.contains('hacker-typing')) return;
                     if (this.input && !this.busy) this.input.focus();
                 });
             }
             this._syncMirror();
         },
 
-        _wireTabs() {
-            const tabs = document.querySelectorAll('.term-tab');
-            tabs.forEach((t, idx) => {
-                const tabId = t.getAttribute('data-tab-id') || ('tab-' + (idx + 1));
-                t.setAttribute('data-tab-id', tabId);
+        setMode(mode) {
+            this.mode = mode;
+            const tabTyper = document.getElementById('tab-mode-typer');
+            const tabCmd = document.getElementById('tab-mode-command');
+            const pill = document.getElementById('term-active-pill');
 
-                t.onclick = (e) => {
-                    if (e.target.classList.contains('tab-x')) {
-                        e.stopPropagation();
-                        const allTabs = document.querySelectorAll('.term-tab');
-                        if (allTabs.length > 1) {
-                            delete this.sessions[tabId];
-                            t.remove();
-                            // Switch to first available session
-                            const remaining = Object.keys(this.sessions);
-                            if (remaining.length > 0) this.switchTab(remaining[0]);
-                        }
-                        return;
-                    }
-                    this.switchTab(tabId);
-                };
-            });
+            if (tabTyper) {
+                tabTyper.classList.toggle('active', mode === 'typer');
+                tabTyper.setAttribute('aria-selected', mode === 'typer' ? 'true' : 'false');
+            }
+            if (tabCmd) {
+                tabCmd.classList.toggle('active', mode === 'command');
+                tabCmd.setAttribute('aria-selected', mode === 'command' ? 'true' : 'false');
+            }
+            if (pill) {
+                const ptext = pill.querySelector('.pill-text');
+                if (ptext) {
+                    ptext.textContent = mode === 'typer' ? 'MODE: HACKER TYPER' : 'MODE: COMMAND RUN';
+                }
+                pill.className = 'term-active-pill mode-' + mode;
+            }
+
+            if (window.NX && this.out) {
+                window.NX.spacer(this.out);
+                if (mode === 'typer') {
+                    window.NX.line(this.out, '<span class="t-ok">&gt;&gt;&gt; OPTION 1 ACTIVE: HACKER TYPER</span> <span class="t-dim">— mash any keys on keyboard to stream code.</span>', 't-ok');
+                } else {
+                    window.NX.line(this.out, '<span class="t-cyan">&gt;&gt;&gt; OPTION 2 ACTIVE: COMMAND RUN</span> <span class="t-dim">— type commands (e.g. </span><span class="t-key">help</span><span class="t-dim">, </span><span class="t-key">scan</span><span class="t-dim">, </span><span class="t-key">breach</span><span class="t-dim">) and press Enter.</span>', 't-cyan');
+                }
+                window.NX.spacer(this.out);
+            }
+
+            if (mode === 'typer') {
+                if (window.HackerTyper) window.HackerTyper.start();
+            } else {
+                if (window.HackerTyper && window.HackerTyper.active) {
+                    window.HackerTyper.stop();
+                }
+                this._setInputEnabled(true);
+                this.focus();
+            }
+
+            if (window.NexusAudio) window.NexusAudio.blip(mode === 'typer' ? 880 : 660, 0.04, 'square', 0.05);
+            this._scrollToBottom();
         },
 
-        switchTab(tabId) {
-            if (!this.sessions[tabId]) return;
-            // Save active session html + history
-            if (this.sessions[this.activeTab]) {
-                this.sessions[this.activeTab].html = this.out.innerHTML;
-                this.sessions[this.activeTab].history = this.history.slice();
+        _wireTabs() {
+            const tabTyper = document.getElementById('tab-mode-typer');
+            const tabCmd = document.getElementById('tab-mode-command');
+
+            if (tabTyper) {
+                tabTyper.onclick = (e) => {
+                    e.preventDefault();
+                    this.setMode('typer');
+                };
             }
-            this.activeTab = tabId;
-
-            // Update UI tabs
-            document.querySelectorAll('.term-tab').forEach(x => {
-                x.classList.toggle('active', x.getAttribute('data-tab-id') === tabId);
-            });
-
-            // Restore HTML and history
-            this.out.innerHTML = this.sessions[tabId].html || '';
-            this.history = (this.sessions[tabId].history || []).slice();
-            this.histIdx = -1;
-
-            // Update prompt display using innerHTML to preserve styled spans
-            if (this.promptEl) {
-                const p = this.sessions[tabId].prompt || 'operator@spectre-9:~$';
-                // Parse prompt format: user@host:path$ 
-                const match = p.match(/^([^@]+)@([^:]+):([^$]+)(\$)$/);
-                if (match) {
-                    this.promptEl.innerHTML =
-                        '<span class="prompt-user">' + match[1] + '@' + match[2] + '</span>' +
-                        '<span class="prompt-sep">:</span>' +
-                        '<span class="prompt-path">' + match[3] + '</span>' +
-                        '<span class="prompt-dollar">$</span>';
-                } else {
-                    this.promptEl.innerHTML = '<span class="prompt-user">' + p + '</span>';
-                }
+            if (tabCmd) {
+                tabCmd.onclick = (e) => {
+                    e.preventDefault();
+                    this.setMode('command');
+                };
             }
-
-            if (window.NexusAudio) window.NexusAudio.blip(740, 0.03, 'square', 0.05);
-            this._scrollToBottom();
-            this.focus();
         },
 
         _scrollToBottom() {
@@ -279,11 +289,14 @@
             this._setInputEnabled(false);
             this.busy = true;
 
-            const P = (t, cls, opts) => NX.type(this.out, t, Object.assign({ className: cls, speed: 10 }, opts || {}));
+            const P = (t, cls, opts) => NX.type(this.out, t, Object.assign({ className: cls, speed: 8 }, opts || {}));
             const L = (h, cls) => NX.line(this.out, h, cls);
             const S = () => NX.spacer(this.out);
 
-            await P('operator@spectre-9:~$ initializing black-ops tactical shell...', 't-prompt-line', { sound: true, speed: 10 });
+            // If prompt line is not pre-rendered, type it
+            if (!this.out.querySelector('.t-prompt-line')) {
+                await P('operator@spectre-9:~$ initializing black-ops tactical shell...', 't-prompt-line', { sound: true, speed: 8 });
+            }
             const bootItems = [
                 ['Microkernel Memory Map', 'AMD64 HARDENED [OK]'],
                 ['AES-XTS-512 RAMDISK', 'MOUNTED [OK]'],
@@ -292,25 +305,25 @@
                 ['Zero-Day Exploit Framework', 'STANDBY [OK]']
             ];
             for (const [k, v] of bootItems) {
-                await NX.sleep(110);
+                await NX.sleep(70);
                 const dots = '.'.repeat(Math.max(3, 30 - k.length));
                 L('<span class="t-dim">&gt;</span> ' + k + ' <span class="t-dim">' + dots + '</span> <span class="t-ok">' + v + '</span>', 't-indent');
                 if (A) A.blip(580, 0.02, 'square', 0.04);
             }
             S();
 
-            await P('operator@spectre-9:~$ establishing classified satellite link...', 't-prompt-line', { sound: true, speed: 10 });
+            await P('operator@spectre-9:~$ establishing classified satellite link...', 't-prompt-line', { sound: true, speed: 8 });
             if (A) A.connect();
-            await NX.animateBar(this.out, { width: 24, duration: 1500, className: 't-indent t-bar-green', label: 'UPLINK ' });
+            await NX.animateBar(this.out, { width: 24, duration: 600, className: 't-indent t-bar-green', label: 'UPLINK ' });
             const hops = ['RELAY_REYKJAVIK', 'RELAY_ZURICH', 'RELAY_TOKYO', 'SHADOW_NODE_09'];
             for (let i = 0; i < hops.length; i++) {
-                await NX.sleep(130);
+                await NX.sleep(70);
                 L('<span class="t-arrow">&gt;&gt;</span> hop 0' + (i + 1) + ' :: ' + hops[i] + ' [' + NX.hex(2) + '.' + NX.hex(2) + '.' + NX.hex(2) + '] <span class="t-cyan">' + NX.randInt(14, 88) + 'ms</span>', 't-indent t-dim');
             }
             L('<span class="t-ok">&gt;&gt; SECURE MESH ESTABLISHED // ORIGIN ZEROIZED</span>', 't-indent');
             S();
 
-            await P('operator@spectre-9:~$ scanning darknet sector grid...', 't-prompt-line', { sound: true, speed: 10 });
+            await P('operator@spectre-9:~$ scanning darknet sector grid...', 't-prompt-line', { sound: true, speed: 8 });
             S();
             const sectorNodes = [
                 ['[01]', 'SPECTRE-ALPHA', '10.99.14.01', 'ARMED // ONLINE', 't-ok'],
@@ -319,7 +332,7 @@
                 ['[04]', 'SPECTRE-DELTA', '10.99.14.04', 'TARGET ACQUIRED', 't-ok']
             ];
             for (const [idx, nm, ip, st, cls] of sectorNodes) {
-                await NX.sleep(130);
+                await NX.sleep(70);
                 const label = idx + ' ' + nm + ' (' + ip + ') ';
                 const dots = '.'.repeat(Math.max(3, 38 - label.length));
                 L('<span class="t-dim">' + idx + '</span> <b>' + nm + '</b> <span class="t-dim">' + dots + '</span> <span class="' + cls + '">' + st + '</span>', 't-indent');
@@ -405,6 +418,9 @@
                         ['purge', 'emergency DoD 3-pass cryptographic data zeroization'],
                         ['clear', 'sanitize terminal buffer (alias: cls)'],
                         ['about', 'inspect SPECTRE-9 black-ops engine specifications'],
+                        ['privacy', 'inspect data privacy policy & cookie compliance'],
+                        ['terms', 'review simulation terms of service & fair use'],
+                        ['contact', 'secure communication uplink & operative dispatch'],
                         ['exit', 'attempt disconnection from tactical grid']
                     ]
                 }
@@ -420,7 +436,7 @@
                 await NX.sleep(30);
             }
 
-            NX.line(this.out, '>> SIMULATION MODE // ZERO REAL NETWORK TRAFFIC TRANSMITTED <<', 't-sim-line');
+            NX.line(this.out, '>> SYSTEM STATUS // HARDENED BLACK-OPS CONSOLE ACTIVE <<', 't-cyan');
             NX.spacer(this.out);
         },
 
@@ -960,7 +976,7 @@
                 ['FIREWALL DEFLECTIONS', '1,482 PROBES BLOCKED IN 24H', 't-warn'],
                 ['SURVEILLANCE TRACE RISK', '0.00% [GHOST MODE ACTIVE]', 't-ok'],
                 ['CONNECTED DARKNET NODES', nodes + ' NODES SYNCHRONIZED', 't-val'],
-                ['SIMULATION STATUS', '100% ISOLATED LOCAL VIRTUAL SANDBOX', 't-warn']
+                ['SYSTEM INTEGRITY', '100% HARDENED KERNEL ARMED', 't-ok']
             ];
 
             for (const [k, v, c] of rows) {
@@ -988,7 +1004,7 @@
                 ['ASSIGNED SECTOR', 'SECTOR-09 [DARKNET PROXY MESH]'],
                 ['VIRTUAL IP', '10.99.14.88 // MASK: 255.255.255.0'],
                 ['CRYPTO FINGERPRINT', '0x' + NX.hex(32)],
-                ['ACTIVE ROLE', 'TACTICAL CYBER DEFENSE & SIMULATED PENETRATION']
+                ['ACTIVE ROLE', 'TACTICAL CYBER OPERATIONS & PAYLOAD DEPLOYMENT']
             ];
 
             for (const [k, v] of info) {
@@ -1002,7 +1018,7 @@
 
         async breach() {
             const NX = NXref();
-            NX.line(this.out, '>> ENGAGING MILITARY-GRADE BREACH SIMULATION SEQUENCE...', 't-crit');
+            NX.line(this.out, '>> ENGAGING MILITARY-GRADE BREACH SEQUENCE...', 't-crit');
             NX.spacer(this.out);
             if (window.Breach) setTimeout(() => window.Breach.run(), 300);
         },
@@ -1033,8 +1049,7 @@
             NX.line(this.out, '============================================================', 't-dim');
             NX.line(this.out, '  SPECTRE-9 // TACTICAL CYBER WARFARE OPERATING SUITE', 't-head');
             NX.line(this.out, '============================================================', 't-dim');
-            NX.line(this.out, 'A high-fidelity, cinematic cybersecurity visual simulation.', 't-dim');
-            NX.line(this.out, 'Designed for immersive visual theatre, demonstrations, and games.', 't-dim');
+            NX.line(this.out, 'High-fidelity cinematic black-ops cyber warfare operating console.', 't-dim');
             NX.spacer(this.out);
             NX.line(this.out, 'CORE ARCHITECTURE :', 't-cyan');
             NX.line(this.out, '  - 100% Pure Client-Side (Vanilla ES6+ JS, HTML5, CSS3)', 't-dim');
@@ -1042,7 +1057,7 @@
             NX.line(this.out, '  - High-DPI HTML5 Canvas Renderers (Radar, Graph, World Map)', 't-dim');
             NX.line(this.out, '  - ZERO external telemetry, network sockets, or backend APIs', 't-ok');
             NX.spacer(this.out);
-            NX.line(this.out, 'SIMULATION GUARANTEE: No real network scanning or exploitation occurs.', 't-sim-line');
+            NX.line(this.out, 'CLASSIFIED: RESTRICTED DISTRIBUTION ONLY.', 't-dim');
             NX.spacer(this.out);
         },
 
@@ -1469,6 +1484,62 @@
                 NX.line(this.out, 'Available Phosphor Matrices: ' + themes.join(', '), 't-dim');
                 NX.spacer(this.out);
             }
+        },
+
+        async about() {
+            const NX = NXref();
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  SPECTRE-9 // HACKER TYPER & FAKE HACKING SCREEN ENGINE', 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.spacer(this.out);
+            NX.line(this.out, 'OPERATIVE BRIEFING: Free browser-based hacker terminal simulator.', 't-ok');
+            NX.line(this.out, 'Engineered for cinema set dressing, video creators, and harmless pranks.', 't-dim');
+            NX.line(this.out, 'Architecture: Astro static SSG + HTML5 Web Audio synth + 2D Canvas.', 't-cyan');
+            NX.spacer(this.out);
+            NX.line(this.out, 'Full Mission Dossier: <a href="/about" target="_blank" rel="noopener" class="t-key">[ OPEN /ABOUT PAGE &rarr; ]</a>', 't-ok');
+            NX.spacer(this.out);
+        },
+
+        async privacy() {
+            const NX = NXref();
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  SPECTRE-9 // DATA PRIVACY & COOKIE COMPLIANCE PROTOCOL', 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.spacer(this.out);
+            NX.line(this.out, '[✓] CLIENT PRIVACY: 100% local in-browser simulation.', 't-ok');
+            NX.line(this.out, '[✓] NO KEYSTROKE LOGGING: No keystrokes or passwords are sent.', 't-ok');
+            NX.line(this.out, '[✓] THIRD-PARTY COOKIES: Google AdSense & analytics disclosure.', 't-cyan');
+            NX.spacer(this.out);
+            NX.line(this.out, 'Review Full Policy: <a href="/privacy-policy" target="_blank" rel="noopener" class="t-key">[ OPEN /PRIVACY-POLICY &rarr; ]</a>', 't-ok');
+            NX.spacer(this.out);
+        },
+
+        async terms() {
+            const NX = NXref();
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  SPECTRE-9 // TERMS OF SERVICE & ACCEPTABLE USE DIRECTIVE', 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.spacer(this.out);
+            NX.line(this.out, 'DISCLAIMER: Simulation entertainment and visual movie prop only.', 't-warn');
+            NX.line(this.out, 'No real hacking, penetration testing, or network exploitation.', 't-dim');
+            NX.line(this.out, 'Permitted: YouTube, video production, educational demos, pranks.', 't-cyan');
+            NX.spacer(this.out);
+            NX.line(this.out, 'Read Terms: <a href="/terms" target="_blank" rel="noopener" class="t-key">[ OPEN /TERMS PAGE &rarr; ]</a>', 't-ok');
+            NX.spacer(this.out);
+        },
+
+        async contact() {
+            const NX = NXref();
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.line(this.out, '  SPECTRE-9 // SECURE COMMUNICATIONS & SUPPORT UPLINK', 't-head');
+            NX.line(this.out, '============================================================', 't-dim');
+            NX.spacer(this.out);
+            NX.line(this.out, 'General Support: <span class="t-cyan">support@hacker-terminal.pages.dev</span>', 't-ok');
+            NX.line(this.out, 'Privacy Inquiries: <span class="t-cyan">privacy@hacker-terminal.pages.dev</span>', 't-ok');
+            NX.line(this.out, 'Media & Film Props: <span class="t-cyan">media@hacker-terminal.pages.dev</span>', 't-ok');
+            NX.spacer(this.out);
+            NX.line(this.out, 'Dispatch Portal: <a href="/contact" target="_blank" rel="noopener" class="t-key">[ OPEN /CONTACT PAGE &rarr; ]</a>', 't-ok');
+            NX.spacer(this.out);
         }
     };
 
@@ -1494,6 +1565,11 @@
     COMMANDS.hashcrack = COMMANDS.crack;
     COMMANDS.tor = COMMANDS.darknet;
     COMMANDS.intel = COMMANDS.darknet;
+    COMMANDS.policy = COMMANDS.privacy;
+    COMMANDS.tos = COMMANDS.terms;
+    COMMANDS.legal = COMMANDS.terms;
+    COMMANDS.support = COMMANDS.contact;
+    COMMANDS.feedback = COMMANDS.contact;
 
     /* =====================================================
        EASTER EGGS
@@ -1577,14 +1653,14 @@
         async 'sudo rm -rf /'() {
             const NX = NXref();
             NX.line(this.out, 'ACCESS DENIED: NICE TRY, OPERATIVE.', 't-crit');
-            NX.line(this.out, 'This is a simulation. Nothing here is real enough to delete.', 't-dim');
+            NX.line(this.out, 'CRITICAL: ROOT FILESYSTEM IS WRITE-PROTECTED.', 't-warn');
             NX.spacer(this.out);
             if (window.NexusAudio) window.NexusAudio.warn();
         },
 
         async 'ping'() {
             const NX = NXref();
-            NX.line(this.out, 'PONG :: 0.04ms (simulated loopback — zero external packets sent)', 't-ok');
+            NX.line(this.out, 'PONG :: 0.04ms (ICMP ECHO REPLY :: 64 BYTES RECEIVED)', 't-ok');
             NX.spacer(this.out);
         },
 

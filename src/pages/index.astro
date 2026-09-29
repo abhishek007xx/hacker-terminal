@@ -1,0 +1,876 @@
+---
+/* ============================================================
+   SPECTRE-9 // BLACK-OPS CYBER WARFARE
+   Static Astro page. Client behaviour lives in classic IIFE
+   scripts that only touch `window.*`, so they are bundled in
+   their original load order from /src/scripts.
+   ============================================================ */
+import '../styles/variables.css';
+import '../styles/layout.css';
+import '../styles/panels.css';
+import '../styles/effects.css';
+import '../styles/responsive.css';
+import '../styles/utilities.css';
+
+const SITE_URL = (Astro.site?.toString() ?? 'https://hacker-terminal-4mk.pages.dev').replace(/\/$/, '');
+const PAGE_PATH = '/';
+
+const TITLE = 'Hacker Typer — Fake Hacking Screen & Hacking Prank Simulator | SPECTRE-9';
+const DESCRIPTION =
+    'Free browser hacker typer, fake hacking screen, and hacker prank simulator. Mash any key for instant hacker typing, 60+ commands, and harmless movie pranks. 100% simulated.';
+
+const ogImage = `${SITE_URL}/og.png`;
+
+const webAppSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        {
+            '@type': 'WebApplication',
+            '@id': `${SITE_URL}/#webapp`,
+            name: 'SPECTRE-9 // Hacker Typer & Fake Hacking Screen Simulator',
+            alternateName: [
+                'SPECTRE-9 Hacker Terminal',
+                'Hacker Typer Simulator',
+                'Fake Hacking Screen',
+                'Hacking Prank Simulator',
+                'Hollywood Hacker Terminal',
+                'Hacker Typer',
+                'Fake Hacking',
+                'Hacking Prank',
+                'Hacker Typing',
+                'Hacker Type',
+                'HackerTyper',
+                'Fake Hacker',
+                'Hacker Prank',
+                'Hacked Screen'
+            ],
+            url: `${SITE_URL}${PAGE_PATH}`,
+            applicationCategory: 'EntertainmentApplication',
+            applicationSubCategory: 'Simulation Game',
+            operatingSystem: 'All modern web browsers (Chrome, Firefox, Safari, Edge, Android, iOS)',
+            browserRequirements: 'Requires JavaScript and HTML5 Canvas',
+            description: DESCRIPTION,
+            image: ogImage,
+            screenshot: ogImage,
+            inLanguage: 'en',
+            isAccessibleForFree: true,
+            offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+            author: {
+                '@type': 'Organization',
+                name: 'SPECTRE-9 Simulation Labs',
+                url: SITE_URL
+            },
+            featureList: [
+                'Instant Hacker Typer with real-time C, Python, and assembly code streaming',
+                'Over 60 simulated interactive CLI terminal commands',
+                '5 authentic CRT phosphor color schemes (Green, Cyan, Amber, Red, Purple)',
+                'Edge-to-edge fullscreen Matrix digital rain animation',
+                'Cinematic red security breach alarm and siren simulation',
+                'Interactive real-time Cyber Defense Wargame simulator',
+                'Procedural Web Audio sound synthesizer for mechanical keyboard clicks and synthwave music',
+                'Drone and CCTV camera surveillance matrix simulator',
+                'GPU hash cracker and cipher steganography lab',
+                '100% simulated, client-side, safe for pranks and video production'
+            ],
+            keywords:
+                'hacker typer, fake hacking, hacking prank, hacker typing, fake hacking screen, hacked screen, hackertyper, fake hacker, hacker prank, hacker type, hacker simulator, movie hacker screen, matrix rain, hollywood hacker'
+        },
+        {
+            '@type': 'HowTo',
+            '@id': `${SITE_URL}/#howto`,
+            name: 'How to Use Hacker Typer to Create a Fake Hacking Screen Prank',
+            description: 'Step-by-step guide to using the SPECTRE-9 hacker typer to simulate an authentic Hollywood hacker terminal for entertainment, streaming backgrounds, or harmless pranks.',
+            step: [
+                {
+                    '@type': 'HowToStep',
+                    name: 'Enter Fullscreen Mode',
+                    text: 'Press F11 on your keyboard or click the Fullscreen icon [⛶] in the top navigation bar for edge-to-edge cinematic immersion.',
+                    url: `${SITE_URL}/#fullscreen`
+                },
+                {
+                    '@type': 'HowToStep',
+                    name: 'Engage Hacker Typer Mode',
+                    text: 'Select Option 1 [01 // HACKER TYPER] on the terminal titlebar or click Hacker Typer in the navigation menu.',
+                    url: `${SITE_URL}/#hackertyper`
+                },
+                {
+                    '@type': 'HowToStep',
+                    name: 'Mash Any Keys to Stream Code',
+                    text: 'Rapidly mash any keys on your keyboard. Authentic syntax-highlighted kernel, cryptography, and network routines stream onto the display in real time.',
+                    url: `${SITE_URL}/#stream`
+                },
+                {
+                    '@type': 'HowToStep',
+                    name: 'Trigger Cinematic Commands',
+                    text: 'Switch to Command Run mode [02 // COMMAND RUN] to execute simulated commands such as breach (security alert overlay), matrix (falling code rain), and scan (network port mapping).',
+                    url: `${SITE_URL}/#commands`
+                }
+            ]
+        }
+    ]
+};
+
+const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+        {
+            '@type': 'Question',
+            name: 'What is a hacker typer and how does it work?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'A hacker typer is an interactive web simulation that outputs realistic syntax-highlighted source code, assembly instructions, and cybersecurity logs whenever you press any key on your keyboard. In SPECTRE-9, simply mash any keys to stream authentic-looking code across a tactical black-ops terminal with zero setup.'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'How do you make your computer look like a fake hacking screen?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Open SPECTRE-9 in your web browser and press F11 (or click the fullscreen icon) for full-screen display. Select your preferred CRT phosphor theme (Green, Amber, Cyan, Red, or Purple), engage Hacker Typer mode to stream code as you type, or run simulated commands like scan, trace, breach, and matrix.'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'Can I use this fake hacking simulator for pranks and movie props?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Yes! SPECTRE-9 is 100% designed for harmless hacking pranks with friends and colleagues, cinematic video production, student films, and live stream backgrounds. It is completely safe, operates entirely client-side in your browser, and performs no real network attacks or data access.'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'Is hacker typing with SPECTRE-9 safe and legal?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Yes, it is 100% safe and legal. SPECTRE-9 is purely visual theatre rendered locally in your browser with HTML5 and WebGL. It contains no malware, sends no network exploits, and does not access your computer files, system settings, or personal data.'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'What commands can I run in the fake hacker terminal?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'SPECTRE-9 features over 60 simulated commands including scan (port mapping), trace (satellite routing), geoip (IP lookups), breach (penetration test animation), nuke (EMP shockwave), matrix (falling code rain), decrypt (GPU hash cracking), and theme (CRT phosphor color changer).'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'How do I trigger the Matrix falling code rain effect?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Switch to Command Run mode [02 // COMMAND RUN] in the terminal, type matrix, and press Enter. You can also customize the matrix speed and glyph density by typing matrix fast or matrix slow. Press Escape to exit Matrix mode.'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'Does SPECTRE-9 have hacker sound effects and typing audio?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Yes! SPECTRE-9 features a procedural Web Audio sound synthesizer that generates mechanical keyboard keystrokes, radar chirps, modem connection tones, and optional ambient synthwave background music without downloading external audio files.'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'Does SPECTRE-9 work on mobile devices and smartphones?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Yes, SPECTRE-9 is fully responsive on smartphones and tablets. It provides dedicated bottom touch navigation tabs (Terminal, Monitor, Network, and Logs) and works with both physical and virtual on-screen keyboards.'
+            }
+        }
+    ]
+};
+---
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content={DESCRIPTION} />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#02060a" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <link rel="canonical" href={`${SITE_URL}${PAGE_PATH}`} />
+
+    <title>{TITLE}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="SPECTRE-9 Black-Ops Terminal" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content={TITLE} />
+    <meta property="og:description" content={DESCRIPTION} />
+    <meta property="og:url" content={`${SITE_URL}${PAGE_PATH}`} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="SPECTRE-9 hacker terminal interface with green CRT phosphor text" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={TITLE} />
+    <meta name="twitter:description" content={DESCRIPTION} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content="SPECTRE-9 hacker terminal interface with green CRT phosphor text" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" id="favicon-link" href="/favicon.svg" />
+    <link rel="alternate icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Fonts: preconnect to Google's font CDN; @font-face is inlined in CSS with font-display: swap -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- AEO / GEO / LLM Knowledge Discovery -->
+    <link rel="alternate" type="text/markdown" href="/llms.txt" title="LLM Context Summary" />
+    <meta name="ai-content-declaration" content="human-authored" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(webAppSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+</head>
+
+
+<body>
+
+    <h1 class="sr-only">Hacker Typer &amp; Fake Hacker Terminal Simulator — SPECTRE-9 Black-Ops Command Center</h1>
+
+    <!-- ============================ GLOBAL CRT / FX LAYER ============================ -->
+    <div class="fx-layer" aria-hidden="true">
+        <div class="fx-scanlines"></div>
+        <div class="fx-noise"></div>
+        <div class="fx-vignette"></div>
+        <div class="fx-flicker"></div>
+        <div class="fx-glitch" id="fx-glitch"></div>
+    </div>
+
+    <!-- ============================ MAIN APP ============================ -->
+    <div id="app" class="app revealed" aria-hidden="false">
+
+        <!-- ---------- TOP BAR ---------- -->
+        <header class="topbar">
+            <div class="topbar-brand">
+                <span class="brand-glyph">&gt;#</span>
+                <span class="brand-name">SPECTRE-9</span>
+                <span class="brand-sep">//</span>
+                <span class="brand-sub">BLACK-OPS WARFARE</span>
+            </div>
+            <div class="topbar-meta">
+                <div class="meta-item"><span class="meta-key">CONNECTION:</span> <span class="meta-val val-ok"
+                        id="meta-connection">ENCRYPTED</span></div>
+                <div class="meta-item"><span class="meta-key">NODE:</span> <span class="meta-val"
+                        id="meta-node">UNKNOWN</span></div>
+                <div class="meta-item"><span class="meta-key">SESSION:</span> <span class="meta-val"
+                        id="meta-session">7F3A-92C1</span></div>
+            </div>
+            <div class="topbar-right">
+                <span class="topbar-clock" id="topbar-clock">00:00:00</span>
+                <button class="theme-picker-btn" id="btn-synth" title="Toggle Procedural Synthwave Ambient Music"><span class="theme-dot"></span> <span id="synth-label">SYNTH: OFF</span></button>
+                <button class="theme-picker-btn" id="btn-theme" title="Cycle CRT Color Theme"><span class="theme-dot"></span> <span id="theme-name">GREEN</span></button>
+                <button class="icon-btn" id="btn-brief" title="Mission Brief — Documentation" aria-label="Mission brief and FAQ">
+                    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.5"/><line x1="8" y1="7" x2="8" y2="11.5"/><circle cx="8" cy="4.5" r="0.8" fill="currentColor"/></svg>
+                </button>
+                <button class="icon-btn" id="btn-cam" title="Drone &amp; CCTV Surveillance Matrix" aria-label="Drone Cam">
+                    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="4.5" width="8.5" height="7" rx="1"/><polygon points="10,7.5 14.5,4.5 14.5,11.5 10,8.5" fill="none"/><circle cx="5.5" cy="8" r="1.5"/></svg>
+                </button>
+                <button class="icon-btn" id="btn-cipher" title="Cipher &amp; Steganography Lab" aria-label="Cipher Lab">
+                    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="10" height="7.5" rx="1"/><path d="M5.5 7V4.5a2.5 2.5 0 0 1 5 0V7"/><circle cx="8" cy="10.5" r="1" fill="currentColor"/></svg>
+                </button>
+                <button class="icon-btn" id="btn-exploit" title="Zero-Day Exploit Chain Builder" aria-label="Exploit Builder">
+                    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><line x1="8" y1="1" x2="8" y2="4"/><line x1="8" y1="12" x2="8" y2="15"/><line x1="1" y1="8" x2="4" y2="8"/><line x1="12" y1="8" x2="15" y2="8"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/></svg>
+                </button>
+                <button class="icon-btn" id="btn-hashcrack" title="GPU Hash Cracker" aria-label="GPU Hash Cracker">
+                    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="8" height="8" rx="1"/><path d="M6 1.5v2.5M10 1.5v2.5M6 12v2.5M10 12v2.5M1.5 6h2.5M1.5 10h2.5M12 6h2.5M12 10h2.5"/><rect x="6.5" y="6.5" width="3" height="3" fill="currentColor"/></svg>
+                </button>
+                <button class="icon-btn" id="btn-darknet" title="Darknet Intelligence Feed" aria-label="Darknet Feed">
+                    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="2.5" fill="currentColor"/><path d="M8 2v3.5M8 10.5V14M2 8h3.5M10.5 8H14M3.8 3.8l2.5 2.5M9.7 9.7l2.5 2.5M3.8 12.2l2.5-2.5M9.7 6.3l2.5-2.5"/></svg>
+                </button>
+                <button class="icon-btn" id="btn-cw" title="Launch Cyber Defense Wargame" aria-label="Cyber Defense Game">
+                    <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><polygon points="9,1 3,9 8,9 7,15 13,7 8,7"/></svg>
+                </button>
+                <button class="icon-btn" id="btn-mute" title="Toggle sound" aria-label="Toggle sound">
+                    <span class="icon-mute-off"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="2,5.5 5.5,5.5 9,2.5 9,13.5 5.5,10.5 2,10.5" fill="currentColor"/><path d="M11.5 5.5a4 4 0 0 1 0 5M13.5 3.5a6.5 6.5 0 0 1 0 9"/></svg></span>
+                    <span class="icon-mute-on"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="2,5.5 5.5,5.5 9,2.5 9,13.5 5.5,10.5 2,10.5" fill="currentColor"/><line x1="11.5" y1="6" x2="14.5" y2="10"/><line x1="14.5" y1="6" x2="11.5" y2="10"/></svg></span>
+                </button>
+                <button class="icon-btn" id="btn-fullscreen" title="Toggle fullscreen" aria-label="Toggle fullscreen">
+                    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5V2.5h3M11 2.5h3v3M14 10.5v3h-3M5 13.5H2v-3"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- ---------- STATUS BAR ---------- -->
+        <footer class="statusbar">
+            <div class="status-leds">
+                <span class="led led-green" id="led-online"><i></i>SYSTEM ONLINE</span>
+                <span class="led led-green" id="led-encrypted"><i></i>ENCRYPTED</span>
+                <span class="led led-cyan" id="led-proxy"><i></i>PROXY ACTIVE</span>
+                <span class="led led-green" id="led-defcon"><i></i>DEFCON: <b>5</b></span>
+                <span class="led led-amber" id="led-trace"><i></i>TRACE: <em id="trace-value">0%</em></span>
+            </div>
+            <div class="status-sim" id="status-sim">
+                <span class="sim-dot">◆</span> ENCRYPTED MESH // NODE 0x9F ACTIVE
+            </div>
+        </footer>
+
+        <!-- ---------- MAIN GRID ---------- -->
+        <main class="main-grid">
+
+            <!-- ===== LEFT SIDEBAR ===== -->
+            <aside class="sidebar" id="sidebar">
+                <nav class="side-nav" aria-label="Main navigation">
+                    <div class="side-label">MAIN</div>
+                    <button class="nav-item active" data-nav="terminal"><span class="nav-ic">▶</span> TERMINAL</button>
+                    <button class="nav-item" data-nav="network"><span class="nav-ic">◈</span> NETWORK</button>
+                    <button class="nav-item" data-nav="system"><span class="nav-ic">▦</span> SYSTEM</button>
+                    <button class="nav-item" data-nav="exploits"><span class="nav-ic">⚡</span> EXPLOITS</button>
+                    <button class="nav-item" data-nav="payloads"><span class="nav-ic">◉</span> PAYLOADS</button>
+                    <button class="nav-item" data-nav="logs"><span class="nav-ic">▤</span> LOGS</button>
+                    <button class="nav-item" data-nav="settings"><span class="nav-ic">⚙</span> SETTINGS</button>
+                </nav>
+
+                <div class="identity-panel">
+                    <div class="identity-head">OPERATIVE PROFILE</div>
+                    <div class="identity-rows">
+                        <div class="id-row"><span>USER:</span><b>operator</b></div>
+                        <div class="id-row"><span>UID :</span><b>0 [ROOT]</b></div>
+                        <div class="id-row"><span>GID :</span><b>0 [BLACK-OPS]</b></div>
+                        <div class="id-row"><span>GROUPS:</span><b>superuser,cyberwar</b></div>
+                        <div class="id-row"><span>SECTOR:</span><b>09 [CLASSIFIED]</b></div>
+                        <div class="id-row"><span>IP:</span><b id="id-ip">10.99.14.88</b></div>
+                        <div class="id-row"><span>MASK:</span><b>255.255.255.0</b></div>
+                        <div class="id-row"><span>GATEWAY:</span><b>10.99.14.1 [ONION]</b></div>
+                    </div>
+                    <div class="worldmap-wrap">
+                        <canvas id="worldmap-canvas" class="worldmap-canvas"></canvas>
+                        <div class="worldmap-label">3D VECTOR WIREGLOBE</div>
+                    </div>
+                </div>
+
+                <div class="side-actions">
+                    <button class="action-btn action-cw" id="btn-side-cw">⚡ CYBER DEFENSE WARGAME</button>
+                    <button class="action-btn action-hacker" id="btn-hacker">[ HACKER TYPER ]</button>
+                    <button class="action-btn action-matrix" id="btn-matrix">[ ENTER MATRIX MODE ]</button>
+                    <button class="action-btn action-breach" id="btn-breach">RUN BREACH SIMULATION</button>
+                </div>
+            </aside>
+
+            <!-- ===== CENTER TERMINAL ===== -->
+            <section class="terminal-region panel" id="region-terminal">
+                <h2 class="sr-only">Interactive hacker terminal console</h2>
+                <div class="panel-titlebar">
+                    <div class="term-tabs" role="tablist" aria-label="Terminal Operating Modes">
+                        <button class="term-tab active" id="tab-mode-typer" role="tab" aria-selected="true" data-mode="typer" title="Option 1: Hacker Typer — Mash any keys to pour out code">
+                            <span class="tab-status-dot"></span>
+                            <span class="tab-title">01 // HACKER TYPER</span>
+                            <span class="tab-mode-tag">MASH KEYS</span>
+                        </button>
+                        <button class="term-tab" id="tab-mode-command" role="tab" aria-selected="false" data-mode="command" title="Option 2: Command Run — Interactive CLI terminal">
+                            <span class="tab-status-dot"></span>
+                            <span class="tab-title">02 // COMMAND RUN</span>
+                            <span class="tab-mode-tag">CLI EXEC</span>
+                        </button>
+                    </div>
+                    <div class="term-active-pill mode-typer" id="term-active-pill">
+                        <span class="pill-dot">●</span>
+                        <span class="pill-text">MODE: HACKER TYPER</span>
+                    </div>
+                    <div class="panel-controls" aria-hidden="true">
+                        <span class="pc pc-min">─</span><span class="pc pc-max">▢</span><span
+                            class="pc pc-close">✕</span>
+                    </div>
+                </div>
+                <div class="terminal-body" id="terminal-body">
+                    <div class="terminal-output" id="terminal-output" role="log" aria-live="polite"
+                        aria-label="Terminal output"><span class="t-line t-prompt-line">operator@spectre-9:~$ initializing black-ops tactical shell...</span></div>
+                    <div class="terminal-inputline" id="terminal-inputline">
+                        <span class="terminal-prompt" id="terminal-prompt"><span class="prompt-user">operator@spectre-9</span><span class="prompt-sep">:</span><span
+                            class="prompt-path">~</span><span class="prompt-dollar">$</span></span>
+                        <span class="terminal-input-wrap">
+                            <span class="terminal-input-mirror" id="terminal-input-mirror"></span><span
+                                class="terminal-caret" id="terminal-caret">█</span>
+                        </span>
+                        <input type="text" class="terminal-input" id="terminal-input" autocomplete="off"
+                            autocorrect="off" autocapitalize="off" spellcheck="false"
+                            aria-label="Terminal command input" />
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== RIGHT COLUMN ===== -->
+            <aside class="right-column" id="right-column">
+
+                <!-- SYSTEM MONITOR -->
+                <section class="panel monitor-panel" data-panel="system">
+                    <div class="panel-titlebar">
+                        <h2 class="panel-title">SYSTEM MONITOR</h2>
+                        <span class="panel-controls" aria-hidden="true"><span class="pc">─</span><span class="pc">▢</span><span
+                                class="pc">✕</span></span>
+                    </div>
+                    <div class="panel-content monitor-content">
+                        <div class="monitor-metrics">
+                            <div class="metric">
+                                <span class="metric-label">CPU</span>
+                                <span class="metric-bar"><i id="bar-cpu"></i></span>
+                                <span class="metric-val" id="val-cpu">72%</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">MEMORY</span>
+                                <span class="metric-bar"><i id="bar-mem"></i></span>
+                                <span class="metric-val" id="val-mem">54%</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">NETWORK</span>
+                                <span class="metric-bar"><i id="bar-net"></i></span>
+                                <span class="metric-val" id="val-net">81%</span>
+                            </div>
+                            <div class="metric-row"><span class="metric-label">UPTIME</span><span class="metric-plain"
+                                    id="val-uptime">17:42:08</span></div>
+                            <div class="metric-row"><span class="metric-label">THREADS</span><span class="metric-plain"
+                                    id="val-threads">143</span></div>
+                            <div class="metric-row"><span class="metric-label">NODES</span><span class="metric-plain"
+                                    id="val-nodes">27</span></div>
+                        </div>
+                        <div class="radar-wrap">
+                            <canvas id="radar-canvas" class="radar-canvas"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- NETWORK TOPOLOGY -->
+                <section class="panel topo-panel" data-panel="network">
+                    <div class="panel-titlebar">
+                        <h2 class="panel-title">NETWORK TOPOLOGY</h2>
+                        <span class="panel-controls" aria-hidden="true"><span class="pc">─</span><span class="pc">▢</span><span
+                                class="pc">✕</span></span>
+                    </div>
+                    <div class="panel-content topo-content">
+                        <canvas id="topo-canvas" class="topo-canvas"></canvas>
+                    </div>
+                </section>
+
+                <!-- ENCRYPTION ENGINE & SATELLITE TELEMETRY -->
+                <section class="panel crypto-panel" data-panel="crypto">
+                    <div class="panel-titlebar">
+                        <h2 class="panel-title">ENCRYPTION ENGINE</h2>
+                        <span class="panel-controls" aria-hidden="true"><span class="pc">─</span><span class="pc">▢</span><span
+                                class="pc">✕</span></span>
+                    </div>
+                    <div class="panel-content crypto-content">
+                        <div class="crypto-left">
+                            <div class="crypto-field">
+                                <div class="crypto-key">KEY GENERATION</div>
+                                <div class="crypto-genbar"><i id="crypto-genbar"></i></div>
+                            </div>
+                            <div class="crypto-field"><span class="crypto-key">SESSION KEY:</span> <span
+                                    class="crypto-val" id="crypto-session">A91F-72CD-8841-29FA</span></div>
+                            <div class="crypto-field"><span class="crypto-key">AZIMUTH:</span> <span
+                                    class="crypto-val val-cyan" id="sat-azimuth">142.4°</span></div>
+                            <div class="crypto-field"><span class="crypto-key">ELEVATION:</span> <span
+                                    class="crypto-val val-ok" id="sat-elevation">58.2°</span></div>
+                            <div class="crypto-field"><span class="crypto-key">PACKETS:</span> <span
+                                    class="crypto-val" id="sat-packets">4,182</span></div>
+                        </div>
+                        <div class="crypto-right">
+                            <canvas id="sat-canvas" class="sat-canvas" title="Satellite Orbital Recon Link"></canvas>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- ===== EVENT LOG ===== -->
+            <section class="panel eventlog-panel" id="region-logs" data-panel="logs">
+                <div class="panel-titlebar">
+                    <h2 class="panel-title">TACTICAL EVENT LOG</h2>
+                    <span class="panel-controls"><span class="pc" aria-hidden="true">─</span><span class="pc pc-clearlog"
+                            id="btn-clearlog" role="button" tabindex="0" title="Clear log"
+                            aria-label="Clear tactical event log">✕</span></span>
+                </div>
+                <div class="panel-content eventlog-content" id="eventlog-content" role="log" aria-live="polite"
+                    aria-label="Tactical event log output"></div>
+            </section>
+
+            <!-- ===== DATA STREAM & LIVE DISASSEMBLER ===== -->
+            <section class="panel datastream-panel" data-panel="stream">
+                <div class="panel-titlebar">
+                    <h2 class="panel-title">DATA STREAM &amp; MEMORY DISASSEMBLER</h2>
+                    <span class="panel-controls"><span class="pc" aria-hidden="true">✕</span></span>
+                </div>
+                <div class="panel-content datastream-content">
+                    <div class="ds-hex" id="ds-hex" title="Hex Stream"></div>
+                    <div class="mem-disasm" id="mem-disasm-content" title="Live x86_64 Disassembly"></div>
+                    <canvas id="ds-canvas" class="ds-canvas" title="RF Spectrum"></canvas>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- ---------- HACKER TYPER HUD INDICATOR ---------- -->
+        <div class="hacker-typer-badge" id="hacker-badge" aria-hidden="true">
+            <span class="htb-dot">●</span> INJECTION STREAM ACTIVE &nbsp;//&nbsp; [ESC] DISENGAGE
+        </div>
+
+        <!-- ---------- MOBILE TAB BAR ---------- -->
+        <nav class="mobile-tabs" id="mobile-tabs" aria-label="Panel tabs">
+            <button class="mtab active" data-tab="terminal">TERMINAL</button>
+            <button class="mtab" data-tab="monitor">MONITOR</button>
+            <button class="mtab" data-tab="network">NET</button>
+            <button class="mtab" data-tab="log">LOG</button>
+        </nav>
+    </div>
+
+    <!-- ============================ MISSION BRIEF / ABOUT / FAQ ============================ -->
+    <div id="brief-modal" class="cipher-modal" role="dialog" aria-modal="true" aria-labelledby="brief-title"
+        aria-hidden="true" inert>
+        <div class="cipher-box">
+            <header class="cipher-header">
+                <h2 class="cipher-title" id="brief-title">📋 MISSION BRIEF // WHAT IS SPECTRE-9?</h2>
+                <button class="cipher-btn" id="btn-brief-close" type="button" aria-label="Close mission brief">✕</button>
+            </header>
+
+            <div class="brief-body">
+                <section class="brief-section">
+                    <h3>What is this hacker terminal?</h3>
+                    <p>
+                        <strong>SPECTRE-9</strong> is a free, browser-based <strong>hacker typer</strong> and
+                        <strong>fake hacker terminal</strong> built for one reason: to make you look like an elite Hollywood
+                        hacker. Open the terminal directly, then mash any key to stream syntax-highlighted kernel
+                        code onto the screen while a rotating radar, network topology, live system monitor and a
+                        wireframe world map flicker in real time. It is the ultimate “hacker screen” flex — no install,
+                        no account, no download, 100% simulated and mobile-ready.
+                    </p>
+                </section>
+
+                <section class="brief-section">
+                    <h3>Is any of it real hacking?</h3>
+                    <p>
+                        No — and that is exactly the point. This site has <strong>no backend and no network code</strong>
+                        at all: there is no scanning, no connecting, no exploiting. Every hash, packet, node, satellite
+                        and “breached” target is generated locally in your browser as pure visual theatre. It is 100%
+                        simulated, safe to open anywhere, and impossible to get anyone in trouble with.
+                    </p>
+                </section>
+
+                <section class="brief-section">
+                    <h3>What is inside the command center?</h3>
+                    <ul class="brief-list">
+                        <li><b>Hacker Typer</b> — mash keys to pour highlighted source code, ESC to stop.</li>
+                        <li><b>60+ terminal commands</b> — <code>scan</code>, <code>trace</code>, <code>mitm</code>,
+                            <code>nuke</code>, <code>breach</code>, <code>decrypt</code>, <code>geoip</code>,
+                            <code>defcon</code>, <code>payload</code>, <code>sat</code> and more.</li>
+                        <li><b>5 CRT phosphor themes</b> — green, cyan, amber, red and purple, plus a live theme
+                            <code>command</code>.</li>
+                        <li><b>Cinematic modes</b> — Matrix rain, breach simulation and a real-time cyber defense
+                            wargame.</li>
+                        <li><b>Five lab tools</b> — cipher &amp; stego lab, GPU hash cracker, zero-day exploit
+                            builder, darknet intel feed and drone/CCTV surveillance.</li>
+                        <li><b>Live dashboards</b> — system monitor, radar sweep, network topology, satellite recon,
+                            event log and hex data stream.</li>
+                        <li><b>Synth audio</b> — every beep, siren and sonar ping is synthesized in the browser; zero
+                            audio files are shipped.</li>
+                    </ul>
+                </section>
+
+                <section class="brief-section">
+                    <h3>How do I use the hacker typer?</h3>
+                    <ol class="brief-steps">
+                        <li>The terminal boots directly into black-ops tactical mode on page load.</li>
+                        <li>Type <code>help</code> in the console to list the full command matrix.</li>
+                        <li>Select <b>[ 01 // HACKER TYPER ]</b> (or type <code>hacker</code>) and mash any key to stream code.</li>
+                        <li>Switch the phosphor color with <code>theme amber</code>, or use the theme button up top.</li>
+                        <li>Press <b>F11</b> for edge-to-edge cinematic fullscreen mode.</li>
+                    </ol>
+                </section>
+
+                <section class="brief-section">
+                    <h3>Frequently asked questions</h3>
+                    <dl class="brief-faq">
+                        <dt>Is this a real hacking tool?</dt>
+                        <dd>No. SPECTRE-9 is 100% simulated visual theatre — no backend, no network activity, no real
+                            system is ever touched.</dd>
+
+                        <dt>How do I use the hacker typer?</dt>
+                        <dd>Hit the HACKER TYPER button (or type <code>hacker</code>) and mash any key. Press ESC to
+                            stop.</dd>
+
+                        <dt>Does it work on mobile and is it free?</dt>
+                        <dd>Yes to both. It runs in any modern browser, on desktop and phone, with no account and no
+                            download.</dd>
+
+                        <dt>Can I use it to look like a hacker in front of my friends?</dt>
+                        <dd>That is literally what it is for: a cinematic boot, a Matrix mode and a breach simulation
+                            that look like a movie.</dd>
+
+                        <dt>Can I use this for a hacker prank or fake hacking screen joke?</dt>
+                        <dd>Yes! SPECTRE-9 is the ultimate fake hacker tool for a harmless hacking prank. Press F11 for fullscreen, start hacker typing by mashing keys, or type <code>breach</code> to trigger a simulated hacked screen red alert.</dd>
+                    </dl>
+                </section>
+
+                <p class="brief-disclaimer">⚠ SIMULATION MODE // NO REAL NETWORK ACTIVITY // NO REAL SYSTEM WAS
+                    ACCESSED</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================ EMP SHOCKWAVE ============================ -->
+    <div id="emp-shockwave" class="emp-shockwave" aria-hidden="true"></div>
+
+    <!-- ============================ CYBER DEFENSE WARGAME MODAL ============================ -->
+    <div id="cyberwar-modal" class="cyberwar-modal" aria-hidden="true" inert>
+        <div class="cyberwar-box">
+            <div class="cw-header">
+                <div class="cw-title">⚡ SPECTRE-9 CYBER DEFENSE WARGAME</div>
+                <div class="cw-hud-stats">
+                    <span class="cw-score" id="cw-score">SCORE: 0</span>
+                    <span class="cw-threat" id="cw-threat">THREAT: 75%</span>
+                    <button class="surv-btn" id="btn-cw-close" title="Exit Wargame">✕</button>
+                </div>
+            </div>
+            <div class="cw-body">
+                <div class="cw-vector">
+                    <div id="cw-vector-title">INCOMING THREAT DETECTED</div>
+                    <div class="cw-vector-detail" id="cw-vector-detail">Analyzing attack vectors...</div>
+                </div>
+                <div class="cw-timer-wrap">
+                    <div class="cw-timer-fill" id="cw-timer-fill"></div>
+                </div>
+                <div class="cw-command-needed" id="cw-command-needed">
+                    TYPE COUNTERMEASURE: <b>firewall drop</b>
+                </div>
+                <div class="cw-inputline">
+                    <span>operator@spectre-9:~$</span>
+                    <input type="text" id="cw-input" class="cw-input" placeholder="Type countermeasure command..." aria-label="Cyber defense countermeasure command" autocomplete="off" spellcheck="false">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================ SURVEILLANCE MODAL ============================ -->
+    <div id="surveillance-modal" class="surveillance-modal" aria-hidden="true" inert>
+        <div class="surv-box">
+            <div class="surv-header">
+                <div class="surv-title" id="surv-ch-name">[CAM-01] ORBITAL RECON DRONE [ALPHA]</div>
+                <div class="surv-controls">
+                    <span id="surv-mode-label" class="t-cyan">MODE: NVG</span>
+                    <button class="surv-btn" id="btn-surv-mode">CYCLE SPECTRUM</button>
+                    <button class="surv-btn" id="btn-surv-next">NEXT CAM</button>
+                    <button class="surv-btn" id="btn-surv-close">✕</button>
+                </div>
+            </div>
+            <div class="surv-canvas-wrap">
+                <canvas id="surv-canvas" class="surv-canvas"></canvas>
+            </div>
+            <div class="surv-footer">
+                <span id="surv-ch-loc" class="t-dim">LOCATION: SECTOR-09 PERIMETER</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================ CIPHER & STEGO LAB MODAL ============================ -->
+    <div id="cipher-modal" class="cipher-modal" aria-hidden="true" inert>
+        <div class="cipher-box">
+            <div class="cipher-header">
+                <div class="cipher-title">🔐 SPECTRE-9 CRYPTOGRAPHIC &amp; STEGO LAB</div>
+                <button class="cipher-btn" id="btn-cipher-close">✕</button>
+            </div>
+            <div class="cipher-controls">
+                <select id="cipher-algo" class="cipher-select" aria-label="Cryptographic algorithm">
+                    <option value="base64">Base64</option>
+                    <option value="hex">Hexadecimal Dump</option>
+                    <option value="rot13">ROT13 Cipher</option>
+                    <option value="caesar">Caesar Shift</option>
+                    <option value="xor">XOR One-Time Pad</option>
+                    <option value="binary">8-bit Binary Stream</option>
+                </select>
+                <input type="text" id="cipher-key" class="cipher-key-input" placeholder="Key / Shift (e.g. 3 or SPECTRE)" value="SPECTRE" aria-label="Cryptographic key or Caesar shift">
+                <button class="cipher-btn" id="btn-cipher-enc">ENCODE</button>
+                <button class="cipher-btn" id="btn-cipher-dec">DECODE</button>
+            </div>
+            <div class="cipher-io-grid">
+                <textarea id="cipher-input" class="cipher-textarea" placeholder="Enter plaintext or ciphertext payload here..." aria-label="Cryptographic plaintext or ciphertext input">CLASSIFIED_SPECTRE_OVERRIDE_KEY_ALPHA_09</textarea>
+                <textarea id="cipher-output" class="cipher-textarea" readonly placeholder="Output stream..." aria-label="Cryptographic output stream"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================ EXPLOIT BUILDER MODAL ============================ -->
+    <div id="exploit-modal" class="exploit-modal" aria-hidden="true" inert>
+        <div class="exp-box">
+            <div class="exp-header">
+                <div class="exp-title">🛠️ ZERO-DAY EXPLOIT CHAIN BUILDER</div>
+                <button class="exp-btn" id="btn-exp-close">✕</button>
+            </div>
+            <div class="exp-form-grid">
+                <div class="exp-form-item">
+                    <label for="exp-arch">TARGET ARCHITECTURE</label>
+                    <select id="exp-arch" class="exp-select" aria-label="Target CPU architecture">
+                        <option value="x86_64">x86_64 AMD64 Hardened</option>
+                        <option value="arm64">ARM64 / AArch64</option>
+                        <option value="mips">MIPS32 Embedded Router</option>
+                        <option value="riscv">RISC-V 64-bit Core</option>
+                    </select>
+                </div>
+                <div class="exp-form-item">
+                    <label for="exp-vector">EXPLOIT VECTOR</label>
+                    <select id="exp-vector" class="exp-select" aria-label="Exploit vector technique">
+                        <option value="bof">Stack Buffer Overflow</option>
+                        <option value="rop">ROP Gadget Return Chain</option>
+                        <option value="heap">Heap Spray &amp; Use-After-Free</option>
+                        <option value="fmt">Format String Memory Write</option>
+                    </select>
+                </div>
+                <div class="exp-form-item">
+                    <label for="exp-evasion">EVASION LAYER</label>
+                    <select id="exp-evasion" class="exp-select" aria-label="Anti-sandbox evasion layer">
+                        <option value="xor">Polymorphic XOR Sled</option>
+                        <option value="timing">Anti-Sandbox Timing Evasion</option>
+                        <option value="hollow">Process Thread Hijacker</option>
+                    </select>
+                </div>
+            </div>
+            <div class="exp-controls">
+                <button class="exp-btn" id="btn-exp-gen">REGENERATE PAYLOAD</button>
+                <button class="exp-btn t-crit" id="btn-exp-fire">⚡ TEST FIRE SIMULATION</button>
+            </div>
+            <pre class="exp-code-block" id="exp-code-output"></pre>
+        </div>
+    </div>
+
+    <!-- ============================ MATRIX MODE ============================ -->
+    <div id="matrix-mode" class="matrix-mode" aria-hidden="true" inert>
+        <canvas id="matrix-canvas" class="matrix-canvas"></canvas>
+        <div class="matrix-hud">
+            <div class="matrix-terminal" id="matrix-terminal"></div>
+        </div>
+        <div class="matrix-exit-hint">PRESS <span>ESC</span> TO EXIT MATRIX MODE</div>
+    </div>
+
+    <!-- ============================ BREACH OVERLAY ============================ -->
+    <div id="breach-overlay" class="breach-overlay" aria-hidden="true" inert>
+        <div class="breach-box">
+            <pre class="breach-output" id="breach-output"></pre>
+        </div>
+    </div>
+
+    <!-- ============================ GPU HASH CRACKER MODAL ============================ -->
+    <div id="hashcracker-modal" class="cipher-modal" aria-hidden="true" inert>
+        <div class="cipher-box hc-box">
+            <div class="cipher-header">
+                <div class="cipher-title">⚙️ SPECTRE-9 // GPU HASH CRACKER v3.1.7</div>
+                <div style="display:flex;align-items:center;gap:12px">
+                    <span id="hc-status" class="hc-status-idle">IDLE</span>
+                    <button class="cipher-btn" id="btn-hc-close">✕</button>
+                </div>
+            </div>
+            <div class="hc-controls">
+                <select id="hc-algo" class="cipher-select" aria-label="Hash algorithm">
+                    <option value="md5">MD5-128bit (8.4 GH/s)</option>
+                    <option value="sha1">SHA-1 160bit (3.2 GH/s)</option>
+                    <option value="sha256">SHA-256 256bit (1.1 GH/s)</option>
+                    <option value="ntlm">NTLM / Windows (16.2 GH/s)</option>
+                    <option value="bcrypt">bcrypt $2b$12$ (23.4 KH/s)</option>
+                </select>
+                <select id="hc-wordlist" class="cipher-select" aria-label="Wordlist dictionary">
+                    <option value="rockyou">RockYou 14M</option>
+                    <option value="common">Common Passwords</option>
+                    <option value="spectre">SPECTRE Custom Dict</option>
+                </select>
+                <button class="cipher-btn" id="btn-hc-gen">GENERATE HASH</button>
+                <button class="cipher-btn" id="btn-hc-crack" style="color:var(--green-core);border-color:var(--green)">▶ CRACK</button>
+                <button class="cipher-btn" id="btn-hc-stop" style="color:var(--red);border-color:var(--red-dim)">■ STOP</button>
+            </div>
+            <input type="text" id="hc-hash-input" class="cipher-textarea hc-hash-field" placeholder="Paste hash here or click GENERATE HASH..." aria-label="Target hash string" style="height:36px;resize:none;font-size:11px">
+            <div class="hc-progress-wrap">
+                <div class="hc-progress-track"><div class="hc-progress-fill" id="hc-progress-fill"></div></div>
+                <span class="hc-progress-label" id="hc-progress-label">0%</span>
+            </div>
+            <div class="hc-log-wrap" id="hc-log"></div>
+        </div>
+    </div>
+
+    <!-- ============================ DARKNET INTEL FEED MODAL ============================ -->
+    <div id="darknet-modal" class="cipher-modal" aria-hidden="true" inert>
+        <div class="cipher-box dn-box">
+            <div class="cipher-header">
+                <div class="cipher-title">🕷️ DARKNET // THREAT INTELLIGENCE FEED</div>
+                <div style="display:flex;gap:8px">
+                    <button class="cipher-btn" id="btn-dn-scan">🔍 SCAN NOW</button>
+                    <button class="cipher-btn" id="btn-dn-refresh">↺ REFRESH</button>
+                    <button class="cipher-btn" id="btn-dn-close">✕</button>
+                </div>
+            </div>
+            <div class="dn-grid">
+                <div class="dn-section">
+                    <div class="dn-section-title">💾 RECENT DATA BREACHES</div>
+                    <div class="dn-breach-list" id="dn-breach-list"></div>
+                </div>
+                <div class="dn-section">
+                    <div class="dn-section-title">📡 C2 BEACON TRACKER</div>
+                    <div class="dn-c2-list" id="dn-c2-list"></div>
+                </div>
+                <div class="dn-section">
+                    <div class="dn-section-title">💀 EXPLOIT MARKET (LIVE)</div>
+                    <div class="dn-exploit-list" id="dn-exploit-list"></div>
+                </div>
+                <div class="dn-section">
+                    <div class="dn-section-title">🔴 LIVE THREAT FEED</div>
+                    <div class="dn-live-feed" id="dn-live-feed"></div>
+                </div>
+            </div>
+            <div class="dn-scan-section">
+                <div class="dn-section-title">🌐 RECON SCAN OUTPUT</div>
+                <div class="dn-scan-output" id="dn-scan-output"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================ NO-JS FALLBACK (also crawlable) ============================ -->
+    <noscript>
+        <div class="noscript-fallback">
+            <h2>JavaScript is required to run the SPECTRE-9 terminal</h2>
+            <p><strong>SPECTRE-9</strong> is a free <strong>hacker typer</strong> (also searched as <strong>hackertyper</strong> or <strong>hacker type</strong>), <strong>fake hacking screen</strong>, and <strong>hacker prank</strong> simulator that runs entirely in your browser. Whether you need a harmless <strong>hacking prank</strong>, a cinematic <strong>fake hacker</strong> movie prop, or an edge-to-edge <strong>hacked screen</strong> alert, SPECTRE-9 delivers instant <strong>hacker typing</strong> with zero setup.</p>
+            <ul>
+                <li>Mash any key for instant <strong>hacker typing</strong> — syntax-highlighted code pours onto the screen.</li>
+                <li>60+ fake commands including <code>scan</code>, <code>trace</code>, <code>breach</code>,
+                    <code>nuke</code>, <code>geoip</code>, and <code>decrypt</code>.</li>
+                <li>5 CRT phosphor themes, Matrix mode, breach simulation and an interactive cyber defense wargame.</li>
+                <li>100% simulated: no backend, no network code, no real hacking — safe and free.</li>
+            </ul>
+            <div class="noscript-links" style="margin-top: 16px; padding-top: 12px; border-top: 1px solid rgba(45,220,130,0.2);">
+                <span style="color: #3e9970;">100% simulated &mdash; no backend, no network code, no real hacking.</span>
+            </div>
+        </div>
+    </noscript>
+
+    <!-- ============================ SCRIPTS (bundled, original load order preserved) ============================ -->
+    <script>
+        import '../scripts/audio.js';
+        import '../scripts/synth.js';
+        import '../scripts/typewriter.js';
+        import '../scripts/worldmap.js';
+        import '../scripts/radar.js';
+        import '../scripts/monitor.js';
+        import '../scripts/topology.js';
+        import '../scripts/encryption.js';
+        import '../scripts/satfeed.js';
+        import '../scripts/surveillance.js';
+        import '../scripts/stego.js';
+        import '../scripts/exploitbuilder.js';
+        import '../scripts/hashcracker.js';
+        import '../scripts/darknet.js';
+        import '../scripts/memory.js';
+        import '../scripts/cyberwar.js';
+        import '../scripts/eventlog.js';
+        import '../scripts/datastream.js';
+        import '../scripts/matrix.js';
+        import '../scripts/breach.js';
+        import '../scripts/commands.js';
+        import '../scripts/terminal.js';
+        import '../scripts/hackertyper.js';
+        import '../scripts/boot.js';
+        import '../scripts/main.js';
+    </script>
+</body>
+
+</html>

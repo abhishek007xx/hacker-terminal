@@ -1,0 +1,24 @@
+{
+  "name": "SPECTRE-9 // Black-Ops Hacker Terminal",
+  "short_name": "SPECTRE-9",
+  "description": "A cinematic, 100% simulated hacker terminal and hacker typer. Feel like a hacker in one click — no install, no skills, no real hacking.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#02060a",
+  "theme_color": "#37ff8b",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    }
+  ]
+}

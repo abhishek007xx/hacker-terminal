@@ -1,0 +1,92 @@
+# SPECTRE-9 // Hacker Typer, Fake Hacking Screen & Hacking Prank Simulator
+
+> SPECTRE-9 is a free, browser-based **hacker typer** (also known as **hackertyper** or **hacker type**), **fake hacking screen**, and **hacker prank** simulator. Designed for harmless office pranks, video production, streaming backgrounds, and entertainment, it lets anyone experience cinematic **hacker typing** with zero setup. 100% simulated client-side with no backend, no real network exploits, and no real hacking.
+
+## Overview
+- **Name**: SPECTRE-9 Hacker Terminal & Hacker Typer
+- **Alternate Names**: HackerTyper, Hacker Type, Fake Hacking Screen, Hacked Screen Simulator, Fake Hacker Simulator, Hacking Prank Terminal
+- **Category**: Entertainment Web Application / Interactive Cyber Simulation
+- **License / Access**: 100% Free, no account or installation required
+- **Platform**: Any modern web browser (Desktop, Tablet, Mobile)
+- **Primary Use Cases**: Harmless hacking prank, fake hacking screen, fake hacker movie props, Twitch/YouTube stream overlays, entertaining hacker typing simulator
+
+## Key Features
+1. **Hacker Typer Mode**: Mash any keyboard keys to stream authentic-looking C kernel, cryptography routines, and assembly code with real-time syntax coloring.
+2. **60+ Simulated CLI Commands**: Fully functional interactive terminal supporting commands like `scan`, `trace`, `breach`, `matrix`, `nuke`, `decrypt`, `geoip`, `defcon`, `payload`, `sat`, and `theme`.
+3. **5 CRT Phosphor Color Themes**: Green (default P1 phosphor), Cyan (ice cyber), Amber (vintage P3 phosphor), Red (breach alert), and Purple (synthwave).
+4. **Cinematic Hollywood Modes**:
+   - **Matrix Rain**: Edge-to-edge falling green katakana and hexadecimal glyphs (`matrix` command).
+   - **Breach Alert & Hacked Screen**: Fullscreen pulsing red "CRITICAL INTRUSION" override (`breach` command) to simulate an authentic hacked screen.
+   - **EMP Shockwave**: Visual screen distortion wave (`nuke` command).
+   - **Cyber Defense Wargame**: Real-time simulated threat mitigation game with defense vectors (`cw` command).
+5. **Procedural Web Audio Engine**: Browser-synthesized mechanical keyboard clicks for realistic hacker typing sounds, modem handshakes, sonar pings, and procedural synthwave ambient music with zero external audio assets.
+6. **Tactical Lab Tools**:
+   - Drone & CCTV Surveillance matrix (`cam` command).
+   - Steganography & Cipher lab (`cipher` command).
+   - Zero-day exploit chain builder (`exploit` command).
+   - GPU hash cracking simulation (`hashcrack` command).
+   - Live darknet threat feed (`darknet` command).
+
+## How to Use
+
+### 1. Hacker Typer (Fast Code Streaming)
+1. Open the website on any desktop or mobile browser.
+2. Select **[01 // HACKER TYPER]** on the terminal titlebar (or click the Hacker Typer button in the sidebar).
+3. Press **F11** or click the fullscreen icon `[⛶]` for full cinematic fake hacking screen immersion.
+4. Mash any keys on your keyboard rapidly. Syntactically highlighted source code streams onto the display in real time for effortless hacker typing.
+5. Press **ESC** or toggle to Command Run mode to pause typing.
+
+### 2. Executing Simulated Commands
+1. Select **[02 // COMMAND RUN]** on the terminal titlebar.
+2. Type `help` and hit **Enter** to inspect the 60+ available simulation commands.
+3. Try popular fake hacking commands:
+   - `scan` — runs a network port reconnaissance scan.
+   - `matrix` — launches edge-to-edge falling code rain.
+   - `breach` — triggers a Hollywood-style security breach hacked screen overlay.
+   - `trace` — tracks simulated multi-hop satellite routes.
+   - `geoip 8.8.8.8` — displays simulated intelligence dossier.
+   - `theme amber` — switches the CRT phosphor display to vintage amber.
+
+## Popular Terminal Commands
+| Command | Arguments | Description |
+| :--- | :--- | :--- |
+| `help` | `[category]` | Displays tactical command catalog and usage syntax |
+| `hacker` | none | Engages Hacker Typer mode for rapid hacker typing |
+| `scan` | `[target]` | Initiates multi-threaded port scan simulation |
+| `matrix` | none | Starts fullscreen digital rain animation (ESC to exit) |
+| `breach` | none | Triggers simulated hacked screen red alert and alarm |
+| `nuke` | none | Discharges visual EMP shockwave across all monitors |
+| `trace` | `[ip]` | Tracks multi-hop satellite and onion routing relays |
+| `decrypt` | `[hash]` | Simulates GPU brute-force hash cracking |
+| `geoip` | `[ip]` | Generates procedural geographical intelligence dossier |
+| `defcon` | `[1-5]` | Adjusts global military defense readiness status |
+| `theme` | `[green\|cyan\|amber\|red\|purple]` | Cycles or sets the CRT phosphor color theme |
+| `synth` | none | Toggles procedural ambient synthwave background audio |
+| `cw` | none | Opens interactive real-time cyber defense wargame |
+| `clear` | none | Wipes active terminal output screen |
+
+## Safety, Legality and Privacy
+- **100% Simulated**: SPECTRE-9 is a fake hacker simulation. It contains no malicious payloads, executes no actual network exploits, and does not connect to external servers or targets.
+- **Client-Side Only**: All logic, graphics, audio synthesis, and text generators execute strictly in the client's web browser.
+- **Privacy First**: Zero user tracking, zero data collection, no accounts, and no personal information stored or transmitted.
+- **Safe for All Ages**: Intended purely for harmless hacker pranks, video filmmaking, learning keyboard flow, and entertainment.
+
+## Frequently Asked Questions
+
+### Q: What is a hacker typer and how does it work?
+**A:** A hacker typer (also searched as hackertyper or hacker type) is an interactive typing tool that generates realistic, syntax-highlighted programming code and terminal commands on the screen as you mash random keys on your keyboard. It creates the illusion that you are rapidly doing authentic hacker typing like an elite computer hacker in a movie.
+
+### Q: How do you make your computer look like a fake hacking screen?
+**A:** Open SPECTRE-9 in your browser and press F11 (or click the fullscreen icon) to display a full-screen fake hacking screen. The terminal displays green CRT phosphor text, live system gauges, rotating radar sweeps, and a 3D wireframe globe. Press keys for instant hacker typing, or type commands like `matrix`, `scan`, and `breach`.
+
+### Q: Can I use this for a harmless hacking prank?
+**A:** Yes! SPECTRE-9 is the ideal tool for a harmless hacking prank or hacker prank with friends, classmates, and coworkers. You can leave the fake hacking screen open in fullscreen mode, or trigger a red alert breached hacked screen. Because it is 100% simulated, it is completely harmless and safe.
+
+### Q: What is the difference between this fake hacker simulator and real hacking?
+**A:** Real hacking involves unauthorized access and network exploitation, which is illegal. SPECTRE-9 is a fake hacker tool and cinematic simulation that runs completely in your web browser using HTML5 Canvas and JavaScript. It sends no network packets and accesses no private data.
+
+### Q: Does SPECTRE-9 work on mobile phones?
+**A:** Yes. On smartphones and tablets, SPECTRE-9 features a responsive layout with dedicated touch tabs (Terminal, Monitor, Network, and Logs) and on-screen keyboard support for mobile hacker typing.
+
+### Q: Does SPECTRE-9 play sound?
+**A:** Yes. SPECTRE-9 includes a procedural Web Audio synthesizer that generates mechanical keystrokes, radar chirps, modem tones, and ambient synthwave music without downloading external audio files. Audio is muted by default and can be toggled on with the audio button or `synth` command.

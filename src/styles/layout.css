@@ -8,15 +8,19 @@
     inset: 0;
     display: grid;
     grid-template-rows: var(--topbar-h) var(--statusbar-h) 1fr;
-    opacity: 0;
-    transform: scale(1.01);
-    transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
-    pointer-events: none;
+    /* explicit single column: without it the implicit `auto` track grows to the
+       max min-content of its children (nowrap topbar/statusbar rows) and the
+       whole shell renders wider than the viewport, silently clipping the right
+       edge behind body's overflow hidden */
+    grid-template-columns: minmax(0, 1fr);
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
 }
 
 .app.revealed {
     opacity: 1;
-    transform: scale(1);
+    transform: none;
     pointer-events: auto;
 }
 
@@ -105,6 +109,20 @@
     align-items: center;
     gap: var(--sp-2);
     margin-left: auto;
+    /* let the control cluster shrink and scroll on narrow desktops instead of
+       pushing past the viewport edge */
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+}
+
+.topbar-right::-webkit-scrollbar {
+    display: none;
+}
+
+.topbar-right>* {
     flex-shrink: 0;
 }
 
@@ -120,15 +138,15 @@
 }
 
 .icon-btn {
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     background: rgba(45, 220, 130, 0.06);
     border: var(--border-soft);
     color: var(--text-mid);
-    font-size: var(--fs-md);
+    font-size: 15px;
     line-height: 1;
     border-radius: var(--radius);
     cursor: pointer;
@@ -145,6 +163,20 @@
     box-shadow: var(--glow-green-sm);
 }
 
+.icon-btn svg {
+    display: block;
+    width: 14px;
+    height: 14px;
+    pointer-events: none;
+}
+
+.icon-mute-off,
+.icon-mute-on {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .icon-mute-on {
     display: none;
 }
@@ -154,7 +186,7 @@ body.muted .icon-mute-off {
 }
 
 body.muted .icon-mute-on {
-    display: inline;
+    display: inline-flex;
     color: var(--red);
 }
 
@@ -324,11 +356,15 @@ body.muted #btn-mute {
 .right-column {
     grid-area: right;
     display: grid;
-    grid-template-rows: auto minmax(130px, 1fr) auto;
+    grid-template-rows: minmax(0, auto) minmax(120px, 1fr) minmax(0, auto);
     gap: var(--sp-3);
     min-height: 0;
     min-width: 0;
-    overflow: hidden;
+    /* scroll instead of clipping when a short viewport can't fit all three */
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--green-dim) transparent;
 }
 
 .side-nav {
@@ -457,47 +493,41 @@ body.muted #btn-mute {
     text-shadow: var(--glow-red);
 }
 
-/* ============================ HACKER TYPER BADGE ============================ */
+/* ============================ HACKER TYPER HUD INDICATOR ============================ */
 .hacker-typer-badge {
     position: fixed;
-    left: 50%;
-    bottom: var(--sp-5);
-    transform: translate(-50%, 20px);
+    top: calc(var(--topbar-h) + 6px);
+    right: var(--sp-4);
     z-index: 500;
-    padding: var(--sp-2) var(--sp-4);
-    background: rgba(6, 20, 24, 0.9);
-    border: 1px solid var(--cyan-dim);
-    border-radius: 999px;
-    color: var(--cyan);
-    font-size: var(--fs-sm);
+    padding: 3px 10px;
+    background: rgba(3, 12, 10, 0.94);
+    border: 1px solid var(--green-core);
+    border-left: 3px solid var(--green-core);
+    border-radius: 2px;
+    color: var(--green-core);
+    font-size: 11px;
+    font-family: var(--font-mono);
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
     white-space: nowrap;
-    box-shadow: var(--glow-cyan), 0 8px 30px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 14px rgba(55, 255, 139, 0.22);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+    transform: translateY(-6px);
+    transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
 }
 
 .hacker-typer-badge.show {
     opacity: 1;
-    transform: translate(-50%, 0);
-}
-
-.hacker-typer-badge b {
-    color: var(--green-core);
-    border: 1px solid var(--green-dim);
-    border-radius: 3px;
-    padding: 0 5px;
-    margin: 0 2px;
+    transform: translateY(0);
 }
 
 .hacker-typer-badge .htb-dot {
-    color: var(--cyan);
-    animation: led-pulse 1.2s ease-in-out infinite;
-    margin-right: 4px;
+    color: var(--green-core);
+    animation: led-pulse 1s ease-in-out infinite;
+    margin-right: 5px;
 }
 
 /* ============================ FULLSCREEN / MISC ============================ */

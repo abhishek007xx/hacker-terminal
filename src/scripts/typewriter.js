@@ -89,7 +89,9 @@
                 if (opts.sound && window.NexusAudio && text[i] !== ' ') {
                     if (Math.random() < 0.55) window.NexusAudio.key();
                 }
-                this._scroll(container);
+                if (i % 3 === 0 || i === text.length - 1) {
+                    this._scroll(container);
+                }
                 const jitter = opts.jitter ? this.rand(0, opts.jitter) : 0;
                 await this.sleep(speed + jitter);
             }
@@ -149,15 +151,13 @@
         },
 
         _scroll(container) {
-            // scroll nearest scrollable ancestor to bottom
-            let el = container;
-            while (el && el !== document.body) {
-                if (el.scrollHeight > el.clientHeight &&
-                    getComputedStyle(el).overflowY !== 'visible') {
-                    el.scrollTop = el.scrollHeight;
-                    return;
-                }
-                el = el.parentElement;
+            if (!container) return;
+            // Direct scroll container fast-path without forced style recalculation
+            const parent = container.parentElement;
+            if (parent) {
+                parent.scrollTop = parent.scrollHeight;
+            } else {
+                container.scrollTop = container.scrollHeight;
             }
         },
 

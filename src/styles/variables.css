@@ -3,6 +3,57 @@
    Palette, spacing, glow, typography scale
    ============================================================ */
 
+/* ---- Web Fonts (Direct @font-face with font-display: swap & local fallback) ---- */
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('JetBrains Mono'), local('JetBrainsMono-Regular'),
+         url('https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: local('JetBrains Mono Bold'), local('JetBrainsMono-Bold'),
+         url('https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Share Tech Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('Share Tech Mono'), local('ShareTechMono-Regular'),
+         url('https://fonts.gstatic.com/s/sharetechmono/v16/J7aHnp1uDWRBEqV98dVQztYldFcLowEF.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('Space Mono'), local('SpaceMono-Regular'),
+         url('https://fonts.gstatic.com/s/spacemono/v17/i7dPIFZifjKcF5UAWdDRYEF8RQ.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: local('Space Mono Bold'), local('SpaceMono-Bold'),
+         url('https://fonts.gstatic.com/s/spacemono/v17/i7dMIFZifjKcF5UAWdDRaPpZUFWaHg.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
     /* ---- Core backgrounds (deep layered black) ---- */
     --bg-void: #02060a;
@@ -37,8 +88,9 @@
     --text-bright: #c8ffe0;
     --text: #7fe6ab;
     --text-mid: #4bbd82;
-    --text-dim: #327a58;
-    --text-muted: #22553f;
+    /* raised to pass WCAG AA 4.5:1 contrast vs #060f11 terminal bg */
+    --text-dim: #3e9970;
+    --text-muted: #3b8d66;
 
     /* ---- Glow tokens (controlled, not neon) ---- */
     --glow-green-sm: 0 0 4px rgba(55, 255, 139, 0.45);
@@ -220,7 +272,7 @@ body.theme-cyan {
     --text-bright: #e0faff;
     --text: #8be4ff;
     --text-mid: #49bce3;
-    --text-dim: #267491;
+    --text-dim: #349ab5;
     --text-muted: #154c61;
     --glow-green-sm: 0 0 4px rgba(63, 224, 255, 0.5);
     --glow-green-md: 0 0 10px rgba(63, 224, 255, 0.45);
@@ -241,7 +293,7 @@ body.theme-amber {
     --text-bright: #fff2d9;
     --text: #ffd080;
     --text-mid: #d69830;
-    --text-dim: #8c5d14;
+    --text-dim: #a87520;
     --text-muted: #5e3b08;
     --glow-green-sm: 0 0 4px rgba(255, 179, 64, 0.5);
     --glow-green-md: 0 0 10px rgba(255, 179, 64, 0.45);
@@ -262,7 +314,7 @@ body.theme-red {
     --text-bright: #ffe6e8;
     --text: #ff8593;
     --text-mid: #d94153;
-    --text-dim: #8c1e2b;
+    --text-dim: #b5293a;
     --text-muted: #5e0d16;
     --glow-green-sm: 0 0 4px rgba(255, 65, 85, 0.55);
     --glow-green-md: 0 0 12px rgba(255, 65, 85, 0.5);
@@ -283,7 +335,7 @@ body.theme-purple {
     --text-bright: #f4ecff;
     --text: #cca8ff;
     --text-mid: #a06eeb;
-    --text-dim: #6038a3;
+    --text-dim: #7e4cc4;
     --text-muted: #3b1b6e;
     --glow-green-sm: 0 0 4px rgba(185, 139, 255, 0.5);
     --glow-green-md: 0 0 10px rgba(185, 139, 255, 0.45);

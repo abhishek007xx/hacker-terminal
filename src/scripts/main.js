@@ -49,55 +49,59 @@
             this._wireMobileTabs();
             this._startClock();
 
-            // Kick off the boot sequence, reveal interface when done
-            if (window.Boot) {
-                window.Boot.init(() => this._enterInterface());
-                window.Boot.run();
-            } else {
-                this._enterInterface();
-            }
+            // Sync inert on all modals: when 'active' added -> remove inert, when removed -> set inert
+            this._wireModalInert();
+
+            // Engage tactical interface directly with no loading delay
+            this._enterInterface();
         },
 
         _enterInterface() {
             if (this.booted) return;
             this.booted = true;
 
-            // Reveal the app shell
+            // Reveal the app shell immediately
             if (this.appEl) {
                 this.appEl.setAttribute('aria-hidden', 'false');
-                requestAnimationFrame(() => this.appEl.classList.add('revealed'));
+                this.appEl.classList.add('revealed');
             }
 
-            // Initialize all simulation modules (canvas + panels)
+            // Initialize primary viewport modules
+            this._safe(() => window.Terminal && window.Terminal.init());
+            this._safe(() => window.HackerTyper && window.HackerTyper.init());
             this._safe(() => window.Monitor && window.Monitor.init());
             this._safe(() => window.Radar && window.Radar.init());
             this._safe(() => window.Topology && window.Topology.init());
             this._safe(() => window.Encryption && window.Encryption.init());
             this._safe(() => window.WorldMap && window.WorldMap.init());
             this._safe(() => window.SatFeed && window.SatFeed.init());
-            this._safe(() => window.Surveillance && window.Surveillance.init());
-            this._safe(() => window.StegoLab && window.StegoLab.init());
-            this._safe(() => window.ExploitBuilder && window.ExploitBuilder.init());
-            this._safe(() => window.HashCracker && window.HashCracker.init());
-            this._safe(() => window.DarknetFeed && window.DarknetFeed.init());
-            this._safe(() => window.NexusSynth && window.NexusSynth.init());
             this._safe(() => window.Memory && window.Memory.init());
-            this._safe(() => window.CyberWar && window.CyberWar.init());
             this._safe(() => window.EventLog && window.EventLog.init());
             this._safe(() => window.DataStream && window.DataStream.init());
-            this._safe(() => window.Matrix && window.Matrix.init());
-            this._safe(() => window.Breach && window.Breach.init());
-            this._safe(() => window.Terminal && window.Terminal.init());
-            this._safe(() => window.HackerTyper && window.HackerTyper.init());
 
-            // Nudge canvases to size correctly after the reveal transition
-            setTimeout(() => window.dispatchEvent(new Event('resize')), 120);
-            setTimeout(() => window.dispatchEvent(new Event('resize')), 800);
+            // Defer secondary/overlay tool initializations to idle time
+            const initOverlays = () => {
+                this._safe(() => window.Surveillance && window.Surveillance.init());
+                this._safe(() => window.StegoLab && window.StegoLab.init());
+                this._safe(() => window.ExploitBuilder && window.ExploitBuilder.init());
+                this._safe(() => window.HashCracker && window.HashCracker.init());
+                this._safe(() => window.DarknetFeed && window.DarknetFeed.init());
+                this._safe(() => window.NexusSynth && window.NexusSynth.init());
+                this._safe(() => window.CyberWar && window.CyberWar.init());
+                this._safe(() => window.Matrix && window.Matrix.init());
+                this._safe(() => window.Breach && window.Breach.init());
+            };
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(initOverlays, { timeout: 1000 });
+            } else {
+                setTimeout(initOverlays, 100);
+            }
 
-            // Auto-play the cinematic terminal intro
-            setTimeout(() => {
-                this._safe(() => window.Terminal && window.Terminal.playIntro());
-            }, 500);
+            // Nudge canvases to size correctly on next animation frame
+            requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
+
+            // Populate tactical terminal intro
+            this._safe(() => window.Terminal && window.Terminal.playIntro());
 
             // Focus the terminal when the user starts typing anywhere
             document.addEventListener('keydown', (e) => this._globalType(e));
@@ -109,8 +113,42 @@
             if (!window.Terminal || !window.Terminal.input) return;
             const active = document.activeElement;
             if (active === window.Terminal.input) return;
-            if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT')) return;
             // ignore when an overlay is active
+            if (document.body.classList.contains('matrix-active')) return;
+            if (document.body.classList.contains('hacker-typing')) return;
+            const brief = document.getElementById('brief-modal');
+            if (brief && brief.classList.contains('active')) return;
+            const breach = document.getElementById('breach-overlay');
+            if (breach && breach.classList.contains('active')) return;
+            // only hijack plain printable keys (no modifiers)
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+            if (e.key && e.key.length === 1) {
+                window.Terminal.focus();
+            }
+        },
+
+        /* ---------------- MISSION BRIEF (about / FAQ overlay) ---------------- */
+        toggleBrief(force) {
+            const brief = document.getElementById('brief-modal');
+            if (!brief) return;
+            const open = typeof force === 'boolean' ? force : !brief.classList.contains('active');
+            brief.classList.toggle('active', open);
+            brief.setAttribute('aria-hidden', open ? 'false' : 'true');
+            if (open) { brief.removeAttribute('inert'); } else { brief.setAttribute('inert', ''); }
+            document.body.classList.toggle('brief-open', open);
+
+            if (open) {
+                const close = document.getElementById('btn-brief-close');
+                if (close) close.focus();
+                if (window.NexusAudio) window.NexusAudio.blip(1150, 0.05, 'square', 0.05);
+            } else {
+                const btn = document.getElementById('btn-brief');
+                if (btn) btn.focus();
+            }
+        },
+
+        _globalType(e) {
+            // ignore when an overlay or modal is active
             if (document.body.classList.contains('matrix-active')) return;
             if (document.body.classList.contains('hacker-typing')) return;
             const breach = document.getElementById('breach-overlay');
@@ -127,11 +165,41 @@
             if (hc && hc.classList.contains('active')) return;
             const dn = document.getElementById('darknet-modal');
             if (dn && dn.classList.contains('active')) return;
+            if (document.body.classList.contains('brief-open')) return;
 
-            // only hijack plain printable keys (no modifiers)
+            const active = document.activeElement;
+            if (active && active !== (window.Terminal && window.Terminal.input) &&
+                (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT')) {
+                return;
+            }
+
+            // ignore modifiers, shortcuts, function keys, escape
             if (e.ctrlKey || e.metaKey || e.altKey) return;
-            if (e.key && e.key.length === 1) {
-                window.Terminal.focus();
+            const k = e.key;
+            if (k === 'Escape' || k === 'Tab' || k === 'CapsLock' ||
+                k === 'Shift' || k === 'Control' || k === 'Alt' ||
+                k === 'Meta' || k === 'ContextMenu' ||
+                (k && k.startsWith('Arrow')) ||
+                (k && k.startsWith('F') && k.length > 1 && !isNaN(k.slice(1)))) {
+                return;
+            }
+            if (k === '?') return;
+
+            const termMode = (window.Terminal && window.Terminal.mode) || 'typer';
+            if (termMode === 'typer' && window.HackerTyper) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (window.Terminal && window.Terminal.input) {
+                    window.Terminal.input.value = '';
+                    window.Terminal._syncMirror && window.Terminal._syncMirror();
+                    window.Terminal.input.blur();
+                }
+                if (!window.HackerTyper.active) window.HackerTyper.start();
+                window.HackerTyper._emit();
+            } else if (termMode === 'command' && window.Terminal) {
+                if (e.key && e.key.length === 1 && document.activeElement !== window.Terminal.input) {
+                    window.Terminal.focus();
+                }
             }
         },
 
@@ -155,6 +223,52 @@
             // Cipher Lab Button
             const btnCipher = document.getElementById('btn-cipher');
             if (btnCipher) btnCipher.addEventListener('click', () => window.StegoLab && window.StegoLab.open());
+
+            // Mission Brief (about / FAQ) overlay
+            const btnBrief = document.getElementById('btn-brief');
+            if (btnBrief) btnBrief.addEventListener('click', () => this.toggleBrief());
+
+            const btnBriefClose = document.getElementById('btn-brief-close');
+            if (btnBriefClose) btnBriefClose.addEventListener('click', () => this.toggleBrief(false));
+
+            const briefModal = document.getElementById('brief-modal');
+            if (briefModal) {
+                briefModal.addEventListener('click', (e) => {
+                    if (e.target === briefModal) this.toggleBrief(false);
+                });
+            }
+
+            // '?' opens the brief anywhere (except while typing), ESC closes it
+            document.addEventListener('keydown', (e) => {
+                const brief = document.getElementById('brief-modal');
+                if (!brief) return;
+                if (e.key === 'Escape' && brief.classList.contains('active')) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    this.toggleBrief(false);
+                    return;
+                }
+                if (e.key === '?') {
+                    const a = document.activeElement;
+                    const typing = a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT');
+                    if (typing || document.body.classList.contains('matrix-active') ||
+                        document.body.classList.contains('hacker-typing')) return;
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    this.toggleBrief();
+                }
+            });
+
+            // 'Clear log' control is a span with role="button" — make Enter/Space activate it
+            const clearLog = document.getElementById('btn-clearlog');
+            if (clearLog) {
+                clearLog.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        clearLog.click();
+                    }
+                });
+            }
 
             // Exploit Builder Button
             const btnExp = document.getElementById('btn-exploit');
@@ -188,6 +302,33 @@
                 if (this.appEl) this.appEl.classList.toggle('fullscreen-mode', isFs);
                 setTimeout(() => window.dispatchEvent(new Event('resize')), 60);
                 setTimeout(() => window.dispatchEvent(new Event('resize')), 300);
+            });
+        },
+
+        /* ---- Accessibility: sync `inert` on modal open/close ---- */
+        _wireModalInert() {
+            const MODAL_IDS = [
+                'brief-modal', 'cyberwar-modal', 'surveillance-modal',
+                'cipher-modal', 'exploit-modal', 'matrix-mode',
+                'hashcracker-modal', 'darknet-modal', 'breach-overlay'
+            ];
+            const observer = new MutationObserver((mutations) => {
+                for (const m of mutations) {
+                    if (m.type !== 'attributes' || m.attributeName !== 'class') continue;
+                    const el = m.target;
+                    const isOpen = el.classList.contains('active');
+                    if (isOpen) {
+                        el.removeAttribute('inert');
+                        el.setAttribute('aria-hidden', 'false');
+                    } else {
+                        el.setAttribute('inert', '');
+                        el.setAttribute('aria-hidden', 'true');
+                    }
+                }
+            });
+            MODAL_IDS.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) observer.observe(el, { attributes: true, attributeFilter: ['class'] });
             });
         },
 
@@ -293,7 +434,15 @@
         /* ---------------- ACTION BUTTONS ---------------- */
         _wireActions() {
             const ht = document.getElementById('btn-hacker');
-            if (ht) ht.addEventListener('click', () => window.HackerTyper && window.HackerTyper.toggle());
+            if (ht) {
+                ht.addEventListener('click', () => {
+                    if (window.Terminal) {
+                        window.Terminal.setMode(window.Terminal.mode === 'typer' ? 'command' : 'typer');
+                    } else if (window.HackerTyper) {
+                        window.HackerTyper.toggle();
+                    }
+                });
+            }
 
             const mx = document.getElementById('btn-matrix');
             if (mx) mx.addEventListener('click', () => window.Matrix && window.Matrix.enter());

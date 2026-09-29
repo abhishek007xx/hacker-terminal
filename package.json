@@ -1,0 +1,25 @@
+{
+  "name": "spectre-9-hacker-terminal",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SPECTRE-9 — a cinematic, 100% simulated hacker terminal & hacker typer web experience.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "og": "node tools/generate-og.mjs",
+    "smoke": "node tools/smoke.mjs",
+    "deploy": "astro build && wrangler pages deploy dist --project-name=hacker-terminal --branch=main"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.2.0",
+    "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0",
+    "sharp": "^0.34.5",
+    "wrangler": "^4.143.0"
+  }
+}

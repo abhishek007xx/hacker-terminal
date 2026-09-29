@@ -16,6 +16,21 @@
     }
 }
 
+/* ---------------- Topbar meta drops off item-by-item before it can ever
+     ellipsize — each breakpoint below is sized so the remaining items still
+     fit next to the brand + control cluster ---------------- */
+@media (max-width: 1540px) {
+    .topbar-meta .meta-item:nth-child(3) {
+        display: none;
+    }
+}
+
+@media (max-width: 1360px) {
+    .topbar-meta .meta-item:nth-child(2) {
+        display: none;
+    }
+}
+
 /* ---------------- Medium: shrink right column ---------------- */
 @media (max-width: 1280px) {
     :root {
@@ -35,10 +50,6 @@
 
 /* ---------------- Narrow desktop / small laptop ---------------- */
 @media (max-width: 1080px) {
-    .topbar-meta .meta-item:nth-child(2) {
-        display: none;
-    }
-
     :root {
         --right-w: 280px;
         --sidebar-w: 180px;
@@ -46,6 +57,14 @@
 
     .crypto-right,
     .radar-wrap {
+        display: none;
+    }
+}
+
+/* ---------------- Very narrow desktop: the single remaining meta item
+     would squeeze the controls, so the meta cluster steps aside entirely ---------------- */
+@media (max-width: 1160px) {
+    .topbar-meta {
         display: none;
     }
 }
@@ -67,8 +86,9 @@
         position: relative;
         inset: auto;
         min-height: 100vh;
+        min-height: 100dvh;
         grid-template-rows: auto auto 1fr;
-        padding-bottom: var(--mobile-tabs-h);
+        padding-bottom: calc(var(--mobile-tabs-h) + env(safe-area-inset-bottom, 0px));
     }
 
     /* --- Topbar wraps --- */
@@ -80,6 +100,8 @@
     }
 
     .topbar-meta {
+        /* must be re-enabled: the 1040px query hides it on desktop */
+        display: flex;
         order: 3;
         width: 100%;
         justify-content: flex-start;
@@ -87,8 +109,24 @@
         flex-wrap: wrap;
     }
 
+    .topbar-right {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        overflow: visible;
+    }
+
+    .topbar-brand {
+        /* let the brand line shrink instead of forcing the whole topbar
+           wider than the viewport */
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+    }
+
     .topbar-meta .meta-item {
         display: block !important;
+        /* wrap to the next line instead of ellipsizing mid-word */
+        flex-shrink: 0;
     }
 
     .topbar-right {
@@ -117,11 +155,15 @@
         font-size: 9px;
     }
 
-    /* --- Grid becomes single column with tab panes --- */
+    /* --- Grid becomes a single column with tab panes ---
+       flex column + flex:1 panes replaces the old magic `150px` height calc --- */
     .main-grid {
-        display: block;
+        display: flex;
+        flex-direction: column;
+        gap: var(--sp-2);
         padding: var(--sp-2);
         overflow: visible;
+        min-height: 0;
     }
 
     .sidebar,
@@ -135,13 +177,24 @@
     /* right column children promoted to top-level panes */
     .right-column {
         grid-template-rows: none;
+        overflow: visible;
+        /* on the MONITOR tab the dashboards come first — the identity sidebar
+           (profile + action buttons) follows underneath instead of pushing
+           every panel below the fold */
+        order: -1;
+    }
+
+    /* the bottom tab bar is the mobile navigation; the desktop sidebar nav
+       duplicates it (and its entries act on hidden panes), so it steps aside */
+    .side-nav {
+        display: none;
     }
 
     /* Active pane display driven by body[data-mtab] */
     body[data-mtab="terminal"] .terminal-region {
         display: flex;
-        height: calc(100vh - var(--mobile-tabs-h) - 150px);
-        min-height: 380px;
+        flex: 1 1 auto;
+        min-height: 55vh;
     }
 
     body[data-mtab="monitor"] .sidebar,
@@ -152,6 +205,7 @@
     body[data-mtab="monitor"] .right-column {
         display: grid;
         grid-template-rows: auto auto auto;
+        overflow: visible;
     }
 
     body[data-mtab="monitor"] .topo-panel {
@@ -161,10 +215,12 @@
     body[data-mtab="network"] .right-column {
         display: grid;
         grid-template-rows: auto;
+        overflow: visible;
     }
 
     body[data-mtab="network"] .topo-panel {
         display: flex;
+        flex: 1 1 auto;
         min-height: 420px;
     }
 
@@ -176,14 +232,13 @@
     body[data-mtab="log"] .eventlog-panel,
     body[data-mtab="log"] .datastream-panel {
         display: flex;
+        flex: 1 1 auto;
         min-height: 240px;
-        margin-bottom: var(--sp-2);
     }
 
     /* sidebar shown within monitor tab (identity + actions) */
     body[data-mtab="monitor"] .sidebar {
         display: flex;
-        margin-bottom: var(--sp-2);
     }
 
     .radar-wrap,
@@ -199,7 +254,8 @@
         bottom: 0;
         left: 0;
         right: 0;
-        height: var(--mobile-tabs-h);
+        height: calc(var(--mobile-tabs-h) + env(safe-area-inset-bottom, 0px));
+        padding-bottom: env(safe-area-inset-bottom, 0px);
         background: rgba(6, 14, 14, 0.95);
         border-top: 1px solid var(--emerald-line);
         backdrop-filter: blur(8px);
@@ -245,22 +301,36 @@
         letter-spacing: 3px;
     }
 
-    /* keep the Hacker Typer badge above the mobile tab bar */
+    /* keep the Hacker Typer HUD indicator docked neatly at top on mobile */
     .hacker-typer-badge {
-        bottom: calc(var(--mobile-tabs-h) + var(--sp-3));
+        top: calc(var(--topbar-h) + 4px);
+        right: var(--sp-2);
+        bottom: auto;
+        left: auto;
+        transform: translateY(-4px);
         font-size: 9px;
         letter-spacing: 1px;
-        padding: var(--sp-1) var(--sp-3);
-        max-width: 92vw;
-        white-space: normal;
-        text-align: center;
+        padding: 2px 6px;
+        max-width: 90vw;
     }
 }
 
 /* ---------------- Small phones ---------------- */
+@media (max-width: 560px) {
+    /* CONNECTION/NODE/SESSION flavor row would cost a whole extra wrapped
+       line up top; the statusbar LEDs below already carry the vibe */
+    .topbar-meta {
+        display: none;
+    }
+}
+
 @media (max-width: 480px) {
     .brand-name {
         font-size: var(--fs-lg);
+    }
+
+    .brand-sub {
+        display: none;
     }
 
     .datastream-content {

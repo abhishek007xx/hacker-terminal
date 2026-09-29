@@ -1,0 +1,103 @@
+---
+import '../styles/variables.css';
+import '../styles/utilities.css';
+
+const TITLE = 'ACCESS DENIED // SPECTRE-9';
+---
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#02060a" />
+    <meta name="robots" content="noindex" />
+    <title>{TITLE}</title>
+</head>
+
+<body>
+    <main class="nf">
+        <p class="nf-code">ERROR 404</p>
+        <h1 class="nf-title">ACCESS DENIED</h1>
+        <p class="nf-text">
+            The node you tried to reach does not exist in this sector. Either the route was scrubbed
+            from the grid, or someone blackholed your packet.
+        </p>
+        <p class="nf-hint">Meanwhile, the actual terminal is still live: a free browser
+            <strong>hacker typer</strong> and <strong>fake hacker terminal</strong> that makes you look
+            like a movie hacker — 100% simulated, no install, no account.</p>
+        <a class="nf-btn" href="/">[ RETURN TO SPECTRE-9 TERMINAL ]</a>
+    </main>
+</body>
+
+<style>
+    .nf {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--sp-3);
+        padding: clamp(24px, 6vw, 72px);
+        text-align: center;
+        background:
+            radial-gradient(ellipse 120% 80% at 50% 0%, rgba(15, 61, 46, 0.35), transparent 60%),
+            var(--bg-void);
+    }
+
+    .nf-code {
+        font-size: var(--fs-sm);
+        letter-spacing: 6px;
+        color: var(--red);
+        text-shadow: var(--glow-red);
+    }
+
+    .nf-title {
+        font-size: clamp(28px, 8vw, 56px);
+        font-weight: 800;
+        letter-spacing: 8px;
+        color: var(--green-core);
+        text-shadow: var(--glow-green-lg);
+    }
+
+    .nf-text {
+        max-width: 60ch;
+        color: var(--text);
+        line-height: 1.7;
+    }
+
+    .nf-hint {
+        max-width: 60ch;
+        color: var(--text-dim);
+        font-size: var(--fs-sm);
+        line-height: 1.7;
+    }
+
+    .nf-hint strong {
+        color: var(--text-bright);
+    }
+
+    .nf-btn {
+        margin-top: var(--sp-4);
+        display: inline-block;
+        padding: var(--sp-3) var(--sp-6);
+        font-family: var(--font-mono);
+        font-size: var(--fs-md);
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: var(--green-core);
+        text-decoration: none;
+        background: rgba(45, 220, 130, 0.1);
+        border: 1px solid var(--green-dim);
+        border-radius: var(--radius);
+        transition: all 0.25s var(--ease);
+    }
+
+    .nf-btn:hover {
+        background: rgba(45, 220, 130, 0.24);
+        box-shadow: var(--glow-green-lg);
+    }
+</style>
+
+</html>
