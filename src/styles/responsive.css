@@ -100,7 +100,11 @@
     }
 
     .topbar-meta {
-        /* must be re-enabled: the 1040px query hides it on desktop */
+        /* must be re-enabled: the 1160px query hides it on desktop.
+           flex-basis must be forced too — the base `flex: 1` (basis 0%) keeps
+           it share-wrapped with .topbar-right, leaving ~128px and clipping
+           every label mid-word */
+        flex: 0 0 100%;
         display: flex;
         order: 3;
         width: 100%;
@@ -187,6 +191,12 @@
     /* the bottom tab bar is the mobile navigation; the desktop sidebar nav
        duplicates it (and its entries act on hidden panes), so it steps aside */
     .side-nav {
+        display: none;
+    }
+
+    /* the MODE pill duplicates the active tab's tag and eats 154px of the
+       372px mobile titlebar — the tabs need that room */
+    .term-active-pill {
         display: none;
     }
 

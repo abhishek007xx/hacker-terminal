@@ -3,9 +3,9 @@
 
        node tools/probe.mjs
 
-Serves ./dist, opens Chrome at desktop + mobile viewports, and dumps
-bounding boxes / overflow measurements for the elements that usually
-misbehave. Not an assertion suite; just facts for tuning CSS.
+Serves ./dist, enters the app, then dumps bounding boxes / overflow
+measurements at desktop + mobile viewports. Facts for tuning CSS.
+Screenshots land in tools/shots/probe-*.png.
 ============================================================ */
 import { chromium } from 'playwright';
 import http from 'node:http';
@@ -85,6 +85,28 @@ const dump = async (label) => {
             }
         }
         lines.push(`doc scrollW=${document.documentElement.scrollWidth} innerW=${window.innerWidth}`);
+        // titlebar internals
+        const tt = document.querySelector('.term-tabs');
+        if (tt) {
+            const cs = getComputedStyle(tt);
+            const p = tt.parentElement;
+            const pcs = getComputedStyle(p);
+            const r = p.getBoundingClientRect();
+            lines.push(`tt: flex=${cs.flex} minW=${cs.minWidth} ovx=${cs.overflowX} | parent=<${p.tagName} class="${p.className}"> disp=${pcs.display} w=${Math.round(r.width)} gap=${pcs.gap} justify=${pcs.justifyContent}`);
+            const ctl = p.querySelector('.panel-controls');
+            if (ctl) {
+                const cr = ctl.getBoundingClientRect();
+                lines.push(`controls: w=${Math.round(cr.width)} x=${Math.round(cr.x)} children=${ctl.children.length} flexShrink=${getComputedStyle(ctl).flexShrink}`);
+                for (const c of ctl.children) lines.push(`  ctl-kid <${c.tagName} class="${c.className}"> w=${Math.round(c.getBoundingClientRect().width)}`);
+            }
+            lines.push(`tt box: x=${Math.round(tt.getBoundingClientRect().x)} w=${Math.round(tt.getBoundingClientRect().width)}`);
+            lines.push(`tt detail: pos=${cs.position} disp=${cs.display} maxW=${cs.maxWidth} w=${cs.width} basis=${cs.flexBasis} grow=${cs.flexGrow} float=${cs.float} box=${cs.boxSizing}`);
+            const pb = getComputedStyle(p, '::before');
+            const pa = getComputedStyle(p, '::after');
+            lines.push(`titlebar kids=${p.children.length}: ${[...p.children].map((c) => `<${c.tagName}.${c.className}>${Math.round(c.getBoundingClientRect().width)}`).join(' ')} | ::before="${pb.content}" ::after="${pa.content}"`);
+            const cb = getComputedStyle(p);
+            lines.push(`titlebar: pos=${cb.position} disp=${cb.display} w=${Math.round(r.width)} padL=${cb.paddingLeft} padR=${cb.paddingRight}`);
+        }
         const over = [];
         document.querySelectorAll('body *').forEach((el) => {
             const r = el.getBoundingClientRect();
@@ -124,7 +146,15 @@ for (const tab of ['monitor', 'network', 'log', 'terminal']) {
 }
 await page.screenshot({ path: join(root, 'tools', 'shots', 'probe-mobile.png') });
 
+/* intermediate widths — the 1000-1600 range hides meta items progressively */
+for (const w of [768, 1024, 1600]) {
+    await page.setViewportSize({ width: w, height: 900 });
+    await page.waitForTimeout(600);
+    const over = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    console.log(`width ${w}: doc overflow ${over > 0 ? over + 'px OVERFLOW' : '0px ok'}`);
+    await page.screenshot({ path: join(root, 'tools', 'shots', `probe-${w}.png`) });
+}
+
 await browser.close();
 server.close();
 
-await page.goto(url, { waitUntil: 'load' });
