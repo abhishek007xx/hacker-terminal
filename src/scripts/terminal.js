@@ -94,7 +94,9 @@
             this.mode = mode;
             const tabTyper = document.getElementById('tab-mode-typer');
             const tabCmd = document.getElementById('tab-mode-command');
-            const pill = document.getElementById('term-active-pill');
+            // the active tab IS the mode indicator now (the old MODE pill duplicated it)
+            document.body.classList.toggle('mode-typer', mode === 'typer');
+            document.body.classList.toggle('mode-command', mode === 'command');
 
             if (tabTyper) {
                 tabTyper.classList.toggle('active', mode === 'typer');
@@ -103,13 +105,6 @@
             if (tabCmd) {
                 tabCmd.classList.toggle('active', mode === 'command');
                 tabCmd.setAttribute('aria-selected', mode === 'command' ? 'true' : 'false');
-            }
-            if (pill) {
-                const ptext = pill.querySelector('.pill-text');
-                if (ptext) {
-                    ptext.textContent = mode === 'typer' ? 'MODE: HACKER TYPER' : 'MODE: COMMAND RUN';
-                }
-                pill.className = 'term-active-pill mode-' + mode;
             }
 
             if (window.NX && this.out) {

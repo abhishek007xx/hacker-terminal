@@ -233,7 +233,7 @@ const faqSchema = {
 </head>
 
 
-<body>
+<body class="mode-typer">
 
     <h1 class="sr-only">Hacker Typer &amp; Fake Hacker Terminal Simulator — SPECTRE-9 Black-Ops Command Center</h1>
 
@@ -363,18 +363,14 @@ const faqSchema = {
                     <div class="term-tabs" role="tablist" aria-label="Terminal Operating Modes">
                         <button class="term-tab active" id="tab-mode-typer" role="tab" aria-selected="true" data-mode="typer" title="Option 1: Hacker Typer — Mash any keys to pour out code">
                             <span class="tab-status-dot"></span>
-                            <span class="tab-title">01 // HACKER TYPER</span>
+                            <span class="tab-title"><span class="tt-full">01 // HACKER TYPER</span><span class="tt-short">01 // TYPER</span></span>
                             <span class="tab-mode-tag">MASH KEYS</span>
                         </button>
                         <button class="term-tab" id="tab-mode-command" role="tab" aria-selected="false" data-mode="command" title="Option 2: Command Run — Interactive CLI terminal">
                             <span class="tab-status-dot"></span>
-                            <span class="tab-title">02 // COMMAND RUN</span>
+                            <span class="tab-title"><span class="tt-full">02 // COMMAND RUN</span><span class="tt-short">02 // CMD RUN</span></span>
                             <span class="tab-mode-tag">CLI EXEC</span>
                         </button>
-                    </div>
-                    <div class="term-active-pill mode-typer" id="term-active-pill">
-                        <span class="pill-dot">●</span>
-                        <span class="pill-text">MODE: HACKER TYPER</span>
                     </div>
                     <div class="panel-controls" aria-hidden="true">
                         <span class="pc pc-min">─</span><span class="pc pc-max">▢</span><span
@@ -385,6 +381,7 @@ const faqSchema = {
                     <div class="terminal-output" id="terminal-output" role="log" aria-live="polite"
                         aria-label="Terminal output"><span class="t-line t-prompt-line">operator@spectre-9:~$ initializing black-ops tactical shell...</span></div>
                     <div class="terminal-inputline" id="terminal-inputline">
+                        <span class="typer-hint" id="typer-hint">hacker typer armed — mash any key</span>
                         <span class="terminal-prompt" id="terminal-prompt"><span class="prompt-user">operator@spectre-9</span><span class="prompt-sep">:</span><span
                             class="prompt-path">~</span><span class="prompt-dollar">$</span></span>
                         <span class="terminal-input-wrap">

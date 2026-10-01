@@ -194,12 +194,6 @@
         display: none;
     }
 
-    /* the MODE pill duplicates the active tab's tag and eats 154px of the
-       372px mobile titlebar — the tabs need that room */
-    .term-active-pill {
-        display: none;
-    }
-
     /* Active pane display driven by body[data-mtab] */
     body[data-mtab="terminal"] .terminal-region {
         display: flex;
@@ -331,6 +325,26 @@
        line up top; the statusbar LEDs below already carry the vibe */
     .topbar-meta {
         display: none;
+    }
+
+    /* both tabs must fit the 372px titlebar without horizontal scrolling:
+       short titles + drop the mode tags (the active tab's highlight and
+       the typer hint line already communicate the mode) */
+    .tt-full {
+        display: none;
+    }
+
+    .tt-short {
+        display: inline;
+    }
+
+    .tab-mode-tag {
+        display: none;
+    }
+
+    .term-tab {
+        padding: 0 var(--sp-2);
+        gap: 6px;
     }
 }
 

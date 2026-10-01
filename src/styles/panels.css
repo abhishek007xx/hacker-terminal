@@ -152,6 +152,11 @@
     background: rgba(45, 220, 130, 0.05);
 }
 
+/* short title variant swaps in on narrow viewports (see responsive.css) */
+.tt-short {
+    display: none;
+}
+
 .term-tab.active {
     color: var(--green-core);
     background: rgba(45, 220, 130, 0.12);
@@ -210,31 +215,29 @@
     border-color: rgba(0, 229, 255, 0.4);
 }
 
-.term-active-pill {
-    display: inline-flex;
+/* Hacker Typer mode replaces the shell prompt with a mash-keys hint
+   (the command prompt only makes sense in COMMAND RUN mode) */
+.typer-hint {
+    display: none;
     align-items: center;
     gap: 6px;
-    font-size: 10px;
-    font-family: var(--font-mono);
-    font-weight: 700;
-    letter-spacing: 1px;
-    padding: 2px 8px;
-    margin-right: var(--sp-2);
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid var(--border-soft);
-    border-radius: 2px;
     color: var(--green-core);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-shadow: var(--text-glow-soft);
     white-space: nowrap;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 0;
 }
 
-.term-active-pill.mode-command {
-    color: var(--cyan);
-    border-color: rgba(0, 229, 255, 0.35);
+body.mode-typer .typer-hint {
+    display: inline-flex;
 }
 
-.term-active-pill .pill-dot {
-    font-size: 8px;
-    animation: led-pulse 1.2s infinite ease-in-out;
+body.mode-typer #terminal-prompt {
+    display: none;
 }
 
 .terminal-body {
