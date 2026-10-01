@@ -108,6 +108,20 @@ const webAppSchema = {
                     url: `${SITE_URL}/#commands`
                 }
             ]
+        },
+        {
+            '@type': 'WebSite',
+            '@id': `${SITE_URL}/#website`,
+            name: 'Hacker Feel',
+            alternateName: ['HackerFeel', 'HackerFeel.com', 'SPECTRE-9'],
+            url: `${SITE_URL}/`,
+            description: DESCRIPTION,
+            publisher: {
+                '@type': 'Organization',
+                name: 'Hacker Feel Labs',
+                url: SITE_URL,
+                logo: ogImage
+            }
         }
     ]
 };
@@ -198,6 +212,13 @@ const faqSchema = {
 
     <title>{TITLE}</title>
 
+    <meta name="keywords" content="hacker typer, hackerfeel, hacker feel, fake hacking screen, hacker prank, hacker typing, fake hacker, hacker simulator, movie hacker screen, matrix rain, hacker terminal, cyber simulator" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="HackerFeel" />
+    <meta name="application-name" content="HackerFeel" />
+    <meta name="msapplication-TileColor" content="#02060a" />
+
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Hacker Feel // SPECTRE-9 Terminal" />
@@ -219,9 +240,12 @@ const faqSchema = {
 
     <!-- Favicon & Touch Icons -->
     <link rel="icon" type="image/png" sizes="64x64" id="favicon-link" href="/favicons/favicon-green.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <link rel="author" href="/humans.txt" />
 
     <!-- Fonts: preconnect to Google's font CDN; @font-face is inlined in CSS with font-display: swap -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -612,6 +636,16 @@ const faqSchema = {
                         <dt>Can I use this for a hacker prank or fake hacking screen joke?</dt>
                         <dd>Yes! SPECTRE-9 is the ultimate fake hacker tool for a harmless hacking prank. Press F11 for fullscreen, start hacker typing by mashing keys, or type <code>breach</code> to trigger a simulated hacked screen red alert.</dd>
                     </dl>
+                </section>
+
+                <section class="brief-section">
+                    <h3>Privacy &amp; Data Ethics Policy</h3>
+                    <p>
+                        HackerFeel operates strictly client-side within your browser. We never track, log, or record your keystrokes, IP address, or terminal sessions. No spyware, no tracking cookies, and no real exploitation code exists anywhere within this project.
+                    </p>
+                    <p style="margin-top: 8px;">
+                        Contact &amp; Inquiries: <a href="mailto:ops@hackerfeel.com" style="color:var(--green-core);text-decoration:underline;">ops@hackerfeel.com</a> // Domain: <strong>hackerfeel.com</strong>
+                    </p>
                 </section>
 
                 <p class="brief-disclaimer">⚠ SIMULATION MODE // NO REAL NETWORK ACTIVITY // NO REAL SYSTEM WAS

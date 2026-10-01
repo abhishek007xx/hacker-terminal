@@ -1,0 +1,15 @@
+/* TEAM */
+Site: HackerFeel // SPECTRE-9 Black-Ops Simulator
+Domain: https://hackerfeel.com
+Contact: ops@hackerfeel.com
+Location: Global / Web
+
+/* THANKS */
+To everyone creating cinematic hacker props, educational cybersecurity sims, and harmless pranks.
+
+/* TECHNOLOGY COLOPHON */
+Framework: Astro (Static SSR/SSG)
+Styling: Custom CSS3 CRT Scanline Engine + Phosphor Shaders
+Audio: Web Audio API Procedural Sound Synthesizer
+Hosting: Cloudflare Pages Edge Network
+Standards: HTML5, CSS3, Schema.org, RFC 9116, Open Graph, WebManifest PWA

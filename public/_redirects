@@ -1,0 +1,6 @@
+# Cloudflare Pages Redirects & Rewrites
+# https://developers.cloudflare.com/pages/platform/redirects/
+
+# Fallback clean URLs
+/sitemap.xml /sitemap.xml 200
+/security.txt /.well-known/security.txt 301

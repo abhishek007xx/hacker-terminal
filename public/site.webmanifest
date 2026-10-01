@@ -1,6 +1,8 @@
 {
   "name": "HackerFeel // Black-Ops Hacker Terminal",
   "short_name": "HackerFeel",
+  "id": "/",
+  "lang": "en",
   "description": "A cinematic, 100% simulated hacker terminal and hacker typer. Feel like a hacker in one click — no install, no skills, no real hacking.",
   "start_url": "/",
   "scope": "/",
@@ -8,6 +10,23 @@
   "orientation": "any",
   "background_color": "#02060a",
   "theme_color": "#37ff8b",
+  "categories": ["entertainment", "utilities", "games"],
+  "shortcuts": [
+    {
+      "name": "Hacker Typer",
+      "short_name": "Typer",
+      "description": "Instant hacker typing stream",
+      "url": "/#hackertyper",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Matrix Rain Mode",
+      "short_name": "Matrix",
+      "description": "Fullscreen falling digital code rain",
+      "url": "/#matrix",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
   "icons": [
     {
       "src": "/icon-192.png",
@@ -20,6 +39,12 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/favicon.svg",
