@@ -7,7 +7,7 @@ import sitemap from '@astrojs/sitemap';
    e.g. 'https://spectre-9.pages.dev' or 'https://yourdomain.com'
    Used for: canonical link, Open Graph, sitemap, robots, JSON-LD.
    ------------------------------------------------------------------ */
-const SITE = process.env.SITE_URL || 'https://hacker-terminal-4mk.pages.dev';
+const SITE = process.env.SITE_URL || 'https://hackerfeel.com';
 
 export default defineConfig({
     site: SITE,

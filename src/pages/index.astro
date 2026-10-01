@@ -12,7 +12,7 @@ import '../styles/effects.css';
 import '../styles/responsive.css';
 import '../styles/utilities.css';
 
-const SITE_URL = (Astro.site?.toString() ?? 'https://hacker-terminal-4mk.pages.dev').replace(/\/$/, '');
+const SITE_URL = (Astro.site?.toString() ?? 'https://hackerfeel.com').replace(/\/$/, '');
 const PAGE_PATH = '/';
 
 const TITLE = 'Hacker Typer — Fake Hacking Screen & Hacking Prank Simulator | SPECTRE-9';
@@ -29,6 +29,8 @@ const webAppSchema = {
             '@id': `${SITE_URL}/#webapp`,
             name: 'SPECTRE-9 // Hacker Typer & Fake Hacking Screen Simulator',
             alternateName: [
+                'HackerFeel',
+                'hackerfeel.com',
                 'SPECTRE-9 Hacker Terminal',
                 'Hacker Typer Simulator',
                 'Fake Hacking Screen',
@@ -57,7 +59,7 @@ const webAppSchema = {
             offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
             author: {
                 '@type': 'Organization',
-                name: 'SPECTRE-9 Simulation Labs',
+                name: 'HackerFeel / SPECTRE-9 Simulation Labs',
                 url: SITE_URL
             },
             featureList: [
@@ -215,10 +217,10 @@ const faqSchema = {
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content="SPECTRE-9 hacker terminal interface with green CRT phosphor text" />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" id="favicon-link" href="/favicon.svg" />
-    <link rel="alternate icon" href="/favicon.ico" sizes="32x32" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <!-- Favicon & Touch Icons -->
+    <link rel="icon" type="image/png" sizes="64x64" id="favicon-link" href="/favicons/favicon-green.png" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
     <!-- Fonts: preconnect to Google's font CDN; @font-face is inlined in CSS with font-display: swap -->
@@ -251,7 +253,10 @@ const faqSchema = {
 
         <!-- ---------- TOP BAR ---------- -->
         <header class="topbar">
-            <div class="topbar-brand">
+            <div class="topbar-brand" title="SPECTRE-9 // Black-Ops Cyber Warfare">
+                <div class="brand-logo-wrap">
+                    <img src="/logo.png" alt="SPECTRE-9 Skull Logo" class="brand-logo" width="28" height="28" loading="eager" />
+                </div>
                 <span class="brand-glyph">&gt;#</span>
                 <span class="brand-name">SPECTRE-9</span>
                 <span class="brand-sep">//</span>
@@ -522,7 +527,12 @@ const faqSchema = {
         aria-hidden="true" inert>
         <div class="cipher-box">
             <header class="cipher-header">
-                <h2 class="cipher-title" id="brief-title">📋 MISSION BRIEF // WHAT IS SPECTRE-9?</h2>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="brand-logo-wrap" style="width: 24px; height: 24px;">
+                        <img src="/logo.png" alt="" class="brand-logo" width="24" height="24" aria-hidden="true" />
+                    </div>
+                    <h2 class="cipher-title" id="brief-title">📋 MISSION BRIEF // WHAT IS SPECTRE-9?</h2>
+                </div>
                 <button class="cipher-btn" id="btn-brief-close" type="button" aria-label="Close mission brief">✕</button>
             </header>
 

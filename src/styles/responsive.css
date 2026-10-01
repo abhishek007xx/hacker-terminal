@@ -39,10 +39,6 @@
         --bottom-h: 140px;
     }
 
-    .brand-sub {
-        display: none;
-    }
-
     .topbar-meta {
         gap: var(--sp-3);
     }
@@ -353,7 +349,8 @@
         font-size: var(--fs-lg);
     }
 
-    .brand-sub {
+    .brand-sub,
+    .brand-sep {
         display: none;
     }
 

@@ -357,31 +357,27 @@
         },
 
         _updateFavicon(theme) {
-            const colors = {
-                green: { primary: '#37ff8b', core: '#4dffa0', dim: '#1a5235', bg1: '#020806', bg2: '#051510' },
-                cyan: { primary: '#3fe0ff', core: '#70ecff', dim: '#0d4659', bg1: '#02080a', bg2: '#051419' },
-                amber: { primary: '#ffb340', core: '#ffcb65', dim: '#593907', bg1: '#0a0602', bg2: '#191005' },
-                red: { primary: '#ff4155', core: '#ff6e7f', dim: '#590913', bg1: '#0a0204', bg2: '#190509' },
-                purple: { primary: '#b98bff', core: '#d4b3ff', dim: '#3d1b70', bg1: '#08020a', bg2: '#150519' }
-            };
-            const c = colors[theme] || colors.green;
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64"><defs><linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${c.bg1}"/><stop offset="50%" stop-color="${c.bg2}"/><stop offset="100%" stop-color="${c.bg1}"/></linearGradient><linearGradient id="neonGlow" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${c.core}"/><stop offset="100%" stop-color="${c.primary}"/></linearGradient></defs><rect width="64" height="64" rx="14" fill="url(#bgGrad)" stroke="${c.dim}" stroke-width="1.5"/><path d="M 8 18 L 20 18 L 26 24 M 56 46 L 44 46 L 38 40 M 18 56 L 18 44 L 24 38 M 46 8 L 46 20 L 40 26" stroke="${c.dim}" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.6"/><polygon points="32,6 54,18 54,46 32,58 10,46 10,18" fill="${c.bg1}" stroke="${c.primary}" stroke-width="2"/><polygon points="32,10 50,20 50,44 32,54 14,44 14,20" fill="none" stroke="${c.dim}" stroke-width="1" stroke-dasharray="3,2"/><line x1="32" y1="12" x2="32" y2="16" stroke="${c.core}" stroke-width="1.5" stroke-linecap="round"/><line x1="32" y1="48" x2="32" y2="52" stroke="${c.core}" stroke-width="1.5" stroke-linecap="round"/><line x1="16" y1="32" x2="20" y2="32" stroke="${c.core}" stroke-width="1.5" stroke-linecap="round"/><line x1="44" y1="32" x2="48" y2="32" stroke="${c.core}" stroke-width="1.5" stroke-linecap="round"/><g><path d="M 21 24 L 28 32 L 21 40" fill="none" stroke="url(#neonGlow)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="34" y1="23" x2="33" y2="41" stroke="url(#neonGlow)" stroke-width="2.4" stroke-linecap="round"/><line x1="41" y1="23" x2="40" y2="41" stroke="url(#neonGlow)" stroke-width="2.4" stroke-linecap="round"/><line x1="30" y1="28" x2="45" y2="28" stroke="url(#neonGlow)" stroke-width="2.4" stroke-linecap="round"/><line x1="29" y1="36" x2="44" y2="36" stroke="url(#neonGlow)" stroke-width="2.4" stroke-linecap="round"/></g><path d="M 4 14 L 4 4 L 14 4" fill="none" stroke="${c.primary}" stroke-width="2" stroke-linecap="round"/><path d="M 50 4 L 60 4 L 60 14" fill="none" stroke="${c.primary}" stroke-width="2" stroke-linecap="round"/><path d="M 4 50 L 4 60 L 14 60" fill="none" stroke="${c.primary}" stroke-width="2" stroke-linecap="round"/><path d="M 50 60 L 60 60 L 60 50" fill="none" stroke="${c.primary}" stroke-width="2" stroke-linecap="round"/></svg>`;
+            const valid = ['green', 'cyan', 'amber', 'red', 'purple'];
+            const t = valid.includes(theme) ? theme : 'green';
+            const iconUrl = `/favicons/favicon-${t}.png?v=${Date.now()}`;
 
-            const dataUri = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-            
             // Remove existing icon links to force browser tab refresh
             const existingLinks = document.querySelectorAll("link[rel*='icon']");
             existingLinks.forEach(el => {
                 if (el && el.parentNode) el.parentNode.removeChild(el);
             });
 
-            // Create and append fresh link
+            // Create and append fresh PNG icon link
             const newLink = document.createElement('link');
             newLink.id = 'favicon-link';
             newLink.rel = 'icon';
-            newLink.type = 'image/svg+xml';
-            newLink.href = dataUri;
+            newLink.type = 'image/png';
+            newLink.sizes = '64x64';
+            newLink.href = iconUrl;
             document.head.appendChild(newLink);
+
+            const appleLink = document.querySelector("link[rel='apple-touch-icon']");
+            if (appleLink) appleLink.href = iconUrl;
         },
 
         _toggleFullscreen() {

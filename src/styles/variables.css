@@ -98,9 +98,11 @@
     --glow-green-lg: 0 0 18px rgba(55, 255, 139, 0.4), 0 0 6px rgba(55, 255, 139, 0.5);
     --glow-cyan: 0 0 8px rgba(63, 224, 255, 0.5);
     --glow-red: 0 0 10px rgba(255, 65, 85, 0.55);
-    --glow-amber: 0 0 8px rgba(255, 179, 64, 0.5);
     --text-glow: 0 0 2px rgba(55, 255, 139, 0.5);
     --text-glow-soft: 0 0 1px rgba(127, 230, 171, 0.4);
+
+    /* ---- Logo dynamic theme filter (green shifts, black remains 0,0,0) ---- */
+    --logo-filter: drop-shadow(0 0 5px rgba(55, 255, 139, 0.5));
 
     /* ---- Borders ---- */
     --border-thin: 1px solid var(--emerald-line);
@@ -279,6 +281,7 @@ body.theme-cyan {
     --glow-green-lg: 0 0 20px rgba(63, 224, 255, 0.5);
     --text-glow: 0 0 3px rgba(63, 224, 255, 0.6);
     --text-glow-soft: 0 0 1px rgba(139, 228, 255, 0.4);
+    --logo-filter: hue-rotate(55deg) saturate(1.25) drop-shadow(0 0 5px rgba(63, 224, 255, 0.55));
 }
 
 body.theme-amber {
@@ -300,6 +303,7 @@ body.theme-amber {
     --glow-green-lg: 0 0 20px rgba(255, 179, 64, 0.5);
     --text-glow: 0 0 3px rgba(255, 179, 64, 0.6);
     --text-glow-soft: 0 0 1px rgba(255, 208, 128, 0.4);
+    --logo-filter: hue-rotate(278deg) saturate(1.5) brightness(1.1) drop-shadow(0 0 5px rgba(255, 179, 64, 0.55));
 }
 
 body.theme-red {
@@ -321,6 +325,7 @@ body.theme-red {
     --glow-green-lg: 0 0 22px rgba(255, 65, 85, 0.55);
     --text-glow: 0 0 4px rgba(255, 65, 85, 0.65);
     --text-glow-soft: 0 0 1px rgba(255, 133, 147, 0.4);
+    --logo-filter: hue-rotate(222deg) saturate(1.8) brightness(1.15) drop-shadow(0 0 5px rgba(255, 65, 85, 0.6));
 }
 
 body.theme-purple {
@@ -342,4 +347,5 @@ body.theme-purple {
     --glow-green-lg: 0 0 20px rgba(185, 139, 255, 0.5);
     --text-glow: 0 0 3px rgba(185, 139, 255, 0.6);
     --text-glow-soft: 0 0 1px rgba(204, 168, 255, 0.4);
+    --logo-filter: hue-rotate(135deg) saturate(1.4) drop-shadow(0 0 5px rgba(185, 139, 255, 0.55));
 }

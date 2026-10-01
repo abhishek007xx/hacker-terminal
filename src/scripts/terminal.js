@@ -1529,9 +1529,9 @@
             NX.line(this.out, '  SPECTRE-9 // SECURE COMMUNICATIONS & SUPPORT UPLINK', 't-head');
             NX.line(this.out, '============================================================', 't-dim');
             NX.spacer(this.out);
-            NX.line(this.out, 'General Support: <span class="t-cyan">support@hacker-terminal.pages.dev</span>', 't-ok');
-            NX.line(this.out, 'Privacy Inquiries: <span class="t-cyan">privacy@hacker-terminal.pages.dev</span>', 't-ok');
-            NX.line(this.out, 'Media & Film Props: <span class="t-cyan">media@hacker-terminal.pages.dev</span>', 't-ok');
+            NX.line(this.out, 'General Support: <span class="t-cyan">support@hackerfeel.com</span>', 't-ok');
+            NX.line(this.out, 'Privacy Inquiries: <span class="t-cyan">privacy@hackerfeel.com</span>', 't-ok');
+            NX.line(this.out, 'Media & Film Props: <span class="t-cyan">media@hackerfeel.com</span>', 't-ok');
             NX.spacer(this.out);
             NX.line(this.out, 'Dispatch Portal: <a href="/contact" target="_blank" rel="noopener" class="t-key">[ OPEN /CONTACT PAGE &rarr; ]</a>', 't-ok');
             NX.spacer(this.out);

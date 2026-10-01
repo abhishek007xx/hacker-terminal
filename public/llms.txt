@@ -3,9 +3,10 @@
 > SPECTRE-9 is a free, browser-based **hacker typer** (also known as **hackertyper** or **hacker type**), **fake hacking screen**, and **hacker prank** simulator. Designed for harmless office pranks, video production, streaming backgrounds, and entertainment, it lets anyone experience cinematic **hacker typing** with zero setup. 100% simulated client-side with no backend, no real network exploits, and no real hacking.
 
 ## Overview
-- **Name**: SPECTRE-9 Hacker Terminal & Hacker Typer
-- **Alternate Names**: HackerTyper, Hacker Type, Fake Hacking Screen, Hacked Screen Simulator, Fake Hacker Simulator, Hacking Prank Terminal
+- **Name**: SPECTRE-9 Hacker Terminal & Hacker Typer (HackerFeel)
+- **Alternate Names**: HackerFeel, hackerfeel.com, HackerTyper, Hacker Type, Fake Hacking Screen, Hacked Screen Simulator, Fake Hacker Simulator, Hacking Prank Terminal
 - **Category**: Entertainment Web Application / Interactive Cyber Simulation
+- **Canonical URL**: https://hackerfeel.com
 - **License / Access**: 100% Free, no account or installation required
 - **Platform**: Any modern web browser (Desktop, Tablet, Mobile)
 - **Primary Use Cases**: Harmless hacking prank, fake hacking screen, fake hacker movie props, Twitch/YouTube stream overlays, entertaining hacker typing simulator

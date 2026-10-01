@@ -44,6 +44,73 @@
     gap: var(--sp-2);
     white-space: nowrap;
     flex-shrink: 0;
+    text-decoration: none;
+}
+
+.brand-logo-wrap {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1.5px solid var(--emerald-line);
+    box-shadow: 0 0 8px var(--glow-green-sm), inset 0 0 4px rgba(0, 0, 0, 0.8);
+    background: #000;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.25s var(--ease);
+}
+
+.brand-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(2.45) translateY(18%);
+    filter: var(--logo-filter, drop-shadow(0 0 5px rgba(55, 255, 139, 0.5)));
+    transition: filter 0.35s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
+    display: block;
+    user-select: none;
+    pointer-events: none;
+}
+
+.topbar-brand:hover .brand-logo-wrap {
+    border-color: var(--green-core);
+    box-shadow: 0 0 12px var(--green-core);
+}
+
+.topbar-brand:hover .brand-logo {
+    transform: scale(2.65) translateY(18%);
+}
+
+body.hacker-typing .brand-logo-wrap {
+    border-color: var(--green-core);
+    animation: skull-circle-pulse 0.8s ease-in-out infinite alternate;
+}
+
+body.hacker-typing .brand-logo {
+    animation: skull-typing-pulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes skull-circle-pulse {
+    0% {
+        box-shadow: 0 0 6px var(--green);
+    }
+    100% {
+        box-shadow: 0 0 14px var(--green-core);
+    }
+}
+
+@keyframes skull-typing-pulse {
+    0% {
+        transform: scale(2.45) translateY(18%);
+        filter: var(--logo-filter) brightness(1);
+    }
+    100% {
+        transform: scale(2.6) translateY(18%);
+        filter: var(--logo-filter) brightness(1.4) drop-shadow(0 0 8px var(--green-core));
+    }
 }
 
 .brand-glyph {

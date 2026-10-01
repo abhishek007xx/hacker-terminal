@@ -76,9 +76,9 @@ SITE_URL=https://yourdomain.com npm run build
    | Build output directory | `dist` |
    | Node.js version | `20` or later (set in *Environment variables* as `NODE_VERSION=20` if needed) |
 
-4. Optional environment variable: `SITE_URL=https://your-domain.pages.dev` — only needed if
-   the canonical domain changes (e.g. custom domain).
-5. Deploy. `public/_headers` is picked up automatically and adds
+4. Optional environment variable: `SITE_URL=https://hackerfeel.com` — defaulted in `astro.config.mjs`.
+5. Under **Custom domains** in Cloudflare Pages dashboard, add `hackerfeel.com` (and optionally `www.hackerfeel.com`).
+6. Deploy. `public/_headers` is picked up automatically and adds
    `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` and a CSP.
    The 404 page (`/404.html`) is served automatically for unmatched routes.
 

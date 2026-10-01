@@ -29,7 +29,7 @@ Allow: /
 # Simulation-only site: no query parameters, no crawl traps.
 Disallow: /*?*
 
-Sitemap: https://hacker-terminal-4mk.pages.dev/sitemap-index.xml
+Sitemap: https://hackerfeel.com/sitemap-index.xml
 # LLM Knowledge standard: https://llmstxt.org/
-# https://hacker-terminal-4mk.pages.dev/llms.txt
+# https://hackerfeel.com/llms.txt
 
