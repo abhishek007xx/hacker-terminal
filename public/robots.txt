@@ -30,6 +30,7 @@ Allow: /
 Disallow: /*?*
 
 Sitemap: https://hackerfeel.com/sitemap-index.xml
+Sitemap: https://hackerfeel.com/sitemap.xml
 # LLM Knowledge standard: https://llmstxt.org/
 # https://hackerfeel.com/llms.txt
 
