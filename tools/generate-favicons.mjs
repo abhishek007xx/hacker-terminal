@@ -131,7 +131,7 @@ async function main() {
             .png()
             .toBuffer();
 
-        // Solid #000000 background with glowing circular neon ring
+        // Transparent background outside circle — Chrome tab shows clean circle, no black box
         const badgeSvg = `<svg width="${canvasSize}" height="${canvasSize}" viewBox="0 0 ${canvasSize} ${canvasSize}" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <filter id="ringGlow_${t.name}" x="-20%" y="-20%" width="140%" height="140%">
@@ -142,12 +142,11 @@ async function main() {
       </feMerge>
     </filter>
   </defs>
-  <!-- Pure black base - prevents Google Search white circle injection -->
-  <rect width="${canvasSize}" height="${canvasSize}" fill="#000000"/>
-  <circle cx="256" cy="256" r="${ringRadius}" fill="#000000"/>
+  <!-- Dark fill ONLY inside the circle — outside is transparent -->
+  <circle cx="256" cy="256" r="${ringRadius}" fill="#050505"/>
   <!-- Ambient soft glow ring -->
   <circle cx="256" cy="256" r="${ringRadius}" fill="none" stroke="${t.primary}" stroke-width="12" stroke-opacity="0.4" filter="url(#ringGlow_${t.name})"/>
-  <!-- Crisp neon circular border (matches brand logo) -->
+  <!-- Crisp neon circular border -->
   <circle cx="256" cy="256" r="${ringRadius}" fill="none" stroke="${t.primary}" stroke-width="5" stroke-opacity="0.95"/>
 </svg>`;
 
@@ -229,9 +228,9 @@ async function main() {
     await writeFile(join(pub, 'favicon.ico'), icoBuf);
     console.log(`  -> Saved public/favicon.ico (16+32+48, ${icoBuf.length} bytes)`);
 
-    // 6. favicon.svg (High-res vector wrapper around 512 master with solid #000000 canvas)
+    // 6. favicon.svg (High-res vector wrapper around 512 master — transparent outside circle)
     const base64Master = primaryMaster512.toString('base64');
-    const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><rect width="512" height="512" fill="#000000"/><image href="data:image/png;base64,${base64Master}" width="512" height="512"/></svg>`;
+    const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><image href="data:image/png;base64,${base64Master}" width="512" height="512"/></svg>`;
     await writeFile(join(pub, 'favicon.svg'), svgContent, 'utf-8');
     console.log(`  -> Saved public/favicon.svg`);
 
