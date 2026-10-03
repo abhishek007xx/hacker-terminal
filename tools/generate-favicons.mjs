@@ -19,7 +19,7 @@ import { writeFile, mkdir } from 'node:fs/promises';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const pub = join(root, 'public');
 const favDir = join(pub, 'favicons');
-const logoAlphaPath = join(pub, 'logo-alpha.png');
+const logoMasterPath = join(pub, 'logo.png');
 
 function createIco(images) {
     const count = images.length;
@@ -56,10 +56,11 @@ async function main() {
     const canvasSize = 512;
     const ringRadius = 246;
 
-    // The scale(2.45) translateY(18%) transformation matches the topbar brand badge
-    const scaledSize = Math.round(canvasSize * 2.45); // 1254
-    const cropLeft = Math.round((scaledSize - canvasSize) / 2); // 371
-    const cropTop = Math.round((scaledSize - canvasSize) / 2 - canvasSize * 0.18); // 279
+    // Exact framing matching user reference image:
+    // Hood peak visible with slight clearance at top, jaw teeth centered, hood edges flowing into circular rim
+    const cropSize = 500;
+    const cropTop = 45;
+    const cropLeft = Math.round(512 - cropSize / 2); // 262
 
     const maskSvg = Buffer.from(
         `<svg width="${canvasSize}" height="${canvasSize}"><circle cx="256" cy="256" r="${ringRadius - 1}" fill="#fff"/></svg>`
@@ -67,18 +68,18 @@ async function main() {
 
     const themeConfigs = [
         {
-            name: 'cyan',
-            primary: '#3fe0ff',
-            accent: '#70ecff',
-            hue: 60,
-            sat: 1.3,
-        },
-        {
             name: 'green',
             primary: '#37ff8b',
             accent: '#4dffa0',
             hue: 0,
             sat: 1.0,
+        },
+        {
+            name: 'cyan',
+            primary: '#3fe0ff',
+            accent: '#70ecff',
+            hue: 60,
+            sat: 1.3,
         },
         {
             name: 'amber',
@@ -108,25 +109,18 @@ async function main() {
     for (const t of themeConfigs) {
         console.log(`Generating theme favicon: ${t.name}...`);
 
-        let skull = sharp(logoAlphaPath);
+        let skull = sharp(logoMasterPath);
         if (t.hue !== 0) {
             skull = skull.modulate({ hue: t.hue, saturation: t.sat });
         }
 
-        const scaledSkull = await skull.resize(scaledSize, scaledSize).toBuffer();
-
-        // Extract the centered 512x512 face crop (fills the circle, no wide shoulders/drips)
-        const extracted = await sharp(scaledSkull)
-            .extract({
-                left: cropLeft,
-                top: cropTop,
-                width: canvasSize,
-                height: canvasSize,
-            })
+        const cropped = await skull
+            .extract({ left: cropLeft, top: cropTop, width: cropSize, height: cropSize })
+            .resize(canvasSize, canvasSize, { kernel: 'lanczos3' })
             .toBuffer();
 
         // Mask the extracted skull strictly within the circle
-        const maskedSkull = await sharp(extracted)
+        const maskedSkull = await sharp(cropped)
             .composite([{ input: maskSvg, blend: 'dest-in' }])
             .png()
             .toBuffer();
@@ -135,7 +129,7 @@ async function main() {
         const badgeSvg = `<svg width="${canvasSize}" height="${canvasSize}" viewBox="0 0 ${canvasSize} ${canvasSize}" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <filter id="ringGlow_${t.name}" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feGaussianBlur stdDeviation="8" result="blur" />
       <feMerge>
         <feMergeNode in="blur" />
         <feMergeNode in="SourceGraphic" />
@@ -145,7 +139,7 @@ async function main() {
   <!-- Dark fill ONLY inside the circle — outside is transparent -->
   <circle cx="256" cy="256" r="${ringRadius}" fill="#050505"/>
   <!-- Ambient soft glow ring -->
-  <circle cx="256" cy="256" r="${ringRadius}" fill="none" stroke="${t.primary}" stroke-width="12" stroke-opacity="0.4" filter="url(#ringGlow_${t.name})"/>
+  <circle cx="256" cy="256" r="${ringRadius}" fill="none" stroke="${t.primary}" stroke-width="12" stroke-opacity="0.3" filter="url(#ringGlow_${t.name})"/>
   <!-- Crisp neon circular border -->
   <circle cx="256" cy="256" r="${ringRadius}" fill="none" stroke="${t.primary}" stroke-width="5" stroke-opacity="0.95"/>
 </svg>`;
@@ -162,8 +156,8 @@ async function main() {
             .png({ compressionLevel: 9 })
             .toBuffer();
 
-        // Primary master is Cyan (matches user screenshot preference)
-        if (t.name === 'cyan') {
+        // Primary master is Green (default theme and brand identity)
+        if (t.name === 'green') {
             primaryMaster512 = master512;
         }
 
