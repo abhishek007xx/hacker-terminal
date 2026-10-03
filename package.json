@@ -10,7 +10,6 @@
     "preview": "astro preview",
     "astro": "astro",
     "og": "node tools/generate-og.mjs",
-    "favicons": "node tools/generate-favicons.mjs",
     "smoke": "node tools/smoke.mjs",
     "deploy": "astro build && npx wrangler pages deploy dist --project-name=hacker-terminal --branch=main"
   },

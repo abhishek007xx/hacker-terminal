@@ -184,22 +184,6 @@ async function main() {
     await writeFile(join(pub, 'favicon-32.png'), fav32);
     console.log(`  -> Saved public/favicon-32.png`);
 
-    // 1b. favicon-48.png (Google Search primary 48px square standard)
-    const fav48 = await sharp(greenMaster512)
-        .resize(48, 48, { kernel: sharp.kernel.lanczos3 })
-        .png({ compressionLevel: 9 })
-        .toBuffer();
-    await writeFile(join(pub, 'favicon-48.png'), fav48);
-    console.log(`  -> Saved public/favicon-48.png`);
-
-    // 1c. favicon-96.png (Google Search 2x retina standard)
-    const fav96 = await sharp(greenMaster512)
-        .resize(96, 96, { kernel: sharp.kernel.lanczos3 })
-        .png({ compressionLevel: 9 })
-        .toBuffer();
-    await writeFile(join(pub, 'favicon-96.png'), fav96);
-    console.log(`  -> Saved public/favicon-96.png`);
-
     // 2. apple-touch-icon.png (180x180)
     const appleTouch = await sharp(greenMaster512)
         .resize(180, 180, { kernel: sharp.kernel.lanczos3 })
@@ -208,7 +192,7 @@ async function main() {
     await writeFile(join(pub, 'apple-touch-icon.png'), appleTouch);
     console.log(`  -> Saved public/apple-touch-icon.png`);
 
-    // 3. icon-192.png (PWA 192x192, 4x Google 48px multiple)
+    // 3. icon-192.png (PWA 192x192)
     const icon192 = await sharp(greenMaster512)
         .resize(192, 192, { kernel: sharp.kernel.lanczos3 })
         .png({ compressionLevel: 9 })
@@ -226,7 +210,10 @@ async function main() {
         .png()
         .toBuffer();
     const ico32 = fav32;
-    const ico48 = fav48;
+    const ico48 = await sharp(greenMaster512)
+        .resize(48, 48, { kernel: sharp.kernel.lanczos3 })
+        .png()
+        .toBuffer();
 
     const icoBuf = createIco([
         { width: 16, height: 16, buffer: ico16 },
@@ -236,9 +223,9 @@ async function main() {
     await writeFile(join(pub, 'favicon.ico'), icoBuf);
     console.log(`  -> Saved public/favicon.ico (16+32+48, ${icoBuf.length} bytes)`);
 
-    // 6. favicon.svg (High-res vector wrapper around 512 master with solid #000000 canvas)
+    // 6. favicon.svg (High-res vector wrapper around 512 master)
     const base64Master = greenMaster512.toString('base64');
-    const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><rect width="512" height="512" fill="#000000"/><image href="data:image/png;base64,${base64Master}" width="512" height="512"/></svg>`;
+    const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><image href="data:image/png;base64,${base64Master}" width="512" height="512"/></svg>`;
     await writeFile(join(pub, 'favicon.svg'), svgContent, 'utf-8');
     console.log(`  -> Saved public/favicon.svg`);
 
