@@ -1,12 +1,13 @@
 /* ============================================================
    tools/generate-favicons.mjs
 
-   Generates maximized, high-contrast circular favicons for Chrome tab
-   and Google Search preview.
-
-   Maximizes the circular hacker skull to fill 96%+ of the tab
-   icon area, eliminating excessive outer padding and nested
-   margins so it is bold, crisp, and clearly legible even at 16x16.
+   Generates authentic circular hacker skull favicons matching the
+   SPECTRE-9 brand logo from the topbar:
+   - Exact circular frame with glowing neon boundary ring
+   - Beautifully proportioned hooded hacker skull (apex, eyes, teeth)
+   - Solid #000000 black background (NO transparency) so Google
+     Search never injects an unsightly white circular card
+   - All 5 CRT themes supported: green, cyan, amber, red, purple
    ============================================================ */
 import sharp from 'sharp';
 import { fileURLToPath } from 'node:url';
@@ -60,23 +61,20 @@ async function main() {
     console.log(`Trimmed skull dimensions: ${skullMeta.width} x ${skullMeta.height}`);
 
     const canvasSize = 512;
-    // Scale skull so it occupies 96.1% of canvas height (492px out of 512px)
-    const skullH = 492;
+    // Sized to 410px height: preserves the hood shape, apex, and circular neon frame
+    // exactly like the topbar brand logo
+    const skullH = 410;
     const skullW = Math.round(skullH * (skullMeta.width / skullMeta.height));
     const topOffset = Math.round((canvasSize - skullH) / 2);
     const leftOffset = Math.round((canvasSize - skullW) / 2);
 
-    console.log(`Scaled skull on 512x512 canvas: ${skullW} x ${skullH} (at top=${topOffset}, left=${leftOffset})`);
+    console.log(`Skull on 512x512 canvas: ${skullW} x ${skullH} (at top=${topOffset}, left=${leftOffset})`);
 
     const themeConfigs = [
         {
             name: 'green',
             primary: '#37ff8b',
             accent: '#4dffa0',
-            innerRing: '#25b364',
-            bgStart: '#081e13',
-            bgMid: '#020906',
-            bgEnd: '#010403',
             hue: 0,
             sat: 1.0,
         },
@@ -84,10 +82,6 @@ async function main() {
             name: 'cyan',
             primary: '#3fe0ff',
             accent: '#70ecff',
-            innerRing: '#23a0ba',
-            bgStart: '#03171e',
-            bgMid: '#01090d',
-            bgEnd: '#010305',
             hue: 60,
             sat: 1.3,
         },
@@ -95,10 +89,6 @@ async function main() {
             name: 'amber',
             primary: '#ffb340',
             accent: '#ffcb65',
-            innerRing: '#ba7a23',
-            bgStart: '#1a1003',
-            bgMid: '#0a0601',
-            bgEnd: '#030200',
             hue: 290,
             sat: 1.5,
         },
@@ -106,10 +96,6 @@ async function main() {
             name: 'red',
             primary: '#ff4155',
             accent: '#ff6e7f',
-            innerRing: '#ba2335',
-            bgStart: '#1a0408',
-            bgMid: '#0a0204',
-            bgEnd: '#040102',
             hue: 255,
             sat: 1.6,
         },
@@ -117,16 +103,13 @@ async function main() {
             name: 'purple',
             primary: '#b98bff',
             accent: '#d4b3ff',
-            innerRing: '#7d52ba',
-            bgStart: '#14041e',
-            bgMid: '#08020d',
-            bgEnd: '#030105',
             hue: 170,
             sat: 1.4,
         },
     ];
 
     let greenMaster512 = null;
+    const ringRadius = 242;
 
     for (const t of themeConfigs) {
         console.log(`Generating theme favicon: ${t.name}...`);
@@ -140,27 +123,30 @@ async function main() {
             .resize(skullW, skullH, { fit: 'fill' })
             .toBuffer();
 
-        // Circular background badge SVG
-        // Radius 253 with 6px stroke touches exactly 256 (the edge of 512x512)
+        // Solid #000000 background (NO transparency) with glowing circular neon ring
         const badgeSvg = `<svg width="${canvasSize}" height="${canvasSize}" viewBox="0 0 ${canvasSize} ${canvasSize}" xmlns="http://www.w3.org/2000/svg">
+  <!-- Solid black background - prevents Google Search white circle injection -->
+  <rect width="${canvasSize}" height="${canvasSize}" fill="#000000"/>
   <defs>
-    <radialGradient id="grad_${t.name}" cx="50%" cy="45%" r="55%">
-      <stop offset="0%" stop-color="${t.bgStart}"/>
-      <stop offset="60%" stop-color="${t.bgMid}"/>
-      <stop offset="100%" stop-color="${t.bgEnd}"/>
-    </radialGradient>
+    <filter id="ringGlow_${t.name}" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
   </defs>
-  <!-- Full-bleed circular dark cyber disc -->
-  <circle cx="256" cy="256" r="253" fill="url(#grad_${t.name})" stroke="${t.primary}" stroke-width="6" stroke-opacity="0.95"/>
-  <!-- Subtle inner neon circuit track -->
-  <circle cx="256" cy="256" r="247" fill="none" stroke="${t.innerRing}" stroke-width="2" stroke-opacity="0.45" stroke-dasharray="12 6"/>
+  <!-- Ambient soft glow ring -->
+  <circle cx="256" cy="256" r="${ringRadius}" fill="#000000" stroke="${t.primary}" stroke-width="14" stroke-opacity="0.35" filter="url(#ringGlow_${t.name})"/>
+  <!-- Crisp neon circular border (matches brand logo) -->
+  <circle cx="256" cy="256" r="${ringRadius}" fill="#000000" stroke="${t.primary}" stroke-width="6" stroke-opacity="0.95"/>
 </svg>`;
 
         const bgBuf = await sharp(Buffer.from(badgeSvg))
             .png()
             .toBuffer();
 
-        // Composite skull on circular badge
+        // Composite skull inside circular badge
         const master512 = await sharp(bgBuf)
             .composite([
                 {
@@ -237,13 +223,13 @@ async function main() {
     await writeFile(join(pub, 'favicon.ico'), icoBuf);
     console.log(`  -> Saved public/favicon.ico (16+32+48, ${icoBuf.length} bytes)`);
 
-    // 6. favicon.svg (Crisp high-res vector wrapper around 512 master)
+    // 6. favicon.svg (High-res vector wrapper around 512 master)
     const base64Master = greenMaster512.toString('base64');
     const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><image href="data:image/png;base64,${base64Master}" width="512" height="512"/></svg>`;
     await writeFile(join(pub, 'favicon.svg'), svgContent, 'utf-8');
     console.log(`  -> Saved public/favicon.svg`);
 
-    console.log('\nAll Chrome tab favicons regenerated at MAX size successfully!');
+    console.log('\nAll favicons generated matching brand logo with zero white space!');
 }
 
 main().catch((err) => {
